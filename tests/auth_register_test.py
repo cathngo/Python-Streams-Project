@@ -29,7 +29,7 @@ def test_register_password_length():
 def test_register_fname_length():
     clear_v1()
     with pytest.raises(InputError):
-        auth_register_v1('user@email.com', 'password', 'f', 'lastname')
+        auth_register_v1('user@email.com', 'password', '', 'lastname')
     with pytest.raises(InputError):
         auth_register_v1('user@email.com', 'password', 'ffffff' * 10, 'lastname')
 
@@ -37,7 +37,7 @@ def test_register_fname_length():
 def test_register_lname_length():
     clear_v1()
     with pytest.raises(InputError):
-        auth_register_v1('user@email.com', 'password', 'firstname', 'l')
+        auth_register_v1('user@email.com', 'password', 'firstname', '')
     with pytest.raises(InputError):
         auth_register_v1('user@email.com', 'password', 'firstname', 'llllll' * 10)
 
