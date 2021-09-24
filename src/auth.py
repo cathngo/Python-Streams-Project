@@ -17,27 +17,29 @@ def auth_register_v1(email, password, name_first, name_last):
     check_name(name_first)
     check_name(name_last)
 
-    auth_user_id = len(store['users'])
+    u_id = len(store['users'])
 
     # First user to register becomes the streams owner
-    is_streams_owner = True if (auth_user_id == 0) else False
+    is_streams_owner = True if (u_id == 0) else False
     
     # Creates unique handle
-    handle = create_handle(name_first, name_last, store)
+    handle_str = create_handle(name_first, name_last, store)
     
     # Registers user into store
     store['users'].append(
         {
-            'auth_user_id': auth_user_id,
+            'u_id': u_id,
             'email': email,
             'password': password,
             'name_first': name_first, 
             'name_last': name_last,
-            'handle': handle,
+            'handle_str': handle_str,
             'is_streams_owner': is_streams_owner,
         }
     )
+
+    data_store.set(store)
     
     return {
-        'auth_user_id': auth_user_id
+        'auth_user_id': u_id
     }

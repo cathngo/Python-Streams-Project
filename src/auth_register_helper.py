@@ -33,38 +33,45 @@ def check_name(name):
 
 # Check data_store to see if generated handle is already in use
 # Return True if handle is already in use, otherwise return False
-def check_duplicate_handle(handle, store):
+def check_duplicate_handle(handle_str, store):
     for user in store['users']:
-        if user['handle'] == handle:
+        if user['handle_str'] == handle_str:
             return True
     return False
 
 # Generates a unique handle for the user
 def create_handle(name_first, name_last, store):
     # Concatenates lowercase-only alphanumeric (a-z0-9) first name and last name.
-    handle = ''
+    handle_str = ''
     for character in name_first:
         if character.islower() or character.isdigit():
-            handle += character
+            handle_str += character
 
     for character in name_last:
         if character.islower() or character.isdigit():
-            handle += character
+            handle_str += character
 
     # If length of handle is longer than 20 characters, it is cut off at 20 characters
-    if len(handle) > 20:
-        handle = handle[:20]
+    if len(handle_str) > 20:
+        handle_str = handle_str[:20]
 
     '''
     If the handle is once again taken, append the concatenated names with the smallest
     number (starting from 0) that forms a new handle that isn't already taken.
     '''
-    if check_duplicate_handle(handle, store) == True:
-        handle += '0'
+    if check_duplicate_handle(handle_str, store) == True:
+        handle_str += '0'
 
-    i = 1
-    while check_duplicate_handle(handle, store) == True:
-        handle[-1] = i
-        i += 1
+    '''
+    If the newly formed handle is already taken, increment the number and append to the handle
+    until newly created handle is unique.
+    '''
+    append_num = 1
+    append_num_digits = 1
+    while check_duplicate_handle(handle_str, store) == True:
+        handle_str = handle_str[:-append_num_digits] + str(append_num)
+        if append_num % (10 ** append_num_digits) == 0:
+            append_num_digits += 1
+        append_num += 1
 
-    return handle
+    return handle_str
