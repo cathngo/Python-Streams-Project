@@ -28,11 +28,3 @@ def test_nonexistent_auth_id():
         channels_create_v1(1, 'channel_name', True)    
   
 
-#check channel id is unique
-def test_unique_channel_id():
-    clear_v1()
-    id_one = auth_register_v1('validemailone@gmail.com', '123abc!@#', 'Hayden', 'Everest')
-    id_two = auth_register_v1('validemailtwo@gmail.com', '123abc!@', 'Sam', 'Smith')
-    channel_id_one = channels_create_v1(id_one['auth_user_id'], 'channel_name', True)
-    channel_id_two = channels_create_v1(id_two['auth_user_id'], 'channel_name', True)
-    assert channel_id_one != channel_id_two
