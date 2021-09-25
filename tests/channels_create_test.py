@@ -11,9 +11,9 @@ def test_channels_invalid_name():
     clear_v1()
     id = auth_register_v1('validemail@gmail.com', '123abc!@#', 'Sam', 'Smith')
     with pytest.raises(InputError):
-        channels_create_v1(id['auth_user_id'],'',True)      
+        channels_create_v1(id['auth_user_id'], '', True)      
     with pytest.raises(InputError):
-        channels_create_v1(id['auth_user_id'],'nameLongerThanTwentyCharacters',True)        
+        channels_create_v1(id['auth_user_id'], 'nameLongerThanTwentyCharacters', True)        
  
 
 #check auth_id exists
@@ -21,11 +21,11 @@ def test_nonexistent_auth_id():
     clear_v1()
     #check empty user list
     with pytest.raises(AccessError):
-        channels_create_v1(5,'channel_name',True)
+        channels_create_v1(5, 'channel_name', True)
     #check empty u_id
     auth_register_v1('validemail@gmail.com', '123abc!@#', 'Sam', 'Smith')
     with pytest.raises(AccessError):
-        channels_create_v1(1,'channel_name',True)    
+        channels_create_v1(1, 'channel_name', True)    
   
 
 #check channel id is unique
