@@ -44,12 +44,12 @@ def create_handle(name_first, name_last, store):
     # Concatenates lowercase-only alphanumeric (a-z0-9) first name and last name.
     handle_str = ''
     for character in name_first:
-        if character.islower() or character.isdigit():
-            handle_str += character
+        if character.isalpha() or character.isdigit():
+            handle_str += character.lower()
 
     for character in name_last:
-        if character.islower() or character.isdigit():
-            handle_str += character
+        if character.isalpha() or character.isdigit():
+            handle_str += character.lower()
 
     # If length of handle is longer than 20 characters, it is cut off at 20 characters
     if len(handle_str) > 20:
