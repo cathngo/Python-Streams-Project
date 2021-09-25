@@ -38,18 +38,18 @@ def channels_create_v1(auth_user_id, name, is_public):
             'name': name,
             'is_public': is_public,
             'owner_members': [
-                 {            
-                 'u_id': auth_user_id,   
-                 }
-             ],
+                {            
+                    'u_id': auth_user_id,   
+                }
+            ],
             'all_members': [
-                  {          
-                 'u_id': auth_user_id,
-                  }
-             ]                             
+                {          
+                    'u_id': auth_user_id,
+                }
+            ],                            
         }
     )
-
+    
     data_store.set(store)
     
     return {
