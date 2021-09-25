@@ -6,7 +6,7 @@ def check_valid_name(name):
         raise InputError
 
 
-#check auth id exists
+#check auth_id exists
 def check_auth_id_exists(auth_user_id, store):
     found = False
     #search for u_id in users
