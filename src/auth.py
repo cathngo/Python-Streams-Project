@@ -9,13 +9,14 @@ def auth_login_v1(email, password):
     # Checks that the email is valid 
     check_email(email)
      
-    
+    # Checks if email and password are correct
+    # Returns auth_user_id
     for user in store['users']:
         if user['email'] != email:
-            raise InputError 
+            raise InputError('Error: Email entered does not belong to a user')
         else:
             if user['password'] != password:
-                raise InputError
+                raise InputError('Error: Password is not correct')
             return {
                 'auth_user_id': user['u_id']
             }
