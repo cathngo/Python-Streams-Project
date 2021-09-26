@@ -7,6 +7,8 @@ from src.other import clear_v1
 
 # Check if email entered does not belong to a user 
 def test_incorrect_email():
+    clear_v1()
+    auth_register_v1('diwa@gmail.com','password','diwa','big')
     with pytest.raises(InputError):
         auth_login_v1('fake@gmail.com','password')
 
