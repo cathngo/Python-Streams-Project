@@ -17,7 +17,7 @@ def test_no_channel_joined:
     user_id2 = auth_register_v1('other1@gmail.com', 'test321', 'Willis', 'Posa')
     channels_create_v1(user_id2['auth_user_id'], 'channel1', True)  
     channels_create_v1(user_id2['auth_user_id'], 'channel2', True)
-    joined_channels = channels_list_v1(user_id2['auth_user_id'])
+    joined_channels = channels_list_v1(user_id1['auth_user_id'])
     assert len(joined_channels) == 0
 
 
