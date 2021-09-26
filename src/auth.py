@@ -3,9 +3,23 @@ from src.error import InputError
 from src.auth_register_helper import check_email, check_duplicate_email, check_password, check_name, create_handle
 
 def auth_login_v1(email, password):
-    return {
-        'auth_user_id': 1,
-    }
+    
+    store = data_store.get()
+    
+    # Checks that the email is valid 
+    check_email(email)
+     
+    
+    for user in store['users']:
+        if user['email'] != email:
+            raise InputError 
+        else:
+            if user['password'] != password:
+                raise InputError
+            return {
+                'auth_user_id': user['u_id']
+            }
+             
 
 def auth_register_v1(email, password, name_first, name_last):
     store = data_store.get()
