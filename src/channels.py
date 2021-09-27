@@ -4,14 +4,24 @@ from src.channels_create_helper import check_valid_name, check_auth_id_exists
 from src.auth import auth_register_v1
 
 def channels_list_v1(auth_user_id):
-    return {
-        'channels': [
-        	{
-        		'channel_id': 1,
-        		'name': 'My Channel',
-        	}
-        ],
-    }
+    store = data_store.get()
+    check_auth_id_exists(auth_user_id, store)
+    
+    joined_channels = []
+    
+    for channel in store['channels']:
+        if channel['is_public'] == False : continue
+        
+        for directoy_user_id in channel['all_members']:
+            if directoy_user_id['u_id'] == auth_user_id:
+                temp_dict = {
+            		'channel_id': channel['channel_id'],
+            		'name': channel['name'],
+        		}
+                joined_channels.append(temp_dict)
+    
+    return joined_channels
+
 
 def channels_listall_v1(auth_user_id):
     return {

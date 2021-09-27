@@ -1,11 +1,11 @@
 import pytest
 
 from src.error import InputError, AccessError
-from src.channels import channels_create_v1
+from src.channels import channels_create_v1, channels_list_v1
 from src.auth import auth_register_v1
 from src.other import clear_v1
 
-def test_no_channel_joined:
+def test_no_channel_joined():
     clear_v1()
     
     #check when there is no channels
@@ -21,7 +21,7 @@ def test_no_channel_joined:
     assert len(joined_channels) == 0
 
 
-def test_multiple_channels_list:
+def test_multiple_channels_list():
     clear_v1()
     user_id1 = auth_register_v1('test1@gmail.com', 'test321', 'Jack', 'Smith')
     user_id2 = auth_register_v1('other1@gmail.com', 'test321', 'Willis', 'Posa')
