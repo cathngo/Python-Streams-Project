@@ -23,9 +23,10 @@ def test_nonexistent_auth_id():
     with pytest.raises(AccessError):
         channels_create_v1(5, 'channel_name', True)
     #check empty u_id
-    auth_register_v1('validemail@gmail.com', '123abc!@#', 'Sam', 'Smith')
+    u_id = auth_register_v1('validemail@gmail.com', '123abc!@#', 'Sam', 'Smith')
+    invalid_u_id = u_id['auth_user_id'] + 1
     with pytest.raises(AccessError):
-        channels_create_v1(1, 'channel_name', True)    
+        channels_create_v1(invalid_u_id, 'channel_name', True)    
   
 
 #check channel id is unique
