@@ -3,10 +3,24 @@ from src.error import InputError
 from src.auth_register_helper import check_email, check_duplicate_email, check_password, check_name, create_handle
 
 def auth_login_v1(email, password):
-    return {
-        'auth_user_id': 1,
-    }
-
+    
+    store = data_store.get()
+    
+    # Checks that the email is valid 
+    check_email(email)
+     
+    # Checks if email and password are correct
+    # Returns auth_user_id
+    for user in store['users']:
+        if user['email'] == email:
+            if user['password'] == password:
+                return {
+                    'auth_user_id': user['u_id']
+                }
+            else:
+                raise InputError('Error: Incorrect password')
+    raise InputError('Error: Email entered does not belong to a user')
+    
 def auth_register_v1(email, password, name_first, name_last):
     store = data_store.get()
 

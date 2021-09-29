@@ -1,6 +1,5 @@
 from src.error import InputError, AccessError
 
-
 def check_channel_id(channel_id, store):
     for channel in store['channels']:
         if channel['channel_id'] == channel_id:
@@ -27,4 +26,5 @@ def get_user_details(auth_user_id, store):
                 'name_last': user['name_last'],
                 'handle_str': user['handle_str'],            
             }
+
     return owner_dictionary 
