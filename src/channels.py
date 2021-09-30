@@ -23,29 +23,29 @@ def channels_list_v1(auth_user_id):
         		}
                 joined_channels.append(temp_dict)
     
-    return joined_channels
-
+    return {
+        'channels': joined_channels
+    }
 
 def channels_listall_v1(auth_user_id):
     store = data_store.get()
     check_auth_id_exists(auth_user_id, store)
     
-    joined_all_channels = []
+    all_channels = []
     
     #check all the channels in the database
     for channel in store['channels']:
-        
-        #loop through all the members of each channel
-        for directoy_user_id in channel['all_members']:
-            if directoy_user_id['u_id'] == auth_user_id:
-                temp_dict = {
-            		'channel_id': channel['channel_id'],
-            		'name': channel['name'],
-        		}
-                joined_all_channels.append(temp_dict)
     
-    return joined_all_channels
-
+        temp_dict = {
+    		'channel_id': channel['channel_id'],
+    		'name': channel['name'],
+		}
+        all_channels.append(temp_dict)
+    
+    return {
+        'channels': all_channels  
+    }
+    
 def channels_create_v1(auth_user_id, name, is_public):
     store = data_store.get()
 
