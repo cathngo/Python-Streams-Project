@@ -11,8 +11,6 @@ def channels_list_v1(auth_user_id):
     
     #check all the channels in the database
     for channel in store['channels']:
-        #prevent from adding private channels
-        if channel['is_public'] == False : continue
         
         #loop through all the members of each channel
         for directoy_user_id in channel['all_members']:

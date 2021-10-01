@@ -50,5 +50,5 @@ def test_private_channels_list():
     channels_create_v1(user_id1['auth_user_id'], 'is_member2', False)
     channels_create_v1(user_id1['auth_user_id'], 'is_member3', False)
     joined_channels = channels_list_v1(user_id1['auth_user_id'])
-    assert len(joined_channels['channels']) == 1
+    assert len(joined_channels['channels']) == 3
     
