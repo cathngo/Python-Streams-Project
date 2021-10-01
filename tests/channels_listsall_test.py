@@ -7,14 +7,16 @@ from src.other import clear_v1
 
 def test_no_channels():
     clear_v1()
-    
     #check when there is no channels
     user_id1 = auth_register_v1('test1@gmail.com', 'test321', 'Jack', 'Smith')
     all_channels = channels_listall_v1(user_id1['auth_user_id'])
     assert len(all_channels['channels']) == 0
     
-
-
+def test_auth_invalid():
+    clear_v1()
+    with pytest.raises(AccessError):
+        channels_listall_v1('non_existent')
+    
 def test_multiple_channels_listsall():
     clear_v1()
     user_id1 = auth_register_v1('test1@gmail.com', 'test321', 'Jack', 'Smith')
@@ -27,7 +29,6 @@ def test_multiple_channels_listsall():
     channels_create_v1(user_id1['auth_user_id'], 'member3', True)
     all_channels = channels_listall_v1(user_id1['auth_user_id'])
     assert len(all_channels['channels']) == 4
-    
     
 def test_private_channels_list():
     clear_v1()
