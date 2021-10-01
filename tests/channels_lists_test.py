@@ -20,7 +20,11 @@ def test_no_channel_joined():
     joined_channels = channels_list_v1(user_id1['auth_user_id'])
     assert len(joined_channels['channels']) == 0
 
-
+def test_auth_invalid_2():
+    clear_v1()
+    with pytest.raises(AccessError):
+        channels_listall_v1('non_existent')
+        
 def test_multiple_channels_list():
     clear_v1()
     user_id1 = auth_register_v1('test1@gmail.com', 'test321', 'Jack', 'Smith')
