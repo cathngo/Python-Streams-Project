@@ -2,6 +2,7 @@ from src.error import InputError, AccessError
 from src.data_store import data_store
 from src.channel_details_helper import check_authorised_user, check_channel_id, get_user_details
 from src.channels_create_helper import check_auth_id_exists
+from src.channel_join_helper import find_user, find_channel, check_authorised_member
 
 def channel_invite_v1(auth_user_id, channel_id, u_id):
     return {
@@ -63,5 +64,32 @@ def channel_messages_v1(auth_user_id, channel_id, start):
     }
 
 def channel_join_v1(auth_user_id, channel_id):
-    return {
+    store = data_store.get()
+    
+    # Check if channel_id valid 
+    check_channel_id(channel_id, store)
+    
+    # Check if user is already member of channel
+    check_authorised_member(auth_user_id, channel_id, store)
+    
+    # Checks if user exists and if so stores location in list
+    user_join = find_user(auth_user_id, store)
+    
+    # Stores location of channel in list
+    channel_join = find_channel(channel_id, store)
+    
+    # If channel is private and user is not global owner
+    # prevent user from joining 
+    if channel_join['is_public'] == False and user_join['is_streams_owner'] == False:
+        raise AccessError
+    
+    # Create member dictionary  
+    member_dictionary = {
+        "u_id": user_join['u_id']
     }
+    
+    # Append user id to member list
+    channel_join['all_members'].append(member_dictionary)
+    
+    data_store.set(store)
+    return {}
