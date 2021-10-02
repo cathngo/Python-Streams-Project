@@ -9,12 +9,10 @@ from src.other import clear_v1
 def clear_register_create_channel():
     clear_v1()
     #register user
-    user_id1 = auth_register_v1('test1@gmail.com', 'testing1', 
-                                'Jack', 'Smith')['auth_user_id']
+    user_id1 = auth_register_v1('test1@gmail.com', 'testing1', 'Jack', 'Smith')
     #create a channel
-    channel_id1 = channels_create_v1(user_id1['auth_user_id'],
-                                     'channel1', True)['channel_id']
-    return [user_id1 , channel_id1]
+    channel_id1 = channels_create_v1(user_id1['auth_user_id'], 'channel1', True)
+    return [user_id1['auth_user_id'] , channel_id1['channel_id']]
 
 def test_invite_invalid_u_id(clear_register_create_channel):
     ids_list = clear_register_create_channels
