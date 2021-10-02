@@ -40,7 +40,7 @@ def test_invite_already_member(clear_register_create_channel):
     
     channel_invite_v1(user_id, channel_id, user_id2['auth_user_id'])
     with pytest.raises(InputError):
-        channel_invite_v1(user_id, channel_id, user_id2)
+        channel_invite_v1(user_id, channel_id, user_id2['auth_user_id'])
 
 def test_unauthorised_invitation(clear_register_create_channel):
     ids_list = clear_register_create_channel
