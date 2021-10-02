@@ -17,14 +17,14 @@ def channel_invite_v1(auth_user_id, channel_id, u_id):
     #check u_id is already part of the given channel_id
     for channel in store['channels']:
         if channel['channel_id'] == channel_id: 
-            #check if u_id is already part of the channel
+            #check u_id is already part of the channel
             for dict in channel['all_members']:
                 if dict['u_id'] == u_id:
                     raise InputError
-            #if is u_id is not part of the channel then append as a dictionary
+            #if u_id is not part of the channel then append as a dictionary
             else:
                 channel['all_members'].append({'u_id': u_id})
-            #break so if stop checking other channels
+            #break to stop checking other channels
             break
     
     data_store.set(store)
