@@ -21,7 +21,7 @@ def test_invite_invalid_u_id(clear_register_create_channel):
     user_id = ids_list[0]
     channel_id = ids_list[1]
     invalid_user = -404
-    with pytest.raises(InputError)
+    with pytest.raises(InputError):
         channel_invite_v1(user_id, channel_id, invalid_user)
         
 def test_invite_to_invalid_channel(clear_register_create_channel):
@@ -30,7 +30,7 @@ def test_invite_to_invalid_channel(clear_register_create_channel):
     invalid_channel = -404
     user_id2 = auth_register_v1('test2@gmail.com', 'testing1', 'Willy', 'Masko')
     
-    with pytest.raises(InputError)
+    with pytest.raises(InputError):
         channel_invite_v1(user_id, invalid_channel , user_id2)
         
 def test_invite_already_member(clear_register_create_channel):
@@ -41,7 +41,7 @@ def test_invite_already_member(clear_register_create_channel):
     channel
     
     channel_invite_v1(user_id, channel_id, user_id2)
-    with pytest.raises(InputError)
+    with pytest.raises(InputError):
         channel_invite_v1(user_id, channel_id, user_id2)
 
 def test_unauthorised_invitation(clear_register_create_channel):
@@ -51,6 +51,6 @@ def test_unauthorised_invitation(clear_register_create_channel):
     user_id2 = auth_register_v1('test2@gmail.com', 'testing2', 'Willy', 'Masko')
     user_id3 = auth_register_v1('test3@gmail.com', 'testing3', 'Putem', 'Rodri')
     #invite an user when the inviter is not the owner
-    with pytest.raises(AccessError)
+    with pytest.raises(AccessError):
         channel_invite_v1(user_id2, channel_id, user_id3)
 
