@@ -2,10 +2,33 @@ from src.error import InputError, AccessError
 from src.data_store import data_store
 from src.channel_details_helper import check_authorised_user, check_channel_id, get_user_details
 from src.channels_create_helper import check_auth_id_exists
+from src.channels_invite_helper import check_u_id_exists
 from src.channel_join_helper import find_user, find_channel, check_authorised_member
 from src.channel_messages_helper import get_channel
 
 def channel_invite_v1(auth_user_id, channel_id, u_id):
+    store = data_store.get()
+
+    #check valid u_id
+    check_u_id_exists(u_id, store)
+    #check channel_id exists
+    check_channel_id(channel_id, store)
+    #check inviter is part of given channel_id
+    check_authorised_user(auth_user_id, channel_id, store)
+    
+    #check u_id is already part of the given channel_id
+    for channel in store['channels']:
+        if channel['channel_id'] == channel_id: 
+            #check u_id is already part of the channel
+            for dict in channel['all_members']:
+                if dict['u_id'] == u_id:
+                    raise InputError
+            #if u_id is not part of the channel then append as a dictionary
+            channel['all_members'].append({'u_id': u_id})
+            #break to prevent having to checking other channels
+            break
+    
+    data_store.set(store)
     return {
     }
 
