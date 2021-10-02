@@ -24,7 +24,7 @@ def channel_invite_v1(auth_user_id, channel_id, u_id):
             #if u_id is not part of the channel then append as a dictionary
             else:
                 channel['all_members'].append({'u_id': u_id})
-            #break to stop checking other channels
+            #break to prevent having to checking other channels
             break
     
     data_store.set(store)

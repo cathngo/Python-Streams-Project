@@ -53,3 +53,27 @@ def test_unauthorised_invitation(clear_register_create_channel):
         channel_invite_v1(user_id2['auth_user_id'],
                          channel_id, user_id3['auth_user_id'])
 
+def test_invite_u_id(clear_register_create_channel):
+    ids_list = clear_register_create_channel
+    user_id = ids_list[0]
+    channel_id = ids_list[1]
+    user_id2 = auth_register_v1('test2@gmail.com', 'testing2', 'Willy', 'Masko')
+    channel_invite_v1(user_id, channel_id, user_id2['auth_user_id'])
+    list1 = channels_list_v1(user_id)
+    list2 = channels_list_v1(user_id2['auth_user_id'])
+    assert list1 == list2
+
+def test_invited_user_invites(clear_register_create_channel):
+    ids_list = clear_register_create_channel
+    user_id = ids_list[0]
+    channel_id = ids_list[1]
+    user_id2 = auth_register_v1('test2@gmail.com', 'testing2', 'Willy', 'Masko')
+    user_id3 = auth_register_v1('test3@gmail.com', 'testing3', 'Putem', 'Rodri')
+    channel_invite_v1(user_id, channel_id, user_id2['auth_user_id'])
+    channel_invite_v1(user_id2['auth_user_id'],
+                     channel_id, user_id3['auth_user_id'])
+    list1 = channels_list_v1(user_id)
+    list2 = channels_list_v1(user_id2['auth_user_id'])
+    list3 = channels_list_v1(user_id3['auth_user_id'])
+    assert list1 == list2
+    assert list2 == list3
