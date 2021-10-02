@@ -38,7 +38,7 @@ def test_no_channel_joined2():
 def test_auth_invalid_2():
     clear_v1()
     with pytest.raises(AccessError):
-        channels_list_v1('non_existent')
+        channels_list_v1(404)
         
 def test_multiple_channels_list(clear_register_create_channels):
     user_id1 = clear_register_create_channels
