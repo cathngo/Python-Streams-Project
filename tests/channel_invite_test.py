@@ -15,7 +15,7 @@ def clear_register_create_channel():
     return [user_id1['auth_user_id'] , channel_id1['channel_id']]
 
 def test_invite_invalid_u_id(clear_register_create_channel):
-    ids_list = clear_register_create_channels
+    ids_list = clear_register_create_channel
     user_id = ids_list[0]
     channel_id = ids_list[1]
     invalid_user = -404
@@ -23,7 +23,7 @@ def test_invite_invalid_u_id(clear_register_create_channel):
         channel_invite_v1(user_id, channel_id, invalid_user)
         
 def test_invite_to_invalid_channel(clear_register_create_channel):
-    ids_list = clear_register_create_channels
+    ids_list = clear_register_create_channel
     user_id = ids_list[0]
     invalid_channel = -404
     user_id2 = auth_register_v1('test2@gmail.com', 'testing1', 'Willy', 'Masko')
@@ -32,7 +32,7 @@ def test_invite_to_invalid_channel(clear_register_create_channel):
         channel_invite_v1(user_id, invalid_channel , user_id2)
         
 def test_invite_already_member(clear_register_create_channel):
-    ids_list = clear_register_create_channels
+    ids_list = clear_register_create_channel
     user_id = ids_list[0]
     channel_id = ids_list[1]
     user_id2 = auth_register_v1('test2@gmail.com', 'testing1', 'Willy', 'Masko')
@@ -43,7 +43,7 @@ def test_invite_already_member(clear_register_create_channel):
         channel_invite_v1(user_id, channel_id, user_id2)
 
 def test_unauthorised_invitation(clear_register_create_channel):
-    ids_list = clear_register_create_channels
+    ids_list = clear_register_create_channel
     user_id = ids_list[0]
     channel_id = ids_list[1]
     user_id2 = auth_register_v1('test2@gmail.com', 'testing2', 'Willy', 'Masko')
