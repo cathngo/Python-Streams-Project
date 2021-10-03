@@ -92,7 +92,7 @@ def channel_messages_v1(auth_user_id, channel_id, start):
     #checks that the number of messages has not been over counted or
     #if start is greater than the number of messages in the page
     if start < 0 or start > message_id:
-        raise AccessError
+        raise InputError
  
     #checks that the last page is not reached otherwise it continues 
     #that there will be another page to come by not making end = -1.      
@@ -122,15 +122,12 @@ def channel_messages_v1(auth_user_id, channel_id, start):
 def channel_join_v1(auth_user_id, channel_id):
     store = data_store.get()
     
-    # Check if channel_id valid 
-    check_channel_id(channel_id, store)
-    
-    # Check if user is already member of channel
-    check_authorised_member(auth_user_id, channel_id, store)
-    
     # Checks if user exists and if so stores location in list
     user_join = find_user(auth_user_id, store)
     
+    # Check if channel_id valid 
+    check_channel_id(channel_id, store)
+
     # Stores location of channel in list
     channel_join = find_channel(channel_id, store)
     
@@ -138,6 +135,9 @@ def channel_join_v1(auth_user_id, channel_id):
     # prevent user from joining 
     if channel_join['is_public'] == False and user_join['is_streams_owner'] == False:
         raise AccessError
+        
+    # Check if user is already member of channel
+    check_authorised_member(auth_user_id, channel_id, store)    
     
     # Create member dictionary  
     member_dictionary = {
@@ -149,3 +149,4 @@ def channel_join_v1(auth_user_id, channel_id):
     
     data_store.set(store)
     return {}
+
