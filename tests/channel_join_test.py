@@ -2,7 +2,7 @@ import pytest
 
 from src.error import InputError, AccessError
 from src.channels import channels_create_v1
-from src.channel import channel_details_v1, channel_join_v1
+from src.channel import channel_details_v1, channel_join_v1, channel_invite_v1
 from src.auth import auth_register_v1
 from src.other import clear_v1
 
@@ -50,7 +50,16 @@ def test_member_update(u_id, c_id):
     details = channel_details_v1(u_id['auth_user_id'], c_id['channel_id']) 
     assert len(details['all_members']) == 2
     
-    
+# Checks if user is already a member of private channel, but attempts join again 
+# and is not global owner raise access error as it takes precedence over
+# InputError given by check_authorised_member
+def test_invalid_private_join(u_id):
+    c_id = channels_create_v1(u_id['auth_user_id'], 'Rappers', False) 
+    u_id2 = auth_register_v1('valid2@gmail.com', 'abcdef123*', 'Drake', 'Dogg')  
+    channel_invite_v1(u_id['auth_user_id'], c_id['channel_id'], u_id2['auth_user_id'])
+    with pytest.raises(AccessError):
+        channel_join_v1(u_id2['auth_user_id'], c_id['channel_id'])
+  
     
     
     
