@@ -77,3 +77,29 @@ def test_invited_user_invites(clear_register_create_channel):
     list3 = channels_list_v1(user_id3['auth_user_id'])
     assert list1 == list2
     assert list2 == list3
+    
+def test_invalid_u_id_auth_user_not_authorized(clear_register_create_channel):
+    ids_list = clear_register_create_channel
+    user_id = ids_list[0]
+    channel_id = ids_list[1]
+    user_id2 = auth_register_v1('test2@gmail.com', 'testing2', 'Willy', 'Masko')
+    invalid_u_id = 404
+    
+    with pytest.raises(AccessError):
+        channel_invite_v1(user_id2['auth_user_id'], channel_id, invalid_u_id)
+        
+def test_u_id_is_member_and_auth_not_authorized(clear_register_create_channel):
+    ids_list = clear_register_create_channel
+    user_id = ids_list[0]
+    channel_id = ids_list[1]
+    user_id2 = auth_register_v1('test2@gmail.com', 'testing2', 'Willy', 'Masko')
+    user_id3 = auth_register_v1('test3@gmail.com', 'testing3', 'Porona', 'Viva')
+    
+    channel_invite_v1(user_id, channel_id, user_id2['auth_user_id'])
+    with pytest.raises(AccessError):
+        channel_invite_v1(user_id3['auth_user_id'], channel_id,
+                          user_id2['auth_user_id'])
+
+
+
+

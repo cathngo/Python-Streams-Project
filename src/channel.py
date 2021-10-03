@@ -9,12 +9,14 @@ from src.channel_messages_helper import get_channel
 def channel_invite_v1(auth_user_id, channel_id, u_id):
     store = data_store.get()
 
-    #check valid u_id
-    check_u_id_exists(u_id, store)
+    #check valid auth_id
+    check_auth_id_exists(auth_user_id, store)    
     #check channel_id exists
     check_channel_id(channel_id, store)
     #check inviter is part of given channel_id
     check_authorised_user(auth_user_id, channel_id, store)
+    #check valid u_id
+    check_u_id_exists(u_id, store)
     
     #check u_id is already part of the given channel_id
     for channel in store['channels']:
