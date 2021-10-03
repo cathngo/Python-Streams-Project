@@ -67,7 +67,7 @@ def channel_messages_v1(auth_user_id, channel_id, start):
     #checks that the number of messages has not been over counted or
     #if start is greater than the number of messages in the page
     if start < 0 or start > message_id:
-        raise AccessError
+        raise InputError
  
     #checks that the last page is not reached otherwise it continues 
     #that there will be another page to come by not making end = -1.      
