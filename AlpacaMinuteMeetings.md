@@ -1,10 +1,8 @@
 # Alpaca Meeting Minutes #
-*Google Doc links*
+*Google Drive link*
 
-**First Meeting 22.09.21**
+**The Google Drive link with all our meetings** 
+    https://drive.google.com/drive/folders/1QJkUaOY_BEr24fVjoo65pbMVOmh6mdLX?usp=sharing
 
-    https://docs.google.com/document/d/1mEDv4h9NOQGOIjenkRwDkJTr0pGGVwJz8cVZ9QmSXek/edit
 
-**Second Meeting 25.09.21**
 
-    https://docs.google.com/document/d/11sNKDMwBAM2TopjuihK0v4vSRmzRZmuFLI2AGmq9Gmc/edit
