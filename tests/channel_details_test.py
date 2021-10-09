@@ -66,8 +66,8 @@ def test_correct_channel_details(test_u_id, test_c_id):
 #check returns correct channel details given multiple channels a user has created
 def test_multiple_channels(test_u_id):
     #create multiple channels with first user
-    c_id_zero = channels_create_v1(test_u_id['auth_user_id'], 'Channel Zero', True) 
-    c_id_one = channels_create_v1(test_u_id['auth_user_id'], 'Channel One', True) 
+    channels_create_v1(test_u_id['auth_user_id'], 'Channel Zero', True) 
+    channels_create_v1(test_u_id['auth_user_id'], 'Channel One', True) 
     c_id_two = channels_create_v1(test_u_id['auth_user_id'], 'Channel Two', False) 
     #test returns details of channel two
     details = channel_details_v1(test_u_id['auth_user_id'], c_id_two['channel_id'])

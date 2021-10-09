@@ -53,7 +53,7 @@ def test_member_update(u_id, c_id):
 # Checks if user is already a member of private channel, but attempts join again 
 # and is not global owner raise access error as it takes precedence over
 # InputError given by check_authorised_member
-def test_invalid_private_join(u_id):
+def test_invalid_private_join2(u_id):
     c_id = channels_create_v1(u_id['auth_user_id'], 'Rappers', False) 
     u_id2 = auth_register_v1('valid2@gmail.com', 'abcdef123*', 'Drake', 'Dogg')  
     channel_invite_v1(u_id['auth_user_id'], c_id['channel_id'], u_id2['auth_user_id'])

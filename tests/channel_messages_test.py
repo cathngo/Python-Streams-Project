@@ -52,7 +52,6 @@ def test_unauthorised_member(clear):
 def test_negative_one_end_of_messages(clear):
     u_id = auth_register_v1('validemail@gmail.com', '123abc!@#', 'Sam', 'Smith')
     c_id = channels_create_v1(u_id['auth_user_id'], 'Alpaca', True)
-    start = 0
     m_id = channel_messages_v1(u_id['auth_user_id'], c_id['channel_id'], 0)  
     assert m_id['end'] == -1  
 
