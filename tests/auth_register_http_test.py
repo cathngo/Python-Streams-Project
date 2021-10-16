@@ -1,6 +1,7 @@
 import requests
 import jwt
 from src import config
+from src.config import SECRET
 
 def test_unique_id():
     '''
@@ -21,8 +22,8 @@ def test_unique_id():
     payload1 = r1.json()
     payload2 = r2.json()
 
-    user1_info = jwt.decode(payload1['token'], 'Kanye', algorithms=['HS256'])
-    user2_info = jwt.decode(payload2['token'], 'Kanye', algorithms=['HS256'])
+    user1_info = jwt.decode(payload1['token'], SECRET, algorithms=['HS256'])
+    user2_info = jwt.decode(payload2['token'], SECRET, algorithms=['HS256'])
     assert user1_info['auth_user_id'] != user2_info['auth_user_id']
 
 
@@ -66,9 +67,24 @@ def test_unique_session_id():
     payload1 = r1.json()
     payload2 = r2.json()
 
-    user1_info = jwt.decode(payload1['token'], 'Kanye', algorithms=['HS256'])
-    user2_info = jwt.decode(payload2['token'], 'Kanye', algorithms=['HS256'])
+    user1_info = jwt.decode(payload1['token'], SECRET, algorithms=['HS256'])
+    user2_info = jwt.decode(payload2['token'], SECRET, algorithms=['HS256'])
     assert user1_info['session_id'] != user2_info['session_id']
+
+def test_token_works():
+    '''
+    Check if generated token matches user id
+    '''
+    r1 = requests.post(config.url + 'auth/register/v2', json={
+        'email': 'user1@email.com',
+        'password': 'user1password',
+        'name_first': 'Kanye',
+        'name_last': 'Yeezus',
+    })
+    payload1 = r1.json()
+
+    user1_info = jwt.decode(payload1['token'], SECRET, algorithms=['HS256'])
+    assert user1_info['auth_user_id'] == payload1['auth_user_id']
 
 def test_unique_invalid_email():
     '''
