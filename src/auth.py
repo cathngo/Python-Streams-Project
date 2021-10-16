@@ -1,6 +1,15 @@
 from src.data_store import data_store
 from src.error import InputError
-from src.auth_register_helper import check_email, check_duplicate_email, check_password, check_name, create_handle
+from src.auth_register_helper import (
+    check_email,
+    check_duplicate_email,
+    check_password,
+    check_name,
+    create_handle,
+    generate_jwt,
+    hash_user_password,
+    generate_new_session_id,
+)
 
 def auth_login_v1(email, password):
     
@@ -38,6 +47,15 @@ def auth_register_v1(email, password, name_first, name_last):
     
     # Creates unique handle
     handle_str = create_handle(name_first, name_last, store)
+
+    # Hash user's input password
+    password = hash_user_password(password)
+
+    # Get new session id for user
+    new_session_id = generate_new_session_id()
+
+    # Creates unique token
+    token = generate_jwt(u_id, new_session_id)
     
     # Registers user into store
     store['users'].append(
@@ -49,11 +67,14 @@ def auth_register_v1(email, password, name_first, name_last):
             'name_last': name_last,
             'handle_str': handle_str,
             'is_streams_owner': is_streams_owner,
+            'session_list': [new_session_id]
         }
     )
 
     data_store.set(store)
     
     return {
+        'token': token,
         'auth_user_id': u_id
     }
+
