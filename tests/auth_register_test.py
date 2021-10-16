@@ -48,12 +48,12 @@ def test_register_unique_id():
     auth_user2_id = auth_register_v1('user2@email.com', 'password', 'John', 'lastname')
     assert auth_user1_id != auth_user2_id
 
-# Check if user id generated from auth_register matches returned id from auth_login
-def test_register_works():
-    clear_v1()
-    user_return = auth_register_v1('user@email.com', 'password', 'firstname', 'lastname')
-    user_id = user_return['auth_user_id']
+# # Check if user id generated from auth_register matches returned id from auth_login
+# def test_register_works():
+#     clear_v1()
+#     user_return = auth_register_v1('user@email.com', 'password', 'firstname', 'lastname')
+#     user_id = user_return['auth_user_id']
 
-    user_login_return = auth_login_v1('user@email.com', 'password')
-    login_id = user_login_return['auth_user_id']
-    assert user_id == login_id
+#     user_login_return = auth_login_v1('user@email.com', 'password')
+#     login_id = user_login_return['auth_user_id']
+#     assert user_id == login_id
