@@ -26,7 +26,7 @@ def test_http_unique_id():
 
     user1_info = jwt.decode(payload1['token'], SECRET, algorithms=['HS256'])
     user2_info = jwt.decode(payload2['token'], SECRET, algorithms=['HS256'])
-    assert user1_info['auth_user_id'] != user2_info['auth_user_id']
+    assert user1_info['u_id'] != user2_info['u_id']
 
 def test_http_correct_token():
     '''
@@ -88,7 +88,7 @@ def test_http_token_works():
     payload1 = r1.json()
 
     user1_info = jwt.decode(payload1['token'], SECRET, algorithms=['HS256'])
-    assert user1_info['auth_user_id'] == payload1['auth_user_id']
+    assert user1_info['u_id'] == payload1['auth_user_id']
 
 def test_http_unique_invalid_email():
     '''
