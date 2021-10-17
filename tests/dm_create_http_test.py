@@ -1,7 +1,5 @@
 import requests
-import jwt
 from src import config
-from src.config import SECRET
 
 def test_dm_create_works():
     '''
