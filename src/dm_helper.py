@@ -3,8 +3,11 @@ from src.channels_invite_helper import check_u_id_exists
 def check_valid_u_id_list(u_ids, store):
     '''
     Check if any u_id in u_ids does not refer to a valid user
-    Returns InputError if u_ids is empty
+    Skips check if u_ids is empty
     '''
+    if not u_ids:
+        return
+
     for id in u_ids:
         check_u_id_exists(id, store)
 
@@ -25,13 +28,19 @@ def find_user_handle(u_id, store):
         if user['u_id'] == u_id:
             return user['handle_str']
 
-def generate_dm_names(u_ids, store):
+def generate_dm_names(u_ids, store, owner_id):
     '''
     Creates a list of names for users in dm
     Don't need to check if user id in u_ids exists or not
+    Owner of DM is added to name
     '''
-    new_dm_list = []
+    owner_handle = find_user_handle(owner_id, store)
+    new_dm_list = [owner_handle]
+
     for id in u_ids:
         new_dm_list.append(find_user_handle(id, store))
     new_dm_list.sort()
-    return new_dm_list
+
+    # Convert to a string
+    dm_name = ', '.join(new_dm_list)
+    return dm_name

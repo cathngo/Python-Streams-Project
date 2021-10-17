@@ -1,17 +1,12 @@
 from src.data_store import data_store
 from src.dm_helper import check_valid_u_id_list, generate_dm_id, generate_dm_names
 from src.token_helper import decode_jwt, check_valid_token
-from src.error import InputError
 
 def dm_create_v1(token , u_ids):
     '''
     Creates a dm based on input and returns a unique dm id
     '''
     store = data_store.get()
-
-    # If u_ids is empty, raise InputError
-    if not u_ids:
-        raise InputError("Directing message to 0 users")
 
     # Check valid token
     user_token = decode_jwt(token)
@@ -23,13 +18,18 @@ def dm_create_v1(token , u_ids):
     # Generate new dm_id
     dm_id = generate_dm_id()
 
-    # Generate dm_names
-    dm_names = generate_dm_names(u_ids, store)
+    # Generate name for dm
+    dm_name = generate_dm_names(u_ids, store, user_token['u_id'])
+
+    # Populate users in the dm into a list
+    dm_members = u_ids
+    dm_members.append(user_token['u_id'])
 
     store['dm'].append({
         'dm_id': dm_id,
+        'name': dm_name,
         'owner_id': user_token['u_id'],
-        'users': dm_names,
+        'members': dm_members,
     })
 
     data_store.set(store)
