@@ -45,6 +45,7 @@ def echo():
 @APP.route("/clear/v1", methods=['DELETE'])
 def clear():
     clear_v1()
+    return dumps({})
 
 @APP.route("/auth/register/v2", methods=['POST'])
 def auth_register_v2_http():
