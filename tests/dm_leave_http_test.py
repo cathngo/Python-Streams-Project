@@ -27,12 +27,15 @@ def test_dm_leave_works():
     })
     payload3 = r3.json()
     
-    r4 = requests.post(config.url + 'dm/leave/v1', json={
+    requests.post(config.url + 'dm/leave/v1', json={
         'token': payload2['token'],
         'dm_id': payload3['dm_id'],
     })
+    r4 = requests.get(config.url + 'dm/list/v1', params={
+        'token': payload2['token'],
+    })
     payload4 = r4.json()
-    assert len(payload4['members']) == 1
+    assert len(payload4['dms']) == 0
 
 def test_invalid_token():
     '''
@@ -78,7 +81,7 @@ def test_invalid_dm_id():
     })
     payload2 = r2.json()
 
-    r3 = requests.post(config.url + 'dm/remove/v1', json={
+    r3 = requests.post(config.url + 'dm/leave/v1', json={
         'token': payload1['token'],
         'dm_id': payload2['dm_id'] + 1,
     })
@@ -110,7 +113,7 @@ def test_not_dm_member():
     })
     payload3 = r3.json()
     
-    r4 = requests.post(config.url + 'dm/leave/v1', params={
+    r4 = requests.post(config.url + 'dm/leave/v1', json={
         'token': payload2['token'],
         'dm_id': payload3['dm_id'],
     })
