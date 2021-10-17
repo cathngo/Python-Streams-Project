@@ -33,7 +33,7 @@ def dm_create_v1(token , u_ids):
     })
 
     data_store.set(store)
-    
+
     return {
         'dm_id': dm_id
     }
