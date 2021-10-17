@@ -80,3 +80,11 @@ def obtain_user_details(auth_user_id, store):
                 'handle_str': user_iter['handle_str'],
             }
             return user_details_temp
+
+def check_user_is_dm_owner(auth_user_id, dm_check):
+    '''
+    Checks if the user is the dm owner
+    '''
+    if auth_user_id == dm_check['owner_id']:
+        return
+    raise AccessError(description='authorised user is not the owner of the DM')
