@@ -161,7 +161,7 @@ def test_http_register_fname_length():
         'name_last': 'Yeezus',
     })
     r2 = requests.post(config.url + 'auth/register/v2', json={
-        'email': 'user1@email.com',
+        'email': 'user2@email.com',
         'password': 'user2password',
         'name_first': 'ffffff' * 10,
         'name_last': 'Ball',
@@ -182,10 +182,37 @@ def test_http_register_lname_length():
         'name_last': '',
     })
     r2 = requests.post(config.url + 'auth/register/v2', json={
-        'email': 'user1@email.com',
+        'email': 'user2@email.com',
         'password': 'user2password',
         'name_first': 'Lavar',
         'name_last': 'ffffff' * 10,
     })
     assert r1.status_code == 400
     assert r2.status_code == 400
+
+def test_unique_handle():
+    '''
+    Have to create 3 unique handles with the same name for coverage
+    '''
+    requests.delete(config.url + 'clear/v1')
+    r1 = requests.post(config.url + 'auth/register/v2', json={
+        'email': 'user1@email.com',
+        'password': 'user1password',
+        'name_first': 'Kanye',
+        'name_last': 'West',
+    })
+    r2 = requests.post(config.url + 'auth/register/v2', json={
+        'email': 'user2@email.com',
+        'password': 'user2password',
+        'name_first': 'Kanye',
+        'name_last': 'West',
+    })
+    r3 = requests.post(config.url + 'auth/register/v2', json={
+        'email': 'user3@email.com',
+        'password': 'user3password',
+        'name_first': 'Kanye',
+        'name_last': 'West',
+    })
+    assert r1.status_code != 400
+    assert r2.status_code != 400
+    assert r3.status_code != 400

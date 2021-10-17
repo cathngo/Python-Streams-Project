@@ -80,12 +80,7 @@ def create_handle(name_first, name_last, store):
     return handle_str
 
 # Create and return unique token for user based off u_id
-def generate_jwt(u_id, session_id = None):
-    '''
-    Session_id defaults to None if not provided
-    '''
-    if session_id == None:
-        session_id = generate_new_session_id()
+def generate_jwt(u_id, session_id):
     return jwt.encode({'u_id': u_id, 'session_id': session_id}, SECRET, algorithm='HS256')
 
 # Hash user password
