@@ -13,8 +13,10 @@ from src.channel import channel_details_v1
 from src.token_helper import decode_jwt, check_valid_token
 from src.dm_create import dm_create_v1
 from src.dm_list import dm_list_v1
+from src.dm_details import dm_details_v1
 from src.users_all_v1_helper import get_all_users
 from src.user_profile_v1_helper import get_user_profile, check_valid_u_id
+from src.user_profile_put_helpers import set_username
 
 def quit_gracefully(*args):
     '''For coverage'''
@@ -113,6 +115,15 @@ def get_user_dms():
 
     return dumps(dms_list)
 
+@APP.route("/dm/details/v1", methods=['GET'])
+def get_dm_details():
+    token = request.args.get('token')
+    dm_id = int(request.args.get('dm_id'))
+
+    dm_details_output = dm_details_v1(token, dm_id)
+
+    return dumps(dm_details_output)
+
 #users_all_v1
 @APP.route("/users/all/v1", methods=['GET'])
 def fetch_users():
@@ -143,6 +154,20 @@ def fetch_user_profile():
 
     return dumps(user_profile)
 
+#user_profile_setname_v1
+@APP.route("/user/profile/setname/v1", methods=['PUT'])
+def update_user_names():
+    data = request.get_json()
+    first_name = data['name_first']
+    last_name = data['name_last']
+    token = data['token']
+
+    #check valid token
+    user_token = decode_jwt(token)
+    check_valid_token(user_token)
+
+    set_username(user_token['u_id'], first_name, last_name)
+    return dumps({})
 
 
 #### NO NEED TO MODIFY BELOW THIS POINT
