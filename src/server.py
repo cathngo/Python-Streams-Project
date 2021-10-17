@@ -15,6 +15,7 @@ from src.dm_create import dm_create_v1
 from src.dm_list import dm_list_v1
 from src.dm_details import dm_details_v1
 from src.dm_remove import dm_remove_v1
+from src.dm_leave import dm_leave_v1
 from src.users_all_v1_helper import get_all_users
 from src.user_profile_v1_helper import get_user_profile, check_valid_u_id
 from src.user_profile_put_helpers import set_username, set_handle
@@ -132,6 +133,14 @@ def get_dm_details():
     dm_details_output = dm_details_v1(token, dm_id)
 
     return dumps(dm_details_output)
+
+@APP.route("/dm/leave/v1", methods=['POST'])
+def leave_dm():
+    data = request.get_json()
+    
+    dm_leave_v1(data['token'], data['dm_id'])
+    
+    return dumps({})
 
 #users_all_v1
 @APP.route("/users/all/v1", methods=['GET'])
