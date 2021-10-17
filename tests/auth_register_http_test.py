@@ -3,6 +3,20 @@ import jwt
 from src import config
 from src.config import SECRET
 
+def test_http_auth_register_works():
+    '''
+    Checks if auth/register/v2 works
+    '''
+    requests.delete(config.url + 'clear/v1')
+    r1 = requests.post(config.url + 'auth/register/v2', json={
+        'email': 'user1@email.com',
+        'password': 'user1password',
+        'name_first': 'Kanye',
+        'name_last': 'Yeezus',
+    })
+    payload1 = r1.json()
+    user1_info = jwt.decode(payload1['token'], SECRET, algorithms=['HS256'])
+    assert len(user1_info) == 2
 
 def test_http_unique_id():
     '''
