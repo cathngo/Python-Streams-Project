@@ -17,6 +17,7 @@ def test_correct_user_details():
     assert r['users'][0]['name_first'] == 'Sam'
     assert r['users'][0]['name_last'] == 'Smith'
     assert r['users'][0]['email'] == 'validemail@gmail.com'
+    assert r['users'][0]['u_id'] == user_token['auth_user_id']
 
 #check returns multiple user details
 def test_multiple_users():
