@@ -30,11 +30,10 @@ def test_dm_list_works():
         'u_ids': [],
     })
     
-    r3 = requests.post(config.url + 'dm/list/v1', json={
-        'token': payload1['token']
+    r3 = requests.get(config.url + 'dm/list/v1', params={
+        'token': payload1['token'],
     })
-    payload3 = r3.json()
-    assert len(payload3['dms']) == 2
+    assert r3.status_code == 200
 
 def test_no_dms():
     '''
@@ -49,7 +48,7 @@ def test_no_dms():
     })
     payload1 = r1.json()
 
-    r2 = requests.post(config.url + 'dm/list/v1', json={
+    r2 = requests.get(config.url + 'dm/list/v1', params={
         'token': payload1['token'],
     })
     payload2 = r2.json()
@@ -73,7 +72,7 @@ def test_invalid_token():
         'u_ids': [],
     })
 
-    r2 = requests.post(config.url + 'dm/list/v1', json={
+    r2 = requests.get(config.url + 'dm/list/v1', params={
         'token': 'invalidtoken',
     })
     assert r2.status_code == 403
