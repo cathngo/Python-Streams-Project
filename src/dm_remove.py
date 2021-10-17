@@ -19,7 +19,9 @@ def dm_remove_v1(token, dm_id):
     check_user_is_dm_owner(user_token['u_id'], dm_check)
 
     # Create new dm list which does not contain the removed DM
-    new_dm_list = [dm_dict for dm_dict in data_store['dm'] if dm_dict.get('dm_id') != dm_id]
+    new_dm_list = [dm_dict for dm_dict in store['dm'] if dm_dict.get('dm_id') != dm_id]
     store['dm'] = new_dm_list
+
+    data_store.set(store)
 
     return {}
