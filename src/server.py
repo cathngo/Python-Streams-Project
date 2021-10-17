@@ -12,6 +12,7 @@ from src.channels import channels_create_v1
 from src.channel import channel_details_v1
 from src.token_helper import decode_jwt, check_valid_token
 from src.dm_create import dm_create_v1
+from src.dm_list import dm_list_v1
 from src.users_all_v1_helper import get_all_users
 
 def quit_gracefully(*args):
@@ -101,6 +102,13 @@ def create_new_dm():
     data = request.get_json()
     return jsonify(
         dm_create_v1(data['token'], data['u_ids'])
+    )
+
+@APP.route("/dm/list/v1", methods=['GET'])
+def get_user_dms():
+    data = request.get_json()
+    return jsonify(
+        dm_list_v1(data['token'])
     )
 
 #users_all_v1
