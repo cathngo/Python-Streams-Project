@@ -14,11 +14,11 @@ def test_correct_user_details():
     user_token = user.json()
     resp = requests.get(config.url + 'users/all/v1', params={'token': user_token['token']})
     r = resp.json()
-    assert r['name_first'] == 'Sam'
-    assert r['name_last'] == 'Smith'
-    assert r['email'] == 'validemail@gmail.com'
+    assert r['users'][0]['name_first'] == 'Sam'
+    assert r['users'][0]['name_last'] == 'Smith'
+    assert r['users'][0]['email'] == 'validemail@gmail.com'
 
-#check returns correct user with multiple existing users
+#check returns multiple user details
 def test_multiple_users():
     #Reset route
     requests.delete(config.url + 'clear/v1')
@@ -30,9 +30,13 @@ def test_multiple_users():
     user_token = user.json()
     resp = requests.get(config.url + 'users/all/v1', params={'token': user_token['token']})
     r = resp.json()
-    assert r['name_first'] == 'Sam'
-    assert r['name_last'] == 'Smith'
-    assert r['email'] == 'validemail@gmail.com'
+
+    assert r['users'][0]['name_first'] == 'Kelly'
+    assert r['users'][1]['name_first'] == 'Donut'
+    assert r['users'][2]['name_first'] == 'Sean'
+    assert r['users'][3]['name_first'] == 'Sam'
+    assert r['users'][3]['name_last'] == 'Smith'
+    assert r['users'][3]['email'] == 'validemail4@gmail.com'
 
 #check accesserror for invalid token for invalid user
 def test_invalid_token():
@@ -42,8 +46,7 @@ def test_invalid_token():
     invalid_u_id = user_token['auth_user_id'] + 1
     invalid_token = jwt.encode({'u_id': invalid_u_id, 'session_id': 0}, config.SECRET, algorithm='HS256')
     resp = requests.get(config.url + 'users/all/v1', params={'token': invalid_token})
-    r = resp.json()
-    assert r.status_code == 403
+    assert resp.status_code == 403
 
 #check accesserror for token with wrong secret
 def test_invalid_secret():
@@ -52,5 +55,4 @@ def test_invalid_secret():
     user_token = user.json()
     invalid_token = jwt.encode({'u_id': user_token['auth_user_id'], 'session_id': 0}, config.SECRET, algorithm='HS256')
     resp = requests.get(config.url + 'users/all/v1', params={'token': invalid_token})
-    r = resp.json()
-    assert r.status_code == 403
+    assert resp.status_code == 403

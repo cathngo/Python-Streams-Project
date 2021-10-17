@@ -1,13 +1,11 @@
 from src.token_helper import decode_jwt, check_valid_token
 from src.data_store import data_store
 
-def get_all_users(token_user):  
+def get_all_users():  
     store = data_store.get()
-    #check valid token
-    check_valid_token(token_user)
 
     all_users = []
-    #check all the userese in the database
+    #check all the users in the database
     for user in store['users']:
         temp_dict = {
             'u_id': user['u_id'],
