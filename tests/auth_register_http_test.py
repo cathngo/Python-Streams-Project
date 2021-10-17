@@ -115,7 +115,21 @@ def test_http_unique_invalid_email():
         'name_first': 'Kanye',
         'name_last': 'Yeezus',
     })
+    r2 = requests.post(config.url + 'auth/register/v2', json={
+        'email': '',
+        'password': 'user2password',
+        'name_first': 'Kanye',
+        'name_last': 'East',
+    })
+    r3 = requests.post(config.url + 'auth/register/v2', json={
+        'email': 'emaillongerthan254characters' * 20,
+        'password': 'user3password',
+        'name_first': 'Kanye',
+        'name_last': 'South',
+    })
     assert r1.status_code == 400
+    assert r2.status_code == 400
+    assert r3.status_code == 400
 
 def test_http_register_duplicate_email():
     '''
@@ -198,20 +212,20 @@ def test_unique_handle():
     r1 = requests.post(config.url + 'auth/register/v2', json={
         'email': 'user1@email.com',
         'password': 'user1password',
-        'name_first': 'Kanye',
-        'name_last': 'West',
+        'name_first': 'KanyeKanyeKanye123',
+        'name_last': 'WestWestWest123',
     })
     r2 = requests.post(config.url + 'auth/register/v2', json={
         'email': 'user2@email.com',
         'password': 'user2password',
-        'name_first': 'Kanye',
-        'name_last': 'West',
+        'name_first': 'KanyeKanyeKanye123',
+        'name_last': 'WestWestWest123',
     })
     r3 = requests.post(config.url + 'auth/register/v2', json={
         'email': 'user3@email.com',
         'password': 'user3password',
-        'name_first': 'Kanye',
-        'name_last': 'West',
+        'name_first': 'KanyeKanyeKanye123',
+        'name_last': 'WestWestWest123',
     })
     assert r1.status_code != 400
     assert r2.status_code != 400
