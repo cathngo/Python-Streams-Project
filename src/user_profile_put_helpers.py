@@ -1,5 +1,5 @@
 from src.data_store import data_store
-from src.auth_register_helper import check_name, check_duplicate_handle
+from src.auth_register_helper import check_name, check_duplicate_handle, check_email, check_duplicate_email
 from src.error import AccessError
 from src.error import InputError
 
@@ -34,5 +34,19 @@ def set_handle(auth_user_id, handle_str):
     for user in store['users']:
         if user['u_id'] == auth_user_id:
             user['handle_str'] = handle_str
+            return 
+    return  
+
+def set_email(auth_user_id, email):
+    store = data_store.get()
+    #check email valid
+    check_email(email)
+    #check duplicate email
+    if check_duplicate_email(email, store) == True:
+        raise InputError("Invalid email - email already in use")
+
+    for user in store['users']:
+        if user['u_id'] == auth_user_id:
+            user['email'] = email
             return 
     return  
