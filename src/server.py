@@ -11,6 +11,7 @@ from src.error import AccessError
 from src.channels import channels_create_v1
 from src.channel import channel_details_v1
 from src.token_helper import decode_jwt, check_valid_token
+from src.dm_create import dm_create_v1
 
 def quit_gracefully(*args):
     '''For coverage'''
@@ -92,6 +93,13 @@ def get_channel_details():
 
     return dumps(
         details
+    )
+
+@APP.route("/dm/create/v1", methods=['POST'])
+def create_new_dm():
+    data = request.get_json()
+    return jsonify(
+        dm_create_v1(data['token'], data['u_ids'])
     )
 
 #### NO NEED TO MODIFY BELOW THIS POINT
