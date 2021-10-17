@@ -56,29 +56,27 @@ def check_dm_id_exists(dm_id, store):
             return dm_iter
     raise InputError(description='dm_id does not exist')
 
-def check_user_in_dm(u_id, dm_id, store):
+def check_user_in_dm(auth_user_id, dm_check):
     '''
-    Checks if the user is a member of the given dm_id
+    Checks if the user is a member of the given dm
     '''
-    for dm_iter in store['dm']:
-        if dm_iter['dm_id'] == dm_id:
-            for user in dm_iter['members']:
-                if user['u_id'] == u_id:
-                    return
+    for user_iter in dm_check['members']:
+        if auth_user_id == user_iter['u_id']:
+            return
     raise AccessError(description='authorised user is not a member of the DM')
 
-def obtain_user_details(u_id, store):
+def obtain_user_details(auth_user_id, store):
     '''
     Returns a dictionary containing user details
     Assumes u_id is a valid and existing id in data store
     '''
-    for user in store['users']:
-        if user['u_id'] == u_id:
+    for user_iter in store['users']:
+        if auth_user_id == user_iter['u_id']:
             user_details_temp = {
-                'u_id': user['u_id'],
-                'email': user['email'],
-                'name_first': user['name_first'], 
-                'name_last': user['name_last'],
-                'handle_str': user['handle_str'],
+                'u_id': user_iter['u_id'],
+                'email': user_iter['email'],
+                'name_first': user_iter['name_first'], 
+                'name_last': user_iter['name_last'],
+                'handle_str': user_iter['handle_str'],
             }
             return user_details_temp

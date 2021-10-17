@@ -17,13 +17,13 @@ def dm_details_v1(token, dm_id):
     dm_check = check_dm_id_exists(dm_id, store)
 
     # Check if authorised user is a member of the DM
-    check_user_in_dm(user_token['u_id'], dm_id, store)
+    check_user_in_dm(user_token['u_id'], dm_check)
 
     # List of dictionaries to store user details
     members = []
 
-    for user in dm_check['members']:
-        members.append(obtain_user_details(user, store))
+    for member_iter in dm_check['members']:
+        members.append(obtain_user_details(member_iter, store))
 
     return {
         'name': dm_check['name'],
