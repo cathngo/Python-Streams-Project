@@ -47,6 +47,25 @@ def test_invalid_token():
     })
     assert r2.status_code == 403
 
+def test_empty_u_ids():
+    '''
+    Check that user can create dm with 0 members
+    '''
+    requests.delete(config.url + 'clear/v1')
+    r1 = requests.post(config.url + 'auth/register/v2', json={
+        'email': 'user1@email.com',
+        'password': 'user1password',
+        'name_first': 'Kanye',
+        'name_last': 'Yeezus',
+    })
+    payload1 = r1.json()
+    r2 = requests.post(config.url + 'dm/create/v1', json={
+        'token': payload1['token'],
+        'u_ids': [],
+    })
+    payload2 = r2.json()
+    assert len(payload2) == 1
+
 def test_invalid_u_ids():
     '''
     Check when any u_id in u_ids does not refer to a valid user
