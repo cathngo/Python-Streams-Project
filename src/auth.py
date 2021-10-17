@@ -99,4 +99,3 @@ def auth_register_v1(email, password, name_first, name_last):
         'token': token,
         'auth_user_id': u_id
     }
-
