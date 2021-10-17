@@ -11,6 +11,7 @@ from src.error import AccessError
 from src.channels import channels_create_v1
 from src.channel import channel_details_v1
 from src.token_helper import decode_jwt, check_valid_token
+from src.users_all_v1_helper import get_all_users
 
 def quit_gracefully(*args):
     '''For coverage'''
@@ -93,6 +94,20 @@ def get_channel_details():
     return dumps(
         details
     )
+
+#users_all_v1
+@APP.route("/users/all/v1", methods=['GET'])
+def fetch_users():
+    token = request.args.get('token')
+
+     #check valid token
+    user_token = decode_jwt(token)
+    check_valid_token(user_token)
+
+    users = get_all_users()
+
+    return dumps(users)
+
 
 #### NO NEED TO MODIFY BELOW THIS POINT
 
