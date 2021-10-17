@@ -67,11 +67,7 @@ def create_channel():
     token = data['token']
 
     #check valid token
-    try:
-        user_token = decode_jwt(token)
-    except:
-        raise AccessError('Could not decode token')
-
+    user_token = decode_jwt(token)
     check_valid_token(user_token)
 
     channel = channels_create_v1(user_token['u_id'], name, is_public)
@@ -89,11 +85,7 @@ def get_channel_details():
     channel_id = int(request.args.get('channel_id'))
 
     #check valid token
-    try:
-        user_token = decode_jwt(token)
-    except:
-        raise AccessError('Could not decode token')
-
+    user_token = decode_jwt(token)
     check_valid_token(user_token)
 
     details = channel_details_v1(user_token['u_id'], channel_id)

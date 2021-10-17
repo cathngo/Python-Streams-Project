@@ -4,7 +4,16 @@ from src.data_store import data_store
 from src.config import SECRET
 
 def decode_jwt(encoded_jwt):
-    return jwt.decode(encoded_jwt, SECRET, algorithms=['HS256'])
+    success = True
+    try:
+        token = jwt.decode(encoded_jwt, SECRET, algorithms=['HS256'])
+    except:
+        success = False
+    if success == False:
+        raise AccessError("Could not decode token")
+    return token
+        
+    
 
 def check_valid_token(user_token):
     store = data_store.get()
