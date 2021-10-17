@@ -12,7 +12,7 @@ def test_correct_user_details():
     #get token from auth reg
     user = requests.post(config.url + 'auth/register/v2', json={'email': 'validemail@gmail.com', 'password': '123abc!@#', 'name_first': 'Sam', 'name_last': 'Smith'})
     user_token = user.json()
-    resp = requests.put(config.url + 'users/all/v1', json={'token': user_token['token']})
+    resp = requests.get(config.url + 'users/all/v1', params={'token': user_token['token']})
     r = resp.json()
     assert r['name_first'] == 'Sam'
     assert r['name_last'] == 'Smith'
@@ -28,7 +28,7 @@ def test_multiple_users():
     requests.post(config.url + 'auth/register/v2', json={'email': 'validemail3@gmail.com', 'password': '123abc3!@#', 'name_first': 'Sean', 'name_last': 'Ocean'})
     user = requests.post(config.url + 'auth/register/v2', json={'email': 'validemail4@gmail.com', 'password': '123abc!@#', 'name_first': 'Sam', 'name_last': 'Smith'})
     user_token = user.json()
-    resp = requests.put(config.url + 'users/all/v1', json={'token': user_token['token']})
+    resp = requests.get(config.url + 'users/all/v1', params={'token': user_token['token']})
     r = resp.json()
     assert r['name_first'] == 'Sam'
     assert r['name_last'] == 'Smith'
@@ -41,7 +41,7 @@ def test_invalid_token():
     user_token = user.json()
     invalid_u_id = user_token['auth_user_id'] + 1
     invalid_token = jwt.encode({'u_id': invalid_u_id, 'session_id': 0}, config.SECRET, algorithm='HS256')
-    resp = requests.put(config.url + 'users/all/v1', json={'token': invalid_token})
+    resp = requests.get(config.url + 'users/all/v1', params={'token': invalid_token})
     r = resp.json()
     assert r.status_code == 403
 
@@ -51,6 +51,6 @@ def test_invalid_secret():
     user = requests.post(config.url + 'auth/register/v2', json={'email': 'validemail@gmail.com', 'password': '123abc!@#', 'name_first': 'Sam', 'name_last': 'Smith'})
     user_token = user.json()
     invalid_token = jwt.encode({'u_id': user_token['auth_user_id'], 'session_id': 0}, config.SECRET, algorithm='HS256')
-    resp = requests.put(config.url + 'users/all/v1', json={'token': invalid_token})
+    resp = requests.get(config.url + 'users/all/v1', params={'token': invalid_token})
     r = resp.json()
     assert r.status_code == 403
