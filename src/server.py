@@ -16,7 +16,7 @@ from src.dm_list import dm_list_v1
 from src.dm_details import dm_details_v1
 from src.users_all_v1_helper import get_all_users
 from src.user_profile_v1_helper import get_user_profile, check_valid_u_id
-from src.user_profile_put_helpers import set_username
+from src.user_profile_put_helpers import set_username, set_handle
 
 def quit_gracefully(*args):
     '''For coverage'''
@@ -167,6 +167,21 @@ def update_user_names():
     check_valid_token(user_token)
 
     set_username(user_token['u_id'], first_name, last_name)
+    return dumps({})
+
+#user_profile_sethandle_v1
+@APP.route("/user/profile/sethandle/v1", methods=['PUT'])
+def update_user_handle():
+    data = request.get_json()
+    handle_str = data['handle_str']
+    token = data['token']
+
+    #check valid token
+    user_token = decode_jwt(token)
+    check_valid_token(user_token)
+
+    set_handle(user_token['u_id'], handle_str)
+
     return dumps({})
 
 
