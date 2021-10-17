@@ -25,7 +25,8 @@ def test_dm_create_works():
         'token': payload1['token'],
         'u_ids': [payload2['auth_user_id']],
     })
-    assert len(r3) == 1
+    payload3 = r3.json()
+    assert len(payload3) == 1
 
 def test_invalid_token():
     '''
@@ -119,4 +120,6 @@ def test_unique_dm_id():
         'token': payload2['token'],
         'u_ids': [payload1['auth_user_id']],
     })
-    assert r3['dm_id'] != r4['dm_id']
+    payload3 = r3.json()
+    payload4 = r4.json()
+    assert payload3['dm_id'] != payload4['dm_id']
