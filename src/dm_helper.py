@@ -61,7 +61,7 @@ def check_user_in_dm(auth_user_id, dm_check):
     Checks if the user is a member of the given dm
     '''
     for user_iter in dm_check['members']:
-        if auth_user_id == user_iter['u_id']:
+        if auth_user_id == user_iter:
             return
     raise AccessError(description='authorised user is not a member of the DM')
 
