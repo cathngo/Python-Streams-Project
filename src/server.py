@@ -13,6 +13,7 @@ from src.channel import channel_details_v1
 from src.token_helper import decode_jwt, check_valid_token
 from src.dm_create import dm_create_v1
 from src.users_all_v1_helper import get_all_users
+from src.user_profile_v1_helper import get_user_profile, check_valid_u_id
 
 def quit_gracefully(*args):
     '''For coverage'''
@@ -115,6 +116,24 @@ def fetch_users():
     users = get_all_users()
 
     return dumps(users)
+
+#user_profile_v1
+@APP.route("/user/profile/v1", methods=['GET'])
+def fetch_user_profile():
+    token = request.args.get('token')
+    u_id = int(request.args.get('u_id'))
+
+    #check valid token
+    user_token = decode_jwt(token)
+    check_valid_token(user_token)
+
+    #check valid u_id
+    check_valid_u_id(u_id)
+
+    user_profile = get_user_profile(token, u_id)
+
+    return dumps(user_profile)
+
 
 
 #### NO NEED TO MODIFY BELOW THIS POINT
