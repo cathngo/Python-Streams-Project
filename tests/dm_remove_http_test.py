@@ -27,16 +27,16 @@ def test_dm_remove_works():
     })
     payload3 = r3.json()
     
-    r4 = requests.delete(config.url + 'dm/remove/v1', json={
+    requests.delete(config.url + 'dm/remove/v1', json={
         'token': payload1['token'],
         'dm_id': payload3['dm_id'],
     })
 
-    r5 = requests.get(config.url + 'dm/list/v1', params={
+    r4 = requests.get(config.url + 'dm/list/v1', params={
         'token': payload1['token'],
     })
-    payload5 = r5.json()
-    assert len(payload5['dms']) == 0
+    payload4 = r4.json()
+    assert len(payload4['dms']) == 0
 
 def test_invalid_token():
     '''
