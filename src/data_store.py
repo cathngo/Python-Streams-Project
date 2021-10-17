@@ -48,3 +48,66 @@ print('Loading Datastore...')
 global data_store
 data_store = Datastore()
 
+'''
+Example of populated Datastore
+
+data = {
+    'users': [
+        {
+            'u_id': 0,
+            'email': 'kanyewest@gmail.com',
+            'password': 'hashedpw',
+            'name_first': 'Kanye', 
+            'name_last': 'West',
+            'handle_str': 'kanyewest',
+            'is_streams_owner': true,
+            'session_list': [1001]
+        },
+        {
+            'u_id': 1,
+            'email': 'kanyesouth@gmail.com',
+            'password': 'hashedpw',
+            'name_first': 'Kanye', 
+            'name_last': 'South',
+            'handle_str': 'kanyesouth',
+            'is_streams_owner': false,
+            'session_list': [1002]
+        },
+    ],
+    'channels': [
+        {
+            'channel_id': 0,
+            'name': 'Haha',
+            'is_public': true,
+            'owner_members': [
+                {            
+                    'u_id': 0,   
+                }
+            ],
+            'all_members': [
+                {          
+                    'u_id': 0,
+                    'u_id': 1,
+                }
+            ],
+            'messages': [],
+        },
+        {
+            'channel_id': 1,
+            'name': 'Yeeeezus',
+            'is_public': true,
+            'owner_members': [
+                {            
+                    'u_id': 1,   
+                }
+            ],
+            'all_members': [
+                {          
+                    'u_id': 1,
+                }
+            ],
+            'messages': [],
+        },
+    ]
+}
+'''

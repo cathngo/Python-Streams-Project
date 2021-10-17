@@ -1,10 +1,12 @@
 import sys
 import signal
 from json import dumps
-from flask import Flask, request
+from flask import Flask, request, jsonify
 from flask_cors import CORS
 from src.error import InputError
 from src import config
+from src.other import clear_v1
+from src.auth import auth_register_v1
 
 def quit_gracefully(*args):
     '''For coverage'''
@@ -38,6 +40,19 @@ def echo():
     return dumps({
         'data': data
     })
+
+# Clear
+@APP.route("/clear/v1", methods=['DELETE'])
+def clear():
+    clear_v1()
+    return dumps({})
+
+@APP.route("/auth/register/v2", methods=['POST'])
+def auth_register_v2_http():
+    data = request.get_json()
+    return jsonify(
+        auth_register_v1(data['email'], data['password'], data['name_first'], data['name_last'])
+    )
 
 #### NO NEED TO MODIFY BELOW THIS POINT
 
