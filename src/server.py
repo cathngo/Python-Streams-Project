@@ -106,10 +106,11 @@ def create_new_dm():
 
 @APP.route("/dm/list/v1", methods=['GET'])
 def get_user_dms():
-    data = request.get_json()
-    return jsonify(
-        dm_list_v1(data['token'])
-    )
+    token = request.args.get('token')
+
+    dms_list = dm_list_v1(token)
+
+    return dumps(dms_list)
 
 #users_all_v1
 @APP.route("/users/all/v1", methods=['GET'])
