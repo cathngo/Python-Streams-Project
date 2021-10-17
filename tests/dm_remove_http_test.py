@@ -82,7 +82,7 @@ def test_invalid_dm_id():
     })
     payload2 = r2.json()
 
-    r3 = requests.delete(config.url + 'dm/delete/v1', json={
+    r3 = requests.delete(config.url + 'dm/remove/v1', json={
         'token': payload1['token'],
         'dm_id': payload2['dm_id'] + 1,
     })
