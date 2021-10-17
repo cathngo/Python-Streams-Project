@@ -87,4 +87,4 @@ def check_user_is_dm_owner(auth_user_id, dm_check):
     '''
     if auth_user_id == dm_check['owner_id']:
         return
-    raise AccessError(description='authorised user is not a member of the DM')
+    raise AccessError(description='authorised user is not the owner of the DM')
