@@ -122,7 +122,7 @@ def test_http_unique_invalid_email():
         'name_last': 'East',
     })
     r3 = requests.post(config.url + 'auth/register/v2', json={
-        'email': 'emaillongerthan254characters' * 20,
+        'email': 'emaillongerthan254characters' * 40,
         'password': 'user3password',
         'name_first': 'Kanye',
         'name_last': 'South',
