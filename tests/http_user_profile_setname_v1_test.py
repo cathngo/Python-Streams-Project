@@ -68,6 +68,15 @@ def test_invalid_token():
     r = requests.put(config.url + 'user/profile/setname/v1', json={'token': invalid_token, 'name_first': 'Jelly', 'name_last': 'Bean'})  
     assert r.status_code == 403   
 
+#access error if invalid token secret
+def test_invalid_token_secret():
+    requests.delete(config.url + 'clear/v1')
+    user = requests.post(config.url + 'auth/register/v2', json={'email': 'validemail@gmail.com', 'password': '123abc!@#', 'name_first': 'Sam', 'name_last': 'Smith'})
+    user_token = user.json()
+    invalid_token = jwt.encode({'u_id': user_token['auth_user_id'], 'session_id': 0}, 'Invalid', algorithm='HS256')
+    r = requests.put(config.url + 'user/profile/setname/v1', json={'token': invalid_token, 'name_first': 'Jelly', 'name_last': 'Bean'})  
+    assert r.status_code == 403   
+
 #check access error if both invalid name and invalid token
 def test_invalid_name_invalid_token():
     requests.delete(config.url + 'clear/v1')
