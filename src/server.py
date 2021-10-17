@@ -7,6 +7,10 @@ from src.error import InputError
 from src import config
 from src.other import clear_v1
 from src.auth import auth_register_v1
+from src.error import AccessError
+from src.channels import channels_create_v1
+from src.channel import channel_details_v1
+from src.token_helper import decode_jwt, check_valid_token
 
 def quit_gracefully(*args):
     '''For coverage'''
@@ -52,6 +56,50 @@ def auth_register_v2_http():
     data = request.get_json()
     return jsonify(
         auth_register_v1(data['email'], data['password'], data['name_first'], data['name_last'])
+    )
+
+#channels_create_v2
+@APP.route("/channels/create/v2", methods=['POST'])
+def create_channel():
+    data = request.get_json()
+    name = data['name']
+    is_public = data['is_public']
+    token = data['token']
+
+    #check valid token
+    try:
+        user_token = decode_jwt(token)
+    except:
+        raise AccessError('Could not decode token')
+
+    check_valid_token(user_token)
+
+    channel = channels_create_v1(user_token['u_id'], name, is_public)
+
+    return dumps({
+        'channel_id': channel['channel_id']
+    })
+
+
+#channel_details_v2
+@APP.route("/channel/details/v2", methods=['GET'])
+def get_channel_details():
+
+    token = request.args.get('token')
+    channel_id = int(request.args.get('channel_id'))
+
+    #check valid token
+    try:
+        user_token = decode_jwt(token)
+    except:
+        raise AccessError('Could not decode token')
+
+    check_valid_token(user_token)
+
+    details = channel_details_v1(user_token['u_id'], channel_id)
+
+    return dumps(
+        details
     )
 
 #### NO NEED TO MODIFY BELOW THIS POINT
