@@ -23,19 +23,34 @@ def test_dm_leave_works():
 
     r3 = requests.post(config.url + 'dm/create/v1', json={
         'token': payload1['token'],
+        'u_ids': [],
+    })
+    r4 = requests.post(config.url + 'dm/create/v1', json={
+        'token': payload1['token'],
         'u_ids': [payload2['auth_user_id']],
     })
     payload3 = r3.json()
+    payload4 = r4.json()
     
     requests.post(config.url + 'dm/leave/v1', json={
         'token': payload2['token'],
-        'dm_id': payload3['dm_id'],
+        'dm_id': payload4['dm_id'],
     })
-    r4 = requests.get(config.url + 'dm/list/v1', params={
+    r5 = requests.get(config.url + 'dm/list/v1', params={
         'token': payload2['token'],
     })
-    payload4 = r4.json()
-    assert len(payload4['dms']) == 0
+    payload5 = r5.json()
+    assert len(payload5['dms']) == 0
+
+    requests.post(config.url + 'dm/leave/v1', json={
+        'token': payload1['token'],
+        'dm_id': payload3['dm_id'],
+    })
+    r6 = requests.get(config.url + 'dm/list/v1', params={
+        'token': payload1['token'],
+    })
+    payload6 = r6.json()
+    assert len(payload6['dms']) == 1
 
 def test_invalid_token():
     '''
