@@ -9,7 +9,7 @@ from src.other import clear_v1
 from src.auth import auth_register_v1
 from src.error import AccessError
 from src.channels import channels_create_v1
-from src.channel import channel_details_v1
+from src.channel import channel_details_v1, channel_messages_v1
 from src.token_helper import decode_jwt, check_valid_token
 from src.dm_create import dm_create_v1
 from src.dm_list import dm_list_v1
@@ -97,7 +97,7 @@ def get_channel_details():
     check_valid_token(user_token)
 
     details = channel_details_v1(user_token['u_id'], channel_id)
-
+    
     return dumps(
         details
     )
@@ -202,6 +202,22 @@ def update_user_handle():
 
     return dumps({})
 
+@APP.route("/channel/message/v2", methods=['GET'])
+def get_channel_message():
+
+    token = request.args.get('token')
+    channel_id = int(request.args.get('channel_id'))
+    start = int(request.args.get('start'))
+
+    #check valid token
+    user_token = decode_jwt(token)
+    check_valid_token(user_token)
+
+    messages = channel_messages_v1(user_token['u_id'], channel_id, start)
+
+    return dumps(
+        messages
+    )
 
 #### NO NEED TO MODIFY BELOW THIS POINT
 
