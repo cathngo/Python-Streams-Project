@@ -69,6 +69,5 @@ def test_start_greater_than_messages():
         'start': 1,
     })
     #get the response in json
-    messages = resp.json()
     assert resp.status_code == 400
 
