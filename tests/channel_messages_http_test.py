@@ -35,7 +35,7 @@ def test_negative_one_end_of_messages():
     })
     channel_id = channel.json()
     #pass in start when there are no more messages
-    resp = requests.get(config.url + 'channel/message/v2', params={
+    resp = requests.get(config.url + 'channel/messages/v2', params={
         'token': user_token['token'], 
         'channel_id': channel_id['channel_id'],
         'start': 0,
@@ -63,7 +63,7 @@ def test_start_greater_than_messages():
     })
     channel_id = channel.json()
     #pass in a start that is greater to the number of messages in the system
-    resp = requests.get(config.url + 'channel/message/v2', params={
+    resp = requests.get(config.url + 'channel/messages/v2', params={
         'token': user_token['token'], 
         'channel_id': channel_id['channel_id'],
         'start': 1,

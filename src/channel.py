@@ -4,7 +4,7 @@ from src.channel_details_helper import check_authorised_user, check_channel_id, 
 from src.channels_create_helper import check_auth_id_exists
 from src.channels_invite_helper import check_u_id_exists
 from src.channel_join_helper import find_user, find_channel, check_authorised_member
-from src.channel_messages_helper import get_channel
+# from src.channel_messages_helper import get_channel
 
 def channel_invite_v1(auth_user_id, channel_id, u_id):
     store = data_store.get()
@@ -75,19 +75,11 @@ def channel_details_v1(auth_user_id, channel_id):
     return channel_dictionary
 
 #the caller must decrease messages['message_id'] by 50 everytime it called until it is < 50, otherwise this funciton will not work. 
-def channel_messages_v1(auth_user_id, channel_id, start):
+def messages_v1(auth_user_id, channel_id, start):
     store = data_store.get()
-    
-    #check valid u_id
-    check_auth_id_exists(auth_user_id, store)
-    #check channel_id exists
-    channel = get_channel(channel_id, store)
-    #check user is part of given channel_id 
-    check_authorised_user(auth_user_id, channel_id, store)
-    
 
     #gets the current lenth of the messages
-    message_id = len(channel['messages'])    
+    message_id = len(store['messages'])    
     
     #checks that the number of messages has not been over counted or
     #if start is greater than the number of messages in the page
@@ -110,9 +102,10 @@ def channel_messages_v1(auth_user_id, channel_id, start):
     #following call
     message_list = []
     for i in range(start, page_length):
-        message_list.append(channel['messages'][max_message_id - i])  
+        message_list.append(store['messages'][max_message_id - i])  
     
-    #returning a single dictionary with a key that is a list.  
+    #returning a single dictionary with a key that is a list.
+    data_store.set(store)  
     return {
         'messages': message_list, 
         'start': start,
