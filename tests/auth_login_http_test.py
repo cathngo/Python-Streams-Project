@@ -26,7 +26,7 @@ def test_http_auth_login_works():
 # Check if email entered does not belong to a user 
 def test_http_unregistered_auth_login():
     requests.delete(config.url + 'clear/v1')
-    r1 = requests.post(config.url + 'auth/register/v2', json={
+    requests.post(config.url + 'auth/register/v2', json={
         'email': 'user1@email.com',
         'password': 'user1password',
         'name_first': 'Kanye',
@@ -39,9 +39,9 @@ def test_http_unregistered_auth_login():
     assert r2.status_code == 400
 
 # Check if email entered is not a valid email
-def test_http_unregistered_auth_login():
+def test_http_invalid_email_auth_login():
     requests.delete(config.url + 'clear/v1')
-    r1 = requests.post(config.url + 'auth/register/v2', json={
+    requests.post(config.url + 'auth/register/v2', json={
         'email': 'user1@email.com',
         'password': 'user1password',
         'name_first': 'Kanye',
@@ -56,7 +56,7 @@ def test_http_unregistered_auth_login():
 # Check if password is not correct
 def test_http_auth_login_incorrect_password():
     requests.delete(config.url + 'clear/v1')
-    r1 = requests.post(config.url + 'auth/register/v2', json={
+    requests.post(config.url + 'auth/register/v2', json={
         'email': 'user1@email.com',
         'password': 'user1password',
         'name_first': 'Kanye',
