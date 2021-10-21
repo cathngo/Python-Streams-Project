@@ -28,18 +28,3 @@ def get_user_details(auth_user_id, store):
             }
 
     return owner_dictionary 
-
-def check_authorised_user_invalid_channel(channel_id, auth_user_id, store):
-    found_channel = False
-    found_user = False
-    for channel in store['channels']:
-        if channel['channel_id'] == channel_id:
-            found_channel = True
-            for member in channel['all_members']:
-                if member['u_id'] == auth_user_id:
-                    found_user = True
-                    return 
-    if found_channel == False and found_user == False:
-        raise AccessError("Invalid user - u_id not found")
-    if found_channel == True and found_usr == False:
-        raise InputError("Invalid channel id - channel id not found")
