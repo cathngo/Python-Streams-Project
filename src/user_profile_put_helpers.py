@@ -16,7 +16,6 @@ def set_username(auth_user_id, name_first, name_last):
             user['name_first'] = name_first
             user['name_last'] = name_last
             return 
-    raise AccessError("User not found cannot update name")
 
 def set_handle(auth_user_id, handle_str):
     store = data_store.get()
@@ -35,18 +34,15 @@ def set_handle(auth_user_id, handle_str):
         if user['u_id'] == auth_user_id:
             user['handle_str'] = handle_str
             return 
-    return  
 
 def set_email(auth_user_id, email):
     store = data_store.get()
     #check email valid
     check_email(email)
     #check duplicate email
-    if check_duplicate_email(email, store) == True:
-        raise InputError("Invalid email - email already in use")
+    check_duplicate_email(email, store) 
 
     for user in store['users']:
         if user['u_id'] == auth_user_id:
             user['email'] = email
             return 
-    return  
