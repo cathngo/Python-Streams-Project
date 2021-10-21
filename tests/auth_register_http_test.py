@@ -112,8 +112,8 @@ def test_http_unique_invalid_email():
     r1 = requests.post(config.url + 'auth/register/v2', json={
         'email': 'bademailcom',
         'password': 'user1password',
-        'name_first': 'Kanye@_',
-        'name_last': 'Yeezus__!@',
+        'name_first': '%Kanye@_',
+        'name_last': '%Yeezus__!@',
     })
     r2 = requests.post(config.url + 'auth/register/v2', json={
         'email': '',
