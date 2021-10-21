@@ -167,5 +167,4 @@ def test_start_greater_than_messages_dm():
         'start': 1,
     })
     #get the response in json
-    dm_messages = resp.json()
     assert resp.status_code == 400
