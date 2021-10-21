@@ -6,7 +6,7 @@ from flask_cors import CORS
 from src.error import InputError
 from src import config
 from src.other import clear_v1
-from src.auth import auth_register_v1
+from src.auth import auth_register_v1, auth_login_v1
 from src.error import AccessError
 from src.channels import channels_create_v1
 from src.channel import channel_details_v1
@@ -65,6 +65,19 @@ def auth_register_v2_http():
     return jsonify(
         auth_register_v1(data['email'], data['password'], data['name_first'], data['name_last'])
     )
+
+#auth_login_v2
+@APP.route("/auth/login/v2", methods=['POST'])
+def auth_login_v2_http():
+    data = request.get_json()
+    login_return = auth_login_v1(data['email'], data['password'])
+    return dumps({
+        'token': login_return['token'],
+        'auth_user_id': login_return['auth_user_id'],
+    })
+
+
+
 
 #channels_create_v2
 @APP.route("/channels/create/v2", methods=['POST'])
