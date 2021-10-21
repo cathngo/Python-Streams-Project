@@ -18,7 +18,7 @@ from src.dm_remove import dm_remove_v1
 from src.dm_leave import dm_leave_v1
 from src.users_all_v1_helper import get_all_users
 from src.user_profile_v1_helper import get_user_profile, check_valid_u_id
-from src.user_profile_put_helpers import set_username, set_handle
+from src.user_profile_put_helpers import set_username, set_handle, set_email
 
 def quit_gracefully(*args):
     '''For coverage'''
@@ -202,6 +202,20 @@ def update_user_handle():
 
     return dumps({})
 
+#user_profile_setemail_v1
+@APP.route("/user/profile/setemail/v1", methods=['PUT'])
+def update_user_email():
+    data = request.get_json()
+    email = data['email']
+    token = data['token']
+
+    #check valid token
+    user_token = decode_jwt(token)
+    check_valid_token(user_token)
+
+    set_email(user_token['u_id'], email)
+
+    return dumps({})
 
 #### NO NEED TO MODIFY BELOW THIS POINT
 

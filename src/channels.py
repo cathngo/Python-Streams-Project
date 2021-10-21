@@ -44,7 +44,24 @@ def channels_listall_v1(auth_user_id):
         'channels': all_channels  
     }
     
+'''
+Creates a new channel for a user and stores it in the datastore
+
+Arguments:
+    auth_user_id (int) - user's id that is created when they first register into Streams
+    name (string) - name of the channel
+    is_public (boolean) - determines whether a channel is private (false) or public (true)
+
+Exceptions:
+InputError - Occurs when:
+    - The length of name is less than 1 or more than 20 characters
+
+Return Value:
+    returns a dictionary containing a unique channel_id if the channel is successfully created
+'''
 def channels_create_v1(auth_user_id, name, is_public):
+
+
     store = data_store.get()
 
     check_valid_name(name)

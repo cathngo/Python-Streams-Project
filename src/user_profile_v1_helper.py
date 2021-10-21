@@ -17,9 +17,8 @@ def get_user_profile(token, user_id):
                 'name_last': user['name_last'],
                 'handle_str': user['handle_str'],
             }
-            return user_profile
+    return user_profile
 
-    return AccessError("User does not exist")
 
 def check_valid_u_id(auth_user_id):
     store = data_store.get()
