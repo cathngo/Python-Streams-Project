@@ -35,6 +35,24 @@ def channel_invite_v1(auth_user_id, channel_id, u_id):
     }
 
 def channel_details_v1(auth_user_id, channel_id):
+'''
+Provides basic details about the given channel that the authorised user is a member of
+
+Arguments:
+    auth_user_id (int) - user's id that is created when they first register into Streams
+    channel_id (int) - channel id that is allocated to uniquely identify a channel upon creation
+
+Exceptions:
+InputError - Occurs when:
+    - Channel_id does not refer to a valid channel
+
+AccessError - Occurs when:
+    - The channel_id is valid but the authorised user is not a member of the channel
+
+Return Value:
+    returns a dictionary containing basic details of a channel with the given channel_id including
+    the channel name, if the channel is private or public, the list of owner members and the list of all members
+'''
     store = data_store.get()
 
     #check valid u_id

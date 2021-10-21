@@ -5,6 +5,22 @@ from src.error import InputError
 
 
 def set_username(auth_user_id, name_first, name_last):
+'''
+Updates the authorised user's first and last name 
+
+Arguments:
+    auth_user_id (int) - the target user's id to apply updates to
+    name_first (string) - the user's first name after the update
+    name_last (string) - the user's last name after the update
+
+Exceptions:
+InputError - Occurs when:
+    - The length of name_first is not between 1 and 50 characters inclusive
+    - the length of name_last is notbetween 1 and 50 characters inclusive
+
+Return Value:
+    Does not return anything
+'''
     store = data_store.get()
     #check name between 1 and 50 ch
     check_name(name_first)
@@ -18,6 +34,22 @@ def set_username(auth_user_id, name_first, name_last):
          
 
 def set_handle(auth_user_id, handle_str):
+'''
+Updates the authorised user's handle (i.e display name)
+
+Arguments:
+    auth_user_id (int) - the target user's id to apply updates to
+    handle_str (string) - the user's handle after the update
+
+Exceptions:
+InputError - Occurs when:
+    - The length of handle_str is not between 3 and 20 characters inclusive
+    - handle_str contains characters that are not alphanumeric
+    - the handle is already used by another user
+
+Return Value:
+    Does not return anything
+'''
     store = data_store.get()
     #check handle_str between 3 and 20 ch
     if len(handle_str) < 3 or len(handle_str) > 20:
@@ -36,6 +68,22 @@ def set_handle(auth_user_id, handle_str):
   
 
 def set_email(auth_user_id, email):
+'''
+Updates the authorised email
+
+Arguments:
+    auth_user_id (int) - the target user's id to apply updates to
+    email (string) - the user's email after the update
+
+Exceptions:
+InputError - Occurs when:
+    - email is not a valid email 
+    (does not match the regular expression: '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}$')
+    - email address is already being used by another user
+
+Return Value:
+    Does not return anything
+'''
     store = data_store.get()
     #check email valid
     check_email(email)
