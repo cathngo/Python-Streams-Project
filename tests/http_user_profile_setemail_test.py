@@ -82,3 +82,15 @@ def test_multiple_update():
     r1 = requests.get(config.url + 'user/profile/v1', params={'token': user_token['token'], 'u_id': user_token['auth_user_id']})
     email1 = r1.json()
     assert email1['email'] =='second@gmail.com'
+
+
+#check successfullly updates the least recent  user
+def test_least_recent():
+    requests.delete(config.url + 'clear/v1')
+    user1 = requests.post(config.url + 'auth/register/v2', json={'email': 'validemail@gmail.com', 'password': '123abc!@#', 'name_first': 'Sam', 'name_last': 'Smith'})
+    requests.post(config.url + 'auth/register/v2', json={'email': 'anotheremail@gmail.com', 'password': '123abc!@#', 'name_first': 'Kelly', 'name_last': 'River'})
+    user1_token = user1.json()
+    requests.put(config.url + 'user/profile/setemail/v1', json={'token': user1_token['token'], 'email': 'leastrecent@gmail.com'})   
+    r1 = requests.get(config.url + 'user/profile/v1', params={'token': user1_token['token'], 'u_id': user1_token['auth_user_id']})
+    email = r1.json()
+    assert email['email'] == 'leastrecent@gmail.com'

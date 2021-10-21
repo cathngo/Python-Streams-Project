@@ -15,7 +15,7 @@ def set_username(auth_user_id, name_first, name_last):
         if user['u_id'] == auth_user_id:
             user['name_first'] = name_first
             user['name_last'] = name_last
-            return 
+         
 
 def set_handle(auth_user_id, handle_str):
     store = data_store.get()
@@ -33,7 +33,7 @@ def set_handle(auth_user_id, handle_str):
     for user in store['users']:
         if user['u_id'] == auth_user_id:
             user['handle_str'] = handle_str
-            return 
+  
 
 def set_email(auth_user_id, email):
     store = data_store.get()
@@ -45,4 +45,4 @@ def set_email(auth_user_id, email):
     for user in store['users']:
         if user['u_id'] == auth_user_id:
             user['email'] = email
-            return 
+           
