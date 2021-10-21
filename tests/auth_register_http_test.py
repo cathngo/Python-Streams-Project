@@ -12,7 +12,7 @@ def test_http_auth_register_works():
         'email': 'user1@email.com',
         'password': 'user1password',
         'name_first': '@#!$%^&',
-        'name_last': 'Yeezus',
+        'name_last': '@#!$%^&',
     })
     payload1 = r1.json()
     user1_info = jwt.decode(payload1['token'], SECRET, algorithms=['HS256'])
