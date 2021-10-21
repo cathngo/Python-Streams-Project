@@ -2,12 +2,25 @@ from src.data_store import data_store
 from src.token_helper import decode_jwt, check_valid_token
 from src.dm_helper import check_dm_id_exists, check_user_in_dm
 
+'''
+Given a DM ID, the user is removed as a member of this DM.
+The creator is allowed to leave and the DM will still exist if this happens.
+This does not update the name of the DM.
+
+Arguments:
+    token (string) - user's token
+    dm_id (integer) - unique id of a DM
+
+Exceptions:
+    InputError - dm_id does not refer to a valid DM
+    AccessError - Occurs when any of:
+        - Invalid token is passed through
+        - dm_id is valid and the authorised user is not a member of the DM
+
+Return Value:
+    Returns an empty dictionary
+'''
 def dm_leave_v1(token, dm_id):
-    '''
-    Given a DM ID, the user is removed as a member of this DM.
-    The creator is allowed to leave and the DM will still exist if this happens.
-    This does not update the name of the DM.
-    '''
     store = data_store.get()
 
     # Check valid token
