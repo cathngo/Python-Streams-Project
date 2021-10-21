@@ -22,15 +22,20 @@ def auth_login_v1(email, password):
     # Returns auth_user_id
     for user in store['users']:
         if user['email'] == email:
-            if user['password'] == password:
+            if user['password'] == hash_user_password(password):
+                new_session_id = generate_new_session_id()
+                user['session_list'].append(new_session_id)
+                token = generate_jwt(user['u_id'], new_session_id)
                 return {
-                    'auth_user_id': user['u_id']
+                    'token': token,
+                    'auth_user_id': user['u_id'],
                 }
             else:
                 raise InputError('Error: Incorrect password')
     raise InputError('Error: Email entered does not belong to a user')
 
 
+            
 '''
 Registers a new user into the datastore
 
