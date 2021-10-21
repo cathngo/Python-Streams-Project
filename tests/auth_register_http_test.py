@@ -183,7 +183,6 @@ def test_http_register_fname_length():
     assert r1.status_code == 400
     assert r2.status_code == 400
 
-
 def test_http_register_lname_length():
     '''
     Check if length of name_last is not between 1 and 50 characters inclusive
@@ -221,7 +220,7 @@ def test_unique_handle():
         'name_first': 'KanyeKanyeKanye123',
         'name_last': 'WestWestWest123',
     })
-    r3 = requests.post(config.url + 'auth/register/v2', json={
+    requests.post(config.url + 'auth/register/v2', json={
         'email': 'user3@email.com',
         'password': 'user3password',
         'name_first': 'KanyeKanyeKanye123',
@@ -275,7 +274,7 @@ def test_unique_handle():
         'name_first': 'KanyeKanyeKanye123',
         'name_last': 'WestWestWest123',
     })
-    r4 = requests.post(config.url + 'auth/register/v2', json={
+    r3 = requests.post(config.url + 'auth/register/v2', json={
         'email': 'user11@email.com',
         'password': 'user11password',
         'name_first': 'KanyeKanyeKanye123',
@@ -284,4 +283,3 @@ def test_unique_handle():
     assert r1.status_code != 400
     assert r2.status_code != 400
     assert r3.status_code != 400
-    assert r4.status_code != 400
