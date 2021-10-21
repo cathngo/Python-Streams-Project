@@ -2,10 +2,24 @@ from src.data_store import data_store
 from src.token_helper import decode_jwt, check_valid_token
 from src.dm_helper import check_dm_id_exists, check_user_is_dm_owner
 
+'''
+Remove an existing DM, so all members are no longer in the DM.
+This can only be done by the original creator of the DM.
+
+Arguments:
+    token (string) - user's token
+    dm_id (integer) - unique id of a DM
+
+Exceptions:
+    InputError - dm_id does not refer to a valid DM
+    AccessError - Occurs when any of:
+        - Invalid token is passed through
+        - dm_id is valid and the authorised user is not the original DM creator
+
+Return Value:
+    Returns an empty dictionary
+'''
 def dm_remove_v1(token, dm_id):
-    '''
-    Remove an existing DM, so all members are no longer in the DM. This can only be done by the original creator of the DM.
-    '''
     store = data_store.get()
 
     # Check valid token
