@@ -24,10 +24,13 @@ def generate_dm_id():
 def find_user_handle(u_id, store):
     '''
     Returns the user's handle in the data store
+    Assumes u_id is a valid and existing id in data store
     '''
+    temp = ""
     for user in store['users']:
         if user['u_id'] == u_id:
-            return user['handle_str']
+            temp = user['handle_str']
+    return temp
 
 def generate_dm_names(u_ids, store, owner_id):
     '''
@@ -70,6 +73,7 @@ def obtain_user_details(auth_user_id, store):
     Returns a dictionary containing user details
     Assumes u_id is a valid and existing id in data store
     '''
+    user_details_temp = {}
     for user_iter in store['users']:
         if auth_user_id == user_iter['u_id']:
             user_details_temp = {
@@ -79,7 +83,7 @@ def obtain_user_details(auth_user_id, store):
                 'name_last': user_iter['name_last'],
                 'handle_str': user_iter['handle_str'],
             }
-            return user_details_temp
+    return user_details_temp
 
 def check_user_is_dm_owner(auth_user_id, dm_check):
     '''
