@@ -2,7 +2,7 @@ from src.data_store import data_store
 from src.dm_helper import check_valid_u_id_list, generate_dm_id, generate_dm_names
 from src.token_helper import decode_jwt, check_valid_token
 
-def dm_create_v1(token , u_ids):
+def dm_create_v1(token, u_ids):
     '''
     Creates a dm based on input and returns a unique dm id
     '''
@@ -30,6 +30,7 @@ def dm_create_v1(token , u_ids):
         'name': dm_name,
         'owner_id': user_token['u_id'],
         'members': dm_members,
+        'messages': [],
     })
 
     data_store.set(store)

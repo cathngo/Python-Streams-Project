@@ -9,7 +9,7 @@ from src.other import clear_v1
 from src.auth import auth_register_v1
 from src.error import AccessError
 from src.channels import channels_create_v1
-from src.channel import channel_details_v1, messages_v1
+from src.channel import channel_details_v1, messages_channel_v1, messages_dm_v1
 from src.token_helper import decode_jwt, check_valid_token
 from src.dm_create import dm_create_v1
 from src.dm_list import dm_list_v1
@@ -213,7 +213,7 @@ def get_channel_message():
     user_token = decode_jwt(token)
     check_valid_token(user_token)
 
-    messages_channel = messages_v1(user_token['u_id'], channel_id, start)
+    messages_channel = messages_channel_v1(user_token['u_id'], channel_id, start)
 
     return dumps(
         messages_channel
@@ -224,12 +224,12 @@ def get_dm_messages():
     token = request.args.get('token')
     dm_id = int(request.args.get('dm_id'))
     start = int(request.args.get('start'))
-
+    
     #check valid token
     user_token = decode_jwt(token)
     check_valid_token(user_token)
 
-    messages_dm = messages_v1(user_token['u_id'], dm_id, start)
+    messages_dm = messages_dm_v1(user_token['u_id'], dm_id, start)
     
     return dumps(
         messages_dm
