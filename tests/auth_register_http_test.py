@@ -11,7 +11,7 @@ def test_http_auth_register_works():
     r1 = requests.post(config.url + 'auth/register/v2', json={
         'email': 'user1@email.com',
         'password': 'user1password',
-        'name_first': 'Kanye',
+        'name_first': '@#!$%^&',
         'name_last': 'Yeezus',
     })
     payload1 = r1.json()
@@ -274,9 +274,15 @@ def test_unique_handle():
         'name_first': 'KanyeKanyeKanye123',
         'name_last': 'WestWestWest123',
     })
-    r3 = requests.post(config.url + 'auth/register/v2', json={
+    requests.post(config.url + 'auth/register/v2', json={
         'email': 'user11@email.com',
         'password': 'user11password',
+        'name_first': 'KanyeKanyeKanye123',
+        'name_last': 'WestWestWest123',
+    })
+    r3 = requests.post(config.url + 'auth/register/v2', json={
+        'email': 'user12@email.com',
+        'password': 'user12password',
         'name_first': 'KanyeKanyeKanye123',
         'name_last': 'WestWestWest123',
     })
