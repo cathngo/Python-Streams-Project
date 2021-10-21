@@ -3,8 +3,6 @@ from src.auth_register_helper import check_name, check_duplicate_handle, check_e
 from src.error import AccessError
 from src.error import InputError
 
-
-def set_username(auth_user_id, name_first, name_last):
 '''
 Updates the authorised user's first and last name 
 
@@ -21,6 +19,9 @@ InputError - Occurs when:
 Return Value:
     Does not return anything
 '''
+
+def set_username(auth_user_id, name_first, name_last):
+
     store = data_store.get()
     #check name between 1 and 50 ch
     check_name(name_first)
@@ -31,9 +32,7 @@ Return Value:
         if user['u_id'] == auth_user_id:
             user['name_first'] = name_first
             user['name_last'] = name_last
-         
 
-def set_handle(auth_user_id, handle_str):
 '''
 Updates the authorised user's handle (i.e display name)
 
@@ -50,6 +49,9 @@ InputError - Occurs when:
 Return Value:
     Does not return anything
 '''
+
+def set_handle(auth_user_id, handle_str):
+
     store = data_store.get()
     #check handle_str between 3 and 20 ch
     if len(handle_str) < 3 or len(handle_str) > 20:
@@ -64,10 +66,8 @@ Return Value:
 
     for user in store['users']:
         if user['u_id'] == auth_user_id:
-            user['handle_str'] = handle_str
-  
+            user['handle_str'] = handle_str  
 
-def set_email(auth_user_id, email):
 '''
 Updates the authorised email
 
@@ -78,12 +78,14 @@ Arguments:
 Exceptions:
 InputError - Occurs when:
     - email is not a valid email 
-    (does not match the regular expression: '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}$')
     - email address is already being used by another user
 
 Return Value:
     Does not return anything
 '''
+
+def set_email(auth_user_id, email):
+
     store = data_store.get()
     #check email valid
     check_email(email)

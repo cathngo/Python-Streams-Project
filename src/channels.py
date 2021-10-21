@@ -44,7 +44,6 @@ def channels_listall_v1(auth_user_id):
         'channels': all_channels  
     }
     
-def channels_create_v1(auth_user_id, name, is_public):
 '''
 Creates a new channel for a user and stores it in the datastore
 
@@ -60,6 +59,8 @@ InputError - Occurs when:
 Return Value:
     returns a dictionary containing a unique channel_id if the channel is successfully created
 '''
+def channels_create_v1(auth_user_id, name, is_public):
+
 
     store = data_store.get()
 

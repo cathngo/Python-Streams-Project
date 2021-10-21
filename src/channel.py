@@ -33,8 +33,7 @@ def channel_invite_v1(auth_user_id, channel_id, u_id):
     data_store.set(store)
     return {
     }
-
-def channel_details_v1(auth_user_id, channel_id):
+    
 '''
 Provides basic details about the given channel that the authorised user is a member of
 
@@ -53,6 +52,8 @@ Return Value:
     returns a dictionary containing basic details of a channel with the given channel_id including
     the channel name, if the channel is private or public, the list of owner members and the list of all members
 '''
+def channel_details_v1(auth_user_id, channel_id):
+
     store = data_store.get()
 
     #check valid u_id
