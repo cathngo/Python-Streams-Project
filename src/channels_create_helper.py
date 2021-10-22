@@ -8,10 +8,4 @@ def check_valid_name(name):
 
 #check auth_id exists
 def check_auth_id_exists(auth_user_id, store):
-    found = False
-    #search for u_id in users
-    for user in store['users']:
-        if user['u_id'] == auth_user_id:
-            found = True
-    if found == False:
-        raise AccessError("Invalid user - could not find u_id")
+    pass
