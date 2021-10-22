@@ -69,4 +69,3 @@
 #     c_id = channels_create_v1(u_id['auth_user_id'], 'Alpaca', True) 
 #     with pytest.raises(InputError):    
 #         messages_channel_v1(u_id['auth_user_id'], c_id['channel_id'], 1)
-

@@ -34,12 +34,13 @@ def test_unauthorised_member(test_u_id, test_c_id):
     invalid_u_id = test_u_id['auth_user_id'] + 1
     with pytest.raises(AccessError):
         channel_details_v1(invalid_u_id, test_c_id['channel_id'])  
-
+'''
 #check when both channel id and auth id invalid
 def test_empty_store():
     clear_v1()
     with pytest.raises(AccessError):
         channel_details_v1(0, 0)
+'''
 
 #check returns correct owner details of given channel
 def test_correct_owner_details(test_u_id, test_c_id):

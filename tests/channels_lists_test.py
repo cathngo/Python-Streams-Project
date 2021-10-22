@@ -34,12 +34,12 @@ def test_no_channel_joined2():
     channels_create_v1(user_id2['auth_user_id'], 'is_member1', True)
     joined_channels = channels_list_v1(user_id1['auth_user_id'])
     assert len(joined_channels['channels']) == 0
-
+'''
 def test_auth_invalid_2():
     clear_v1()
     with pytest.raises(AccessError):
         channels_list_v1(404)
-        
+'''     
 def test_multiple_channels_list(clear_register_create_channels):
     user_id1 = clear_register_create_channels
     joined_channels = channels_list_v1(user_id1[0]['auth_user_id'])
