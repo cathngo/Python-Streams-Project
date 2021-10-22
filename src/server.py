@@ -19,6 +19,7 @@ from src.dm_leave import dm_leave_v1
 from src.users_all_v1_helper import get_all_users
 from src.user_profile_v1_helper import get_user_profile, check_valid_u_id
 from src.user_profile_put_helpers import set_username, set_handle, set_email
+from src.send_message import message_send_channel, message_send_dm
 
 def quit_gracefully(*args):
     '''For coverage'''
@@ -256,6 +257,36 @@ def get_dm_messages():
     
     return dumps(
         messages_dm
+    )
+
+@APP.route("/message/send/v1", methods=['POST'])
+def post_send_message():
+    data = request.get_json()
+    
+    token = data['token']
+    channel_id = data['channel_id']
+    message = data['message']
+    
+    user_token = decode_jwt(token)
+    check_valid_token(user_token)
+
+    return dumps(
+        message_send_channel(user_token['u_id'], channel_id, message)
+    )
+
+@APP.route("/message/senddm/v1", methods=['POST'])
+def post_send_message_dm():
+    data = request.get_json()
+    
+    token = data['token']
+    dm_id = data['dm_id']
+    message = data['message']
+    
+    user_token = decode_jwt(token)
+    check_valid_token(user_token)
+
+    return dumps(
+        message_send_dm(user_token['u_id'], dm_id, message)
     )
 
 #### NO NEED TO MODIFY BELOW THIS POINT

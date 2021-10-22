@@ -93,7 +93,7 @@ def test_invalid_token_dm_messages():
 
 def test_dm_messages_route_works():
     requests.delete(config.url + 'clear/v1')
-     #create a user
+
     user = requests.post(config.url + 'auth/register/v2', json={
         'email': 'validemail@gmail.com', 
         'password': '123abc!@#', 
@@ -101,25 +101,24 @@ def test_dm_messages_route_works():
         'name_last': 'Smith'
     })
     user_reg = user.json()
-    #create a dm with that user
+
     dm = requests.post(config.url + 'dm/create/v1', json={
         'token': user_reg['token'], 
         'u_ids': [],
     })
     dm_reg = dm.json()
-    #pass in a start that is greater to the number of messages in the system
     resp = requests.get(config.url + 'dm/messages/v1', params={
         'token': user_reg['token'], 
         'dm_id': dm_reg['dm_id'],
         'start': 0,
     })
-    #get the response in json
+
     assert resp.status_code == 200
 
 #tests that there is a negative one when the end of a message is reached
 def test_negative_one_end_of_messages_dm():
     requests.delete(config.url + 'clear/v1')
-    #create a user
+
     user = requests.post(config.url + 'auth/register/v2', json={
         'email': 'validemail@gmail.com', 
         'password': '123abc!@#', 
@@ -127,26 +126,26 @@ def test_negative_one_end_of_messages_dm():
         'name_last': 'Smith'
     })
     user_reg = user.json()
-    #create a dm with that user
+
     dm = requests.post(config.url + 'dm/create/v1', json={
         'token': user_reg['token'], 
         'u_ids': [],
     })
     dm_reg = dm.json()
-    #pass in a start that is greater to the number of messages in the system
+
     response = requests.get(config.url + 'dm/messages/v1', params={
         'token': user_reg['token'], 
         'dm_id': dm_reg['dm_id'],
         'start': 0,
     })
-    #get the response in json
+
     dm_messages = response.json()
     assert dm_messages['end'] == -1
 
 
 def test_start_greater_than_messages_dm():
     requests.delete(config.url + 'clear/v1')
-     #create a user
+
     user = requests.post(config.url + 'auth/register/v2', json={
         'email': 'validemail@gmail.com', 
         'password': '123abc!@#', 
@@ -154,17 +153,18 @@ def test_start_greater_than_messages_dm():
         'name_last': 'Smith'
     })
     user_reg = user.json()
-    #create a dm with that user
+
     dm = requests.post(config.url + 'dm/create/v1', json={
         'token': user_reg['token'], 
         'u_ids': [],
     })
     dm_reg = dm.json()
+    
     #pass in a start that is greater to the number of messages in the system
     resp = requests.get(config.url + 'dm/messages/v1', params={
         'token': user_reg['token'], 
         'dm_id': dm_reg['dm_id'],
         'start': 1,
     })
-    #get the response in json
+
     assert resp.status_code == 400
