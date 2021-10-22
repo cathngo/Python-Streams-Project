@@ -24,7 +24,7 @@ def test_invalid_dm_id_message_send_dm():
     })
     dm_reg = dm.json()
 
-    resp = requests.post(config.url + 'message/senddm/v1', params={
+    resp = requests.post(config.url + 'message/senddm/v1', json={
         'token': user_reg['token'], 
         'dm_id': dm_reg['dm_id'] + 1,
         'message': "hello",
@@ -58,7 +58,7 @@ def test_not_dm_member_message_send_dm():
     })
     dm_reg = dm.json()
 
-    resp = requests.post(config.url + 'message/senddm/v1', params={
+    resp = requests.post(config.url + 'message/senddm/v1', json={
         'token': user_reg2['token'], 
         'dm_id': dm_reg['dm_id'],
         'message': "hello",
@@ -84,7 +84,7 @@ def test_invalid_token_message_send_dm():
     })
     payload2 = r2.json()
 
-    r3 = requests.post(config.url + 'message/senddm/v1', params={
+    r3 = requests.post(config.url + 'message/senddm/v1', json={
         'token': 'invalidtoken',
         'dm_id': payload2['dm_id'],
         'message': "hello"
@@ -108,7 +108,7 @@ def test_route_works_message_send_dm():
     })
     dm_reg = dm.json()
 
-    resp = requests.post(config.url + 'message/senddm/v1', params={
+    resp = requests.post(config.url + 'message/senddm/v1', json={
         'token': user_reg['token'], 
         'dm_id': dm_reg['dm_id'],
         'message': "hello",
@@ -133,7 +133,7 @@ def test_message_less_than_one_character_message_send_dm():
     })
     dm_reg = dm.json()
 
-    resp = requests.post(config.url + 'message/senddm/v1', params={
+    resp = requests.post(config.url + 'message/senddm/v1', json={
         'token': user_reg['token'], 
         'dm_id': dm_reg['dm_id'],
         'message': "",
@@ -158,7 +158,7 @@ def test_message_more_than_one_thousand_character_message_send_dm():
     })
     dm_reg = dm.json()
 
-    resp = requests.post(config.url + 'message/senddm/v1', params={
+    resp = requests.post(config.url + 'message/senddm/v1', json={
         'token': user_reg['token'], 
         'dm_id': dm_reg['dm_id'],
         'message': "f" * 1001,
@@ -183,13 +183,13 @@ def test_check_messagge_ids_are_not_the_same_for_same_dm_id_message_send_dm():
     })
     dm_reg = dm.json()
 
-    resp = requests.post(config.url + 'message/senddm/v1', params={
+    resp = requests.post(config.url + 'message/senddm/v1', json={
         'token': user_reg['token'], 
         'dm_id': dm_reg['dm_id'],
         'message': "hello",
     })
     
-    resp2 = requests.post(config.url + 'message/senddm/v1', params={
+    resp2 = requests.post(config.url + 'message/senddm/v1', json={
         'token': user_reg['token'], 
         'dm_id': dm_reg['dm_id'],
         'message': "hello",
@@ -220,13 +220,13 @@ def test_check_messagge_ids_are_not_the_same_for_different_dm_message_send_dm():
     dm_reg = dm.json()
     dm_reg2 = dm2.json()
 
-    resp = requests.post(config.url + 'message/senddm/v1', params={
+    resp = requests.post(config.url + 'message/senddm/v1', json={
         'token': user_reg['token'], 
         'dm_id': dm_reg['dm_id'],
         'message': "hello",
     })
     
-    resp2 = requests.post(config.url + 'message/senddm/v1', params={
+    resp2 = requests.post(config.url + 'message/senddm/v1', json={
         'token': user_reg['token'], 
         'dm_id': dm_reg2['dm_id'],
         'message': "hello",
@@ -259,12 +259,12 @@ def test_check_messagge_ids_are_not_the_same_for_different_channel_and_dm_messag
     })
     dm_id = dm.json()
     
-    resp = requests.post(config.url + 'message/send/v1', params={
+    resp = requests.post(config.url + 'message/send/v1', json={
         'token': user_token['token'], 
         'channel_id': channel_id['channel_id'],
         'message': "hello",
     })
-    resp2 = requests.post(config.url + 'message/senddm/v1', params={
+    resp2 = requests.post(config.url + 'message/senddm/v1', json={
         'token': user_token['token'], 
         'dm_id': dm_id['dm_id'],
         'message': "hello",

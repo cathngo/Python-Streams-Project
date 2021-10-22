@@ -18,7 +18,7 @@ def test_invalid_channel_id_message_send():
         'name_last': 'Smith'
     })
     user_token = user.json()
-    resp = requests.post(config.url + 'message/send/v1', params={
+    resp = requests.post(config.url + 'message/send/v1', json={
         'token': user_token['token'],
         'channel_id': invalid_channel_id,
         'message': "hello"
@@ -50,7 +50,7 @@ def test_unauthorised_user_message_send():
         'name_last': 'Smith'
     })
     unauthorised_user = user2.json()
-    resp = requests.post(config.url + 'message/send/v1', params={
+    resp = requests.post(config.url + 'message/send/v1', json={
         'token': unauthorised_user['token'], 
         'channel_id': channel_id['channel_id'],
         'message': "hello"
@@ -77,7 +77,7 @@ def test_invalid_token_signature_message_send():
     #create invalid token
     invalid_token = jwt.encode({'u_id': user_token['auth_user_id'], 'session_id': 0}, 'Invalid', algorithm='HS256')
     #pass valid channel id but invalid token
-    resp = requests.post(config.url + 'message/send/v1', params={
+    resp = requests.post(config.url + 'message/send/v1', json={
         'token': invalid_token, 
         'channel_id': channel_id['channel_id'],
         'message': "hello"
@@ -102,7 +102,7 @@ def test_route_works_message_send():
     })
     channel_id = channel.json()
 
-    resp = requests.post(config.url + 'message/send/v1', params={
+    resp = requests.post(config.url + 'message/send/v1', json={
         'token': user_token['token'], 
         'channel_id': channel_id['channel_id'],
         'message': "hello",
@@ -128,7 +128,7 @@ def test_message_less_than_one_character_message_send():
     })
     channel_id = channel.json()
 
-    resp = requests.post(config.url + 'message/send/v1', params={
+    resp = requests.post(config.url + 'message/send/v1', json={
         'token': user_token['token'], 
         'channel_id': channel_id['channel_id'],
         'message': ""
@@ -154,7 +154,7 @@ def test_message_more_than_one_thousand_character_message_send():
     })
     channel_id = channel.json()
     
-    resp = requests.post(config.url + 'message/send/v1', params={
+    resp = requests.post(config.url + 'message/send/v1', json={
         'token': user_token['token'], 
         'channel_id': channel_id['channel_id'],
         'message': "f" * 1001
@@ -180,12 +180,12 @@ def test_check_message_ids_are_not_the_same_for_same_channel_message_send():
     })
     channel_id = channel.json()
 
-    resp = requests.post(config.url + 'message/send/v1', params={
+    resp = requests.post(config.url + 'message/send/v1', json={
         'token': user_token['token'], 
         'channel_id': channel_id['channel_id'],
         'message': "hello",
     })
-    resp2 = requests.post(config.url + 'message/send/v1', params={
+    resp2 = requests.post(config.url + 'message/send/v1', json={
         'token': user_token['token'], 
         'channel_id': channel_id['channel_id'],
         'message': "hello",
@@ -220,12 +220,12 @@ def test_check_messagge_ids_are_not_the_same_for_different_channel_message_send(
     })
     channel_id2 = channel2.json()
     
-    resp = requests.post(config.url + 'message/send/v1', params={
+    resp = requests.post(config.url + 'message/send/v1', json={
         'token': user_token['token'], 
         'channel_id': channel_id['channel_id'],
         'message': "hello",
     })
-    resp2 = requests.post(config.url + 'message/send/v1', params={
+    resp2 = requests.post(config.url + 'message/send/v1', json={
         'token': user_token['token'], 
         'channel_id': channel_id2['channel_id'],
         'message': "hello",

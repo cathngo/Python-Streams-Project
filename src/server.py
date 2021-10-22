@@ -261,10 +261,11 @@ def get_dm_messages():
 
 @APP.route("/message/send/v1", methods=['POST'])
 def post_send_message():
+    data = request.get_json()
     
-    token = request.args.get('token')
-    channel_id = int(request.args.get('channel_id'))
-    message = request.args.get('message')
+    token = data['token']
+    channel_id = data['channel_id']
+    message = data['message']
     
     user_token = decode_jwt(token)
     check_valid_token(user_token)
@@ -275,10 +276,11 @@ def post_send_message():
 
 @APP.route("/message/senddm/v1", methods=['POST'])
 def post_send_message_dm():
+    data = request.get_json()
     
-    token = request.args.get('token')
-    dm_id = int(request.args.get('dm_id'))
-    message = request.args.get('message')
+    token = data['token']
+    dm_id = data['dm_id']
+    message = data['message']
     
     user_token = decode_jwt(token)
     check_valid_token(user_token)
