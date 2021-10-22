@@ -1,5 +1,5 @@
 from src.data_store import data_store
-from src.error import InputError
+from src.error import InputError, AccessError
 from src.auth_register_helper import (
     check_email,
     check_duplicate_email,
@@ -34,6 +34,16 @@ def auth_login_v1(email, password):
                 raise InputError('Error: Incorrect password')
     raise InputError('Error: Email entered does not belong to a user')
 
+def auth_logout_v1(token):
+    store = data_store.get()
+    session_id = token
+    for user in store['users']:
+        for session in user['session_list']:
+            if session_id == session:
+                user['session_list'].remove(session_id)
+                data_store.set(store)
+                return
+    raise AccessError('Token invalid')
 
             
 '''
