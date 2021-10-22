@@ -20,13 +20,12 @@ def test_http_auth_logout_works():
 
 def test_http_auth_logout_invalid_token():
     requests.delete(config.url + 'clear/v1')
-    r1 = requests.post(config.url + 'auth/register/v2', json={
+    requests.post(config.url + 'auth/register/v2', json={
         'email': 'user1@email.com',
         'password': 'user1password',
         'name_first': 'Kanye',
         'name_last': 'Yeezus',
     })
-    payload1 = r1.json()
     invalid_token = jwt.encode({'u_id': 0, 'session_id': 0}, 'Invalid', algorithm='HS256')
     r2 = requests.post(config.url + 'auth/logout/v1', json={
         'token': invalid_token,
@@ -42,7 +41,7 @@ def test_http_auth_double_logout():
         'name_last': 'Yeezus',
     })
     payload1 = r1.json()
-    r2 = requests.post(config.url + 'auth/logout/v1', json={
+    requests.post(config.url + 'auth/logout/v1', json={
         'token': payload1['token'],
     })
     r3 = requests.post(config.url + 'auth/logout/v1', json={

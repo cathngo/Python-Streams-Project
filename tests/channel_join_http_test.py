@@ -32,7 +32,7 @@ def test_http_channel_join_works():
     #create a user
     user2 = requests.post(config.url + 'auth/register/v2', json={'email': 'validemail1@gmail.com', 'password': '122abc!@#', 'name_first': 'Tam', 'name_last': 'Lam'})
     user_token2 = user2.json()
-    join = requests.post(config.url + 'channel/join/v2', json={'token': user_token2['token'], 'channel_id': channel_id['channel_id']})
+    requests.post(config.url + 'channel/join/v2', json={'token': user_token2['token'], 'channel_id': channel_id['channel_id']})
     #pass in channel id and token into channel details
     resp = requests.get(config.url + 'channel/details/v2', params={'token': user_token2['token'], 'channel_id': channel_id['channel_id']})
     #get the response in json
