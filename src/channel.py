@@ -4,7 +4,9 @@ from src.channel_details_helper import check_authorised_user, check_channel_id, 
 from src.channels_create_helper import check_auth_id_exists
 from src.channels_invite_helper import check_u_id_exists
 from src.channel_join_helper import find_user, find_channel, check_authorised_member
-from src.channel_messages_helper import get_channel
+from src.message_id_generator import message_id_generate
+from src.channel_messages_helper import get_channel, messages_pagination
+from src.dm_helper import check_dm_id_exists, check_user_in_dm
 
 def channel_invite_v1(auth_user_id, channel_id, u_id):
     store = data_store.get()
@@ -94,48 +96,50 @@ def channel_details_v1(auth_user_id, channel_id):
     return channel_dictionary
 
 #the caller must decrease messages['message_id'] by 50 everytime it called until it is < 50, otherwise this funciton will not work. 
-def channel_messages_v1(auth_user_id, channel_id, start):
+def messages_channel_v1(auth_user_id, channel_id, start):
     store = data_store.get()
     
-    #check valid u_id
-    check_auth_id_exists(auth_user_id, store)
-    #check channel_id exists
     channel = get_channel(channel_id, store)
-    #check user is part of given channel_id 
     check_authorised_user(auth_user_id, channel_id, store)
-    
 
-    #gets the current lenth of the messages
-    message_id = len(channel['messages'])    
-    
-    #checks that the number of messages has not been over counted or
-    #if start is greater than the number of messages in the page
-    if start < 0 or start > message_id:
-        raise InputError
- 
-    #checks that the last page is not reached otherwise it continues 
-    #that there will be another page to come by not making end = -1.      
-    if message_id - start < 50:
-        page_length = message_id
-        end = -1
-    else:
-        page_length = 50 + start
-        end = page_length
-    
-    max_message_id = message_id - 1
-   
-    #goes through the messages in a 0 - 50, 50 - 100, 100 - 150, in pagination 
-    #manner, always starting from the first index and then continuing on the 
-    #following call
+    len_message_channel = len(channel['messages'])
+
+    pagination = messages_pagination(len_message_channel, start)
+    # #goes through the messages in a 0 - 50, 50 - 100, 100 - 150, in pagination 
+    # #manner, always starting from the first index and then continuing on the 
+    # #following call
     message_list = []
-    for i in range(start, page_length):
-        message_list.append(channel['messages'][max_message_id - i])  
+    for i in range(start, pagination['page_length']):
+        message_list.append(channel['messages'][pagination['len_message_channel_dm'] - i]) 
     
-    #returning a single dictionary with a key that is a list.  
+    #returning a single dictionary with a key that is a list.
     return {
         'messages': message_list, 
         'start': start,
-        'end': end,
+        'end': pagination['end'],
+    }
+
+def messages_dm_v1(auth_user_id, dm_id, start):
+    store = data_store.get()
+
+    dm = check_dm_id_exists(dm_id, store)
+    check_user_in_dm(auth_user_id, dm)
+    
+    len_message_dm = len(dm['messages'])
+
+    pagination = messages_pagination(len_message_dm, start)
+    # #goes through the messages in a 0 - 50, 50 - 100, 100 - 150, in pagination 
+    # #manner, always starting from the first index and then continuing on the 
+    # #following call
+    message_list = []
+    for i in range(start, pagination['page_length']):
+        message_list.append(dm['messages'][pagination['len_message_channel_dm'] - i]) 
+    
+    #returning a single dictionary with a key that is a list. 
+    return {
+        'messages': message_list, 
+        'start': start,
+        'end': pagination['end'],
     }
 
 def channel_join_v1(auth_user_id, channel_id):
