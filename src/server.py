@@ -9,11 +9,7 @@ from src.other import clear_v1
 from src.auth import auth_register_v1, auth_login_v1, auth_logout_v1
 from src.error import AccessError
 from src.channels import channels_create_v1
-<<<<<<< HEAD
-from src.channel import channel_details_v1, channel_join_v1
-=======
-from src.channel import channel_details_v1, messages_channel_v1, messages_dm_v1
->>>>>>> master
+from src.channel import channel_details_v1, messages_channel_v1, messages_dm_v1, channel_join_v1
 from src.token_helper import decode_jwt, check_valid_token
 from src.dm_create import dm_create_v1
 from src.dm_list import dm_list_v1
@@ -109,7 +105,6 @@ def create_channel():
         'channel_id': channel['channel_id']
     })
 
-<<<<<<< HEAD
 # Route function for channel_join_v2
 @APP.route("/channel/join/v2", methods=['POST'])
 def channel_join():
@@ -120,9 +115,6 @@ def channel_join():
     channel_join_v1(token['u_id'], data['channel_id'])
     return dumps({})
 
-
-=======
->>>>>>> master
 #channel_details_v2
 @APP.route("/channel/details/v2", methods=['GET'])
 def get_channel_details():
