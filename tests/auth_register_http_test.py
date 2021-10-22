@@ -11,8 +11,8 @@ def test_http_auth_register_works():
     r1 = requests.post(config.url + 'auth/register/v2', json={
         'email': 'user1@email.com',
         'password': 'user1password',
-        'name_first': 'Kanye',
-        'name_last': 'Yeezus',
+        'name_first': '@#!$%^&',
+        'name_last': '@#!$%^&',
     })
     payload1 = r1.json()
     user1_info = jwt.decode(payload1['token'], SECRET, algorithms=['HS256'])
@@ -112,8 +112,8 @@ def test_http_unique_invalid_email():
     r1 = requests.post(config.url + 'auth/register/v2', json={
         'email': 'bademailcom',
         'password': 'user1password',
-        'name_first': 'Kanye',
-        'name_last': 'Yeezus',
+        'name_first': '%Kanye@_',
+        'name_last': '%Yeezus__!@',
     })
     r2 = requests.post(config.url + 'auth/register/v2', json={
         'email': '',
@@ -183,7 +183,6 @@ def test_http_register_fname_length():
     assert r1.status_code == 400
     assert r2.status_code == 400
 
-
 def test_http_register_lname_length():
     '''
     Check if length of name_last is not between 1 and 50 characters inclusive
@@ -221,9 +220,69 @@ def test_unique_handle():
         'name_first': 'KanyeKanyeKanye123',
         'name_last': 'WestWestWest123',
     })
-    r3 = requests.post(config.url + 'auth/register/v2', json={
+    requests.post(config.url + 'auth/register/v2', json={
         'email': 'user3@email.com',
         'password': 'user3password',
+        'name_first': 'KanyeKanyeKanye123',
+        'name_last': 'WestWestWest123',
+    })
+    requests.post(config.url + 'auth/register/v2', json={
+        'email': 'user4@email.com',
+        'password': 'user4password',
+        'name_first': 'KanyeKanyeKanye123',
+        'name_last': 'WestWestWest123',
+    })
+    requests.post(config.url + 'auth/register/v2', json={
+        'email': 'user5@email.com',
+        'password': 'user5password',
+        'name_first': 'KanyeKanyeKanye123',
+        'name_last': 'WestWestWest123',
+    })
+    requests.post(config.url + 'auth/register/v2', json={
+        'email': 'user6@email.com',
+        'password': 'user6password',
+        'name_first': 'KanyeKanyeKanye123',
+        'name_last': 'WestWestWest123',
+    })
+    requests.post(config.url + 'auth/register/v2', json={
+        'email': 'user7@email.com',
+        'password': 'user7password',
+        'name_first': 'KanyeKanyeKanye123',
+        'name_last': 'WestWestWest123',
+    })
+    requests.post(config.url + 'auth/register/v2', json={
+        'email': 'user8@email.com',
+        'password': 'user8password',
+        'name_first': 'KanyeKanyeKanye123',
+        'name_last': 'WestWestWest123',
+    })
+    requests.post(config.url + 'auth/register/v2', json={
+        'email': 'user8@email.com',
+        'password': 'user8password',
+        'name_first': 'KanyeKanyeKanye123',
+        'name_last': 'WestWestWest123',
+    })
+    requests.post(config.url + 'auth/register/v2', json={
+        'email': 'user9@email.com',
+        'password': 'user9password',
+        'name_first': 'KanyeKanyeKanye123',
+        'name_last': 'WestWestWest123',
+    })
+    requests.post(config.url + 'auth/register/v2', json={
+        'email': 'user10@email.com',
+        'password': 'user10password',
+        'name_first': 'KanyeKanyeKanye123',
+        'name_last': 'WestWestWest123',
+    })
+    requests.post(config.url + 'auth/register/v2', json={
+        'email': 'user11@email.com',
+        'password': 'user11password',
+        'name_first': 'KanyeKanyeKanye123',
+        'name_last': 'WestWestWest123',
+    })
+    r3 = requests.post(config.url + 'auth/register/v2', json={
+        'email': 'user12@email.com',
+        'password': 'user12password',
         'name_first': 'KanyeKanyeKanye123',
         'name_last': 'WestWestWest123',
     })

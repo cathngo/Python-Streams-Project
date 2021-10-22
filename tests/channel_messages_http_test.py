@@ -15,14 +15,12 @@ def test_invalid_channel_id_channel_messages():
         'name_last': 'Smith'
     })
     user_token = user.json()
-    invalid_u_id = user_token['auth_user_id'] + 1
-    invalid_token = jwt.encode({'u_id': invalid_u_id, 'session_id': 0}, config.SECRET, algorithm='HS256')
     resp = requests.get(config.url + 'channel/messages/v2', params={
-        'token': invalid_token, 
+        'token': user_token['token'],
         'channel_id': invalid_channel_id,
         'start': 0
     })
-    assert resp.status_code == 403
+    assert resp.status_code == 400
 
 def test_unauthorised_user_channel_messages():
     requests.delete(config.url + 'clear/v1')
@@ -37,8 +35,8 @@ def test_unauthorised_user_channel_messages():
     
     channel = requests.post(config.url + 'channels/create/v2', json={
         'token': user_token1['token'],
-         'name': 'Alpaca', 
-         'is_public': True
+        'name': 'Alpaca', 
+        'is_public': True
     })
     channel_id = channel.json()
     #pass in valid channel id but invalid user

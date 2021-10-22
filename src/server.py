@@ -6,7 +6,7 @@ from flask_cors import CORS
 from src.error import InputError
 from src import config
 from src.other import clear_v1
-from src.auth import auth_register_v1
+from src.auth import auth_register_v1, auth_login_v1
 from src.error import AccessError
 from src.channels import channels_create_v1
 from src.channel import channel_details_v1, messages_channel_v1, messages_dm_v1
@@ -18,7 +18,7 @@ from src.dm_remove import dm_remove_v1
 from src.dm_leave import dm_leave_v1
 from src.users_all_v1_helper import get_all_users
 from src.user_profile_v1_helper import get_user_profile, check_valid_u_id
-from src.user_profile_put_helpers import set_username, set_handle
+from src.user_profile_put_helpers import set_username, set_handle, set_email
 
 def quit_gracefully(*args):
     '''For coverage'''
@@ -66,6 +66,16 @@ def auth_register_v2_http():
         auth_register_v1(data['email'], data['password'], data['name_first'], data['name_last'])
     )
 
+#auth_login_v2
+@APP.route("/auth/login/v2", methods=['POST'])
+def auth_login_v2_http():
+    data = request.get_json()
+    login_return = auth_login_v1(data['email'], data['password'])
+    return dumps({
+        'token': login_return['token'],
+        'auth_user_id': login_return['auth_user_id'],
+    })
+
 #channels_create_v2
 @APP.route("/channels/create/v2", methods=['POST'])
 def create_channel():
@@ -83,7 +93,6 @@ def create_channel():
     return dumps({
         'channel_id': channel['channel_id']
     })
-
 
 #channel_details_v2
 @APP.route("/channel/details/v2", methods=['GET'])
@@ -214,10 +223,24 @@ def get_channel_message():
     check_valid_token(user_token)
 
     messages_channel = messages_channel_v1(user_token['u_id'], channel_id, start)
-
+   
     return dumps(
         messages_channel
     )
+
+#user_profile_setemail_v1
+@APP.route("/user/profile/setemail/v1", methods=['PUT'])
+def update_user_email():
+    data = request.get_json()
+    email = data['email']
+    token = data['token']
+    
+    user_token = decode_jwt(token)
+    check_valid_token(user_token)
+    
+    set_email(user_token['u_id'], email)
+    
+    return dumps({})
 
 @APP.route("/dm/messages/v1", methods=['GET'])
 def get_dm_messages():

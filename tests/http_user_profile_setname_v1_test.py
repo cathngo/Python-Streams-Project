@@ -96,3 +96,14 @@ def test_empty_dictionary():
     resp = requests.put(config.url + 'user/profile/setname/v1', json={'token': user_token['token'], 'name_first': 'UpdatedFirstName', 'name_last': 'UpdatedLastName'})
     assert resp.json() == {}
     
+#check name can be updated for least recent user
+def test_name_least_recent():
+    requests.delete(config.url + 'clear/v1')
+    user = requests.post(config.url + 'auth/register/v2', json={'email': 'validemail@gmail.com', 'password': '123abc!@#', 'name_first': 'Sam', 'name_last': 'Smith'})
+    requests.post(config.url + 'auth/register/v2', json={'email': 'haileyemail@gmail.com', 'password': '123abc!@#', 'name_first': 'Ben', 'name_last': 'Park'})
+    user_token = user.json()
+    requests.put(config.url + 'user/profile/setname/v1', json={'token': user_token['token'], 'name_first': 'Taco', 'name_last': 'Kebab'})
+    resp = requests.get(config.url + 'user/profile/v1', params={'token': user_token['token'], 'u_id': user_token['auth_user_id']})
+    names = resp.json()
+    assert names['name_first'] == 'Taco'
+    assert names['name_last'] == 'Kebab'

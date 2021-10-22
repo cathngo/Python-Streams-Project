@@ -104,7 +104,7 @@ def test_dm_messages_route_works():
     #create a dm with that user
     dm = requests.post(config.url + 'dm/create/v1', json={
         'token': user_reg['token'], 
-        'u_ids': [user_reg['auth_user_id']],
+        'u_ids': [],
     })
     dm_reg = dm.json()
     #pass in a start that is greater to the number of messages in the system
@@ -130,7 +130,7 @@ def test_negative_one_end_of_messages_dm():
     #create a dm with that user
     dm = requests.post(config.url + 'dm/create/v1', json={
         'token': user_reg['token'], 
-        'u_ids': [user_reg['auth_user_id']],
+        'u_ids': [],
     })
     dm_reg = dm.json()
     #pass in a start that is greater to the number of messages in the system
@@ -157,7 +157,7 @@ def test_start_greater_than_messages_dm():
     #create a dm with that user
     dm = requests.post(config.url + 'dm/create/v1', json={
         'token': user_reg['token'], 
-        'u_ids': [user_reg['auth_user_id']],
+        'u_ids': [],
     })
     dm_reg = dm.json()
     #pass in a start that is greater to the number of messages in the system

@@ -1,10 +1,21 @@
 from src.data_store import data_store
 from src.token_helper import decode_jwt, check_valid_token
 
+'''
+Returns the list of DMs that the user is a member of
+
+Arguments:
+    token (string) - user's token
+
+Exceptions:
+    AccessError - Occurs when any of:
+        - Invalid token is passed through
+
+Return Value:
+    Returns a dictionary containing dms, which is a list of dictionaries,
+    where each dictionary contains types { dm_id, name }
+'''
 def dm_list_v1(token):
-    '''
-    Returns the list of DMs that the user is a member of
-    '''
     store = data_store.get()
 
     # Check valid token

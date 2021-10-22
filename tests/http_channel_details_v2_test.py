@@ -78,3 +78,14 @@ def test_invalid_token_signature():
     resp = requests.get(config.url + 'channel/details/v2', params={'token': invalid_token, 'channel_id': channel_id['channel_id']})
     assert resp.status_code == 403
 
+def test_check_last_channel():
+    requests.delete(config.url + 'clear/v1')
+    #create user and channel with token
+    user1 = requests.post(config.url + 'auth/register/v2', json={'email': 'validemail@gmail.com', 'password': '123abc!@#', 'name_first': 'Sam', 'name_last': 'Smith'})
+    user_token1 = user1.json()
+    requests.post(config.url + 'channels/create/v2', json={'token': user_token1['token'], 'name': 'first channel', 'is_public': True})
+    requests.post(config.url + 'channels/create/v2', json={'token': user_token1['token'], 'name': 'second channel', 'is_public': True})
+    channel = requests.post(config.url + 'channels/create/v2', json={'token': user_token1['token'], 'name': 'Alpaca', 'is_public': True})
+    channel_id = channel.json()
+    resp = requests.get(config.url + 'channel/details/v2', params={'token': user_token1['token'], 'channel_id': channel_id['channel_id'] })
+    assert resp.status_code == 200
