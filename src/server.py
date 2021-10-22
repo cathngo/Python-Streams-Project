@@ -8,7 +8,7 @@ from src import config
 from src.other import clear_v1
 from src.auth import auth_register_v1, auth_login_v1
 from src.error import AccessError
-from src.channels import channels_create_v1
+from src.channels import channels_create_v1, channels_list_v1, channels_listall_v1
 from src.channel import channel_details_v1, messages_channel_v1, messages_dm_v1
 from src.token_helper import decode_jwt, check_valid_token
 from src.dm_create import dm_create_v1
@@ -95,6 +95,30 @@ def create_channel():
         'channel_id': channel['channel_id']
     })
 
+#channels_list_v2
+@APP.route("/channels/list/v2", methods=['GET'])
+def get_list_channels():
+    token = request.args.get('token')
+    #decode and check if valid
+    user_token = decode_jwt(token)
+    check_valid_token(user_token)
+    
+    return dumps(
+        channels_list_v1(user_token['u_id'])
+    )
+
+#channels_listall_v2
+@APP.route("/channels/listall/v2", methods=['GET'])
+def get_listall_channels():
+    token = request.args.get('token')
+    #decode and check if valid
+    user_token = decode_jwt(token)
+    check_valid_token(user_token)
+    
+    return dumps(
+        channels_listall_v1(user_token['u_id'])
+    )
+ 
 #channel_details_v2
 @APP.route("/channel/details/v2", methods=['GET'])
 def get_channel_details():
