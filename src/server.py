@@ -9,7 +9,11 @@ from src.other import clear_v1
 from src.auth import auth_register_v1, auth_login_v1, auth_logout_v1
 from src.error import AccessError
 from src.channels import channels_create_v1
+<<<<<<< HEAD
 from src.channel import channel_details_v1, channel_join_v1
+=======
+from src.channel import channel_details_v1, messages_channel_v1, messages_dm_v1
+>>>>>>> master
 from src.token_helper import decode_jwt, check_valid_token
 from src.dm_create import dm_create_v1
 from src.dm_list import dm_list_v1
@@ -19,6 +23,7 @@ from src.dm_leave import dm_leave_v1
 from src.users_all_v1_helper import get_all_users
 from src.user_profile_v1_helper import get_user_profile, check_valid_u_id
 from src.user_profile_put_helpers import set_username, set_handle, set_email
+from src.send_message import message_send_channel, message_send_dm
 
 def quit_gracefully(*args):
     '''For coverage'''
@@ -86,7 +91,6 @@ def auth_logout_v1_http():
     auth_logout_v1(session_id)
     return dumps({})
 
-
 #channels_create_v2
 @APP.route("/channels/create/v2", methods=['POST'])
 def create_channel():
@@ -105,6 +109,7 @@ def create_channel():
         'channel_id': channel['channel_id']
     })
 
+<<<<<<< HEAD
 # Route function for channel_join_v2
 @APP.route("/channel/join/v2", methods=['POST'])
 def channel_join():
@@ -116,6 +121,8 @@ def channel_join():
     return dumps({})
 
 
+=======
+>>>>>>> master
 #channel_details_v2
 @APP.route("/channel/details/v2", methods=['GET'])
 def get_channel_details():
@@ -128,7 +135,7 @@ def get_channel_details():
     check_valid_token(user_token)
 
     details = channel_details_v1(user_token['u_id'], channel_id)
-
+    
     return dumps(
         details
     )
@@ -233,20 +240,82 @@ def update_user_handle():
 
     return dumps({})
 
+@APP.route("/channel/messages/v2", methods=['GET'])
+def get_channel_message():
+
+    token = request.args.get('token')
+    channel_id = int(request.args.get('channel_id'))
+    start = int(request.args.get('start'))
+
+    #check valid token
+    user_token = decode_jwt(token)
+    check_valid_token(user_token)
+
+    messages_channel = messages_channel_v1(user_token['u_id'], channel_id, start)
+   
+    return dumps(
+        messages_channel
+    )
+
 #user_profile_setemail_v1
 @APP.route("/user/profile/setemail/v1", methods=['PUT'])
 def update_user_email():
     data = request.get_json()
     email = data['email']
     token = data['token']
+    
+    user_token = decode_jwt(token)
+    check_valid_token(user_token)
+    
+    set_email(user_token['u_id'], email)
+    
+    return dumps({})
 
+@APP.route("/dm/messages/v1", methods=['GET'])
+def get_dm_messages():
+    token = request.args.get('token')
+    dm_id = int(request.args.get('dm_id'))
+    start = int(request.args.get('start'))
+    
     #check valid token
     user_token = decode_jwt(token)
     check_valid_token(user_token)
 
-    set_email(user_token['u_id'], email)
+    messages_dm = messages_dm_v1(user_token['u_id'], dm_id, start)
+    
+    return dumps(
+        messages_dm
+    )
 
-    return dumps({})
+@APP.route("/message/send/v1", methods=['POST'])
+def post_send_message():
+    data = request.get_json()
+    
+    token = data['token']
+    channel_id = data['channel_id']
+    message = data['message']
+    
+    user_token = decode_jwt(token)
+    check_valid_token(user_token)
+
+    return dumps(
+        message_send_channel(user_token['u_id'], channel_id, message)
+    )
+
+@APP.route("/message/senddm/v1", methods=['POST'])
+def post_send_message_dm():
+    data = request.get_json()
+    
+    token = data['token']
+    dm_id = data['dm_id']
+    message = data['message']
+    
+    user_token = decode_jwt(token)
+    check_valid_token(user_token)
+
+    return dumps(
+        message_send_dm(user_token['u_id'], dm_id, message)
+    )
 
 #### NO NEED TO MODIFY BELOW THIS POINT
 
