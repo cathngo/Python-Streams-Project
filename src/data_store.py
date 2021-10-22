@@ -109,6 +109,31 @@ data = {
             ],
             'messages': [],
         },
-    ]
+    ],
+    'dm': [
+        {
+            'dm_id': 1,
+            'name': 'kanyesouth, kanyewest',
+            'owner_id': 0
+            'members': [
+                {          
+                    'u_id': 1,
+                    'u_id': 0,
+                }
+            ],
+            'messages': [],
+        },
+        {
+            'dm_id': 2,
+            'name': 'kanyesouth',
+            'owner_id': 1
+            'members': [
+                {          
+                    'u_id': 1,
+                }
+            ],
+            'messages': [],
+        },
+    ],
 }
 '''

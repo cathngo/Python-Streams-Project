@@ -2,10 +2,21 @@ from src.data_store import data_store
 from src.dm_helper import check_valid_u_id_list, generate_dm_id, generate_dm_names
 from src.token_helper import decode_jwt, check_valid_token
 
+'''
+Creates a dm based on input and returns a unique dm id
+
+Arguments:
+    token (string) - user's token
+    u_ids (list) - contains the user(s) that this DM is directed to, and will not include the creator
+
+Exceptions:
+    InputError - any u_id in u_ids does not refer to a valid user
+    AccessError - Invalid token is passed through
+
+Return Value:
+    Returns a dictionary containing a unique dm_id
+'''
 def dm_create_v1(token , u_ids):
-    '''
-    Creates a dm based on input and returns a unique dm id
-    '''
     store = data_store.get()
 
     # Check valid token
@@ -30,6 +41,7 @@ def dm_create_v1(token , u_ids):
         'name': dm_name,
         'owner_id': user_token['u_id'],
         'members': dm_members,
+        'messages': [],
     })
 
     data_store.set(store)
