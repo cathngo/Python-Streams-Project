@@ -6,10 +6,10 @@ from flask_cors import CORS
 from src.error import InputError
 from src import config
 from src.other import clear_v1
-from src.auth import auth_register_v1, auth_login_v1
+from src.auth import auth_register_v1, auth_login_v1, auth_logout_v1
 from src.error import AccessError
 from src.channels import channels_create_v1, channels_list_v1, channels_listall_v1
-from src.channel import channel_details_v1, messages_channel_v1, messages_dm_v1
+from src.channel import channel_details_v1, messages_channel_v1, messages_dm_v1, channel_join_v1
 from src.token_helper import decode_jwt, check_valid_token
 from src.dm_create import dm_create_v1
 from src.dm_list import dm_list_v1
@@ -77,6 +77,16 @@ def auth_login_v2_http():
         'auth_user_id': login_return['auth_user_id'],
     })
 
+#auth_logout_v1
+@APP.route("/auth/logout/v1", methods=['POST'])
+def auth_logout_v1_http():
+    data = request.get_json()
+    token = data['token']
+    user_token = decode_jwt(token)
+    session_id = user_token['session_id']
+    auth_logout_v1(session_id)
+    return dumps({})
+
 #channels_create_v2
 @APP.route("/channels/create/v2", methods=['POST'])
 def create_channel():
@@ -119,6 +129,16 @@ def get_listall_channels():
         channels_listall_v1(user_token['u_id'])
     )
  
+# Route function for channel_join_v2
+@APP.route("/channel/join/v2", methods=['POST'])
+def channel_join():
+    data = request.get_json()
+    user_token = data['token']
+    token = decode_jwt(user_token)
+    check_valid_token(token)
+    channel_join_v1(token['u_id'], data['channel_id'])
+    return dumps({})
+
 #channel_details_v2
 @APP.route("/channel/details/v2", methods=['GET'])
 def get_channel_details():
