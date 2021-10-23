@@ -22,7 +22,7 @@ def test_addowner_works():
     assert add.status_code == 200
 
 # Checks for invalid token
-def test_invalid_token_leave():
+def test_invalid_token_addowner():
     requests.delete(config.url + 'clear/v1')
     #create a user
     user = requests.post(config.url + 'auth/register/v2', json={'email': 'validemail@gmail.com', 'password': '123abc!@#', 'name_first': 'Sam', 'name_last': 'Smith'})
@@ -98,5 +98,6 @@ def test_http_channel_owner_adding():
     requests.post(config.url + 'channel/join/v2', json={'token': user_token2['token'], 'channel_id': channel_id['channel_id']})
     user3 = requests.post(config.url + 'auth/register/v2', json={'email': 'validemail2@gmail.com', 'password': '132abc!@#', 'name_first': 'Bam', 'name_last': 'Wam'})
     user_token3 = user3.json()
+    requests.post(config.url + 'channel/join/v2', json={'token': user_token3['token'], 'channel_id': channel_id['channel_id']})
     add = requests.post(config.url + 'channel/addowner/v1', json={'token': user_token2['token'], 'channel_id': channel_id['channel_id'], 'u_id': user_token3['auth_user_id']})
     assert add.status_code == 403

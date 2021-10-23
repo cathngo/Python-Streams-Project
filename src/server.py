@@ -140,7 +140,7 @@ def channel_join():
     return dumps({})
 
 
-# Route function for channel_leave_v2
+# Route function for channel_leave_v1
 @APP.route("/channel/leave/v1", methods=['POST'])
 def channel_leave():
     data = request.get_json()

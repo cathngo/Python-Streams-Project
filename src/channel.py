@@ -197,7 +197,7 @@ def channel_leave_v1(auth_user_id, channel_id):
             channel['all_members'].remove(member)
             data_store.set(store)
             return {}
-    raise AccessError
+    raise AccessError(description = 'Cannot leave channel you have not joined')
     
     
 
@@ -226,6 +226,6 @@ def channel_addowner_v1(auth_user_id, channel_id, u_id):
             channel['owner_members'].append(u_id)
             data_store.set(store)
             return {}
-    raise InputError
+    raise InputError(description = 'Not a member of the channel cannot be promoted')
    
    

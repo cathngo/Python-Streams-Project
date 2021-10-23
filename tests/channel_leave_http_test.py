@@ -77,8 +77,9 @@ def test_http_channel_join_works_owner():
     resp = requests.get(config.url + 'channel/details/v2', params={'token': user_token2['token'], 'channel_id': channel_id['channel_id']})
     #get the response in json
     details = resp.json()
-    assert len(details['all_members']) == 1
     assert len(details['owner_members']) == 0
+    assert len(details['all_members']) == 1
+    
 
 
 # Check if user is not member of the channel
