@@ -5,6 +5,19 @@ from src import config
 from src.other import clear_v1
 import jwt
 
+#check valid token 
+def test_given_token():
+    requests.delete(config.url + 'clear/v1')
+    #create user
+    user = requests.post(config.url + 'auth/register/v2', json={'email': 'validemail@gmail.com', 'password': '123abc!@#', 'name_first': 'Sam', 'name_last': 'Smith'})
+    user_token = user.json()
+    #create channel with that user
+    channel = requests.post(config.url + 'channels/create/v2', json={'token': user_token['token'], 'name': 'Alpaca', 'is_public': True})
+    channel_id = channel.json()
+    #create invalid token
+    invalid_token = jwt.encode({'u_id': user_token['auth_user_id'], 'session_id': 0}, 'invalid', algorithm='HS256')
+    re = requests.post(config.url + 'channel/invite/v2', json={'token': invalid_token, 'channel_id': channel_id['channel_id']})
+    assert re.status_code == 403
 
 
 #check
