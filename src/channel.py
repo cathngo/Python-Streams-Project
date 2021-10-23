@@ -173,3 +173,70 @@ def channel_join_v1(auth_user_id, channel_id):
     data_store.set(store)
     return {}
 
+def channel_leave_v1(auth_user_id, channel_id):
+    store = data_store.get()
+    
+
+    # Checks if user exists and if so stores location in list
+    find_user(auth_user_id, store)
+    
+    # Check if channel_id valid 
+    check_channel_id(channel_id, store)
+
+    # Stores location of channel in list
+    channel = find_channel(channel_id, store)
+    
+    
+    for owner in channel['owner_members']:
+        if auth_user_id == owner['u_id']:       
+            channel['owner_members'].remove(owner)
+            
+    # Remove the member from the channel 
+    for member in channel['all_members']:
+        if member['u_id'] == auth_user_id:
+            channel['all_members'].remove(member)
+            data_store.set(store)
+            return {}
+    raise AccessError
+    
+    
+
+def channel_addowner_v1(auth_user_id, channel_id, u_id):
+    store = data_store.get()
+    
+    # Checks if user exists and if so stores location in list
+    user = find_user(auth_user_id, store)
+    
+    # Check if channel_id valid 
+    check_channel_id(channel_id, store)
+
+    # Stores location of channel in list
+    channel = find_channel(channel_id, store)
+
+    # Checks if user with u_id is already an owner of the channel
+    for owner in channel['owner_members']:
+        if u_id == owner['u_id']: 
+            raise InputError(description='User with u_id is already an owner of the channel')
+    '''
+    # auth_user is not an owner of the channel or a owner of Streams
+    for owners in channel['owner_members']:
+        if auth_user_id == owners and user['global_owner'] == False:
+            # Remove the member from the channel 
+            for member in channel['all_members']:
+                if member == auth_user_id:
+                    # Make the user with u_id an owner of the channel
+                    channel['owner_members'].append(u_id)
+                    data_store.set(store)
+                    return {}
+        '''
+    if auth_user_id not in channel['owner_members'] and user['is_streams_owner'] == False:
+        raise AccessError(description='auth_user is not an owner of the channel or an owner of streams')
+
+    for member in channel['all_members']:
+        if member['u_id'] == u_id:
+            channel['owner_members'].append(u_id)
+            data_store.set(store)
+            return {}
+    raise InputError
+   
+   
