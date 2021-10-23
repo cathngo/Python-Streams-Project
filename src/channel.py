@@ -217,18 +217,7 @@ def channel_addowner_v1(auth_user_id, channel_id, u_id):
     for owner in channel['owner_members']:
         if u_id == owner['u_id']: 
             raise InputError(description='User with u_id is already an owner of the channel')
-    '''
-    # auth_user is not an owner of the channel or a owner of Streams
-    for owners in channel['owner_members']:
-        if auth_user_id == owners and user['global_owner'] == False:
-            # Remove the member from the channel 
-            for member in channel['all_members']:
-                if member == auth_user_id:
-                    # Make the user with u_id an owner of the channel
-                    channel['owner_members'].append(u_id)
-                    data_store.set(store)
-                    return {}
-        '''
+   
     if auth_user_id not in channel['owner_members'] and user['is_streams_owner'] == False:
         raise AccessError(description='auth_user is not an owner of the channel or an owner of streams')
 
