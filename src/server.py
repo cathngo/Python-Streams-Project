@@ -328,10 +328,16 @@ def post_send_message_dm():
     
     user_token = decode_jwt(token)
     check_valid_token(user_token)
-
+    
     return dumps(
         message_send_dm(user_token['u_id'], dm_id, message)
     )
+
+@APP.route("/message/remove/v1", methods=['DELETE'])
+def delete_message_remove():
+    # data = request.get_json()
+    # dm_remove_v1(data['token'], data['dm_id'])
+    return dumps({})
 
 #### NO NEED TO MODIFY BELOW THIS POINT
 
