@@ -410,6 +410,7 @@ def tests_member_message_was_deleted_by_empty_string_message_member_edit_dm():
     assert (message_list['messages']) == []
 
 def tests_member_message_was_deleted_by_empty_string_message_member_edit_channel():
+
     requests.delete(config.url + 'clear/v1')
     #create a user
     user = requests.post(config.url + 'auth/register/v2', json={'email': 'validemail@gmail.com', 
@@ -461,3 +462,51 @@ def tests_member_message_was_deleted_by_empty_string_message_member_edit_channel
     message_list = message_page.json()
 
     assert (message_list['messages']) == []
+
+def tests_member_message_is_greater_than_one_thousand_message_member_editd_dm():
+    requests.delete(config.url + 'clear/v1')
+    #create a user
+    user = requests.post(config.url + 'auth/register/v2', json={
+        'email': 'validemail@gmail.com', 
+        'password': '123abc!@#', 
+        'name_first': 'Sam', 
+        'name_last': 'Smith'
+    })
+    user_token = user.json()
+
+    #create a user
+    user2 = requests.post(config.url + 'auth/register/v2', json={
+        'email': 'validemail1@gmail.com', 
+        'password': '122abc!@#', 
+        'name_first': 'Tam', 
+        'name_last': 'Lam'
+    })
+    user_token2 = user2.json()
+
+    #create a dm with those users
+    dm = requests.post(config.url + 'dm/create/v1', json={
+        'token': user_token['token'], 
+        'u_ids': [user_token2['auth_user_id']],
+    })
+    dm_id = dm.json()
+    #the member user sends a message to channel
+    requests.post(config.url + 'message/senddm/v1', json={
+        'token': user_token2['token'], 
+        'dm_id': dm_id['dm_id'],
+        'message': "hi",
+    })
+    message_send = requests.post(config.url + 'message/senddm/v1', json={
+        'token': user_token2['token'], 
+        'dm_id': dm_id['dm_id'],
+        'message': "hello",
+    })
+    message_id = message_send.json()
+    
+    #the channel owner edits the message   
+    resp = requests.put(config.url + 'message/edit/v1', json={ 
+        'token': user_token2['token'],
+        'message_id': message_id['message_id'], 
+        'message': "f" * 1001
+    })  
+
+    assert resp.status_code == 400
