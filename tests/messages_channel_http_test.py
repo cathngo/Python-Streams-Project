@@ -162,7 +162,6 @@ def test_start_greater_than_messages_channel_messages():
     #get the response in json
     assert resp.status_code == 400
 
-'''
 # Check pagination works when there are more than 50 messages
 def test_pagination_works():
     requests.delete(config.url + 'clear/v1')
@@ -189,11 +188,16 @@ def test_pagination_works():
             'message': "Repeat",
         })
 
-    resp = requests.get(config.url + 'channel/messages/v2', params={
+    resp1 = requests.get(config.url + 'channel/messages/v2', params={
         'token': user_token['token'], 
         'channel_id': channel_id['channel_id'],
         'start': 55,
     })
+    resp2 = requests.get(config.url + 'channel/messages/v2', params={
+        'token': user_token['token'], 
+        'channel_id': channel_id['channel_id'],
+        'start': 0,
+    })
 
-    assert resp.status_code == 200
-'''
+    assert resp1.status_code == 200
+    assert resp2.status_code == 200

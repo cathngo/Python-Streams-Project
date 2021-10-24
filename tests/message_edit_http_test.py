@@ -162,7 +162,21 @@ def tests_member_message_was_editd_message_member_editd_channel():
         'channel_id': channel_id['channel_id']
     })
     
-    #the member user sends a message to channel
+    requests.post(config.url + 'message/send/v1', json={
+        'token': user_token['token'], 
+        'channel_id': channel_id['channel_id'],
+        'message': "hi",
+    })
+    requests.post(config.url + 'message/send/v1', json={
+        'token': user_token2['token'], 
+        'channel_id': channel_id['channel_id'],
+        'message': "hi",
+    })
+    requests.post(config.url + 'message/send/v1', json={
+        'token': user_token2['token'], 
+        'channel_id': channel_id['channel_id'],
+        'message': "hi",
+    })
     message_send = requests.post(config.url + 'message/send/v1', json={
         'token': user_token2['token'], 
         'channel_id': channel_id['channel_id'],
@@ -174,7 +188,7 @@ def tests_member_message_was_editd_message_member_editd_channel():
     requests.put(config.url + 'message/edit/v1', json={ 
         'token': user_token2['token'],
         'message_id': message_id['message_id'],
-        'message':"goodbye" 
+        'message': "goodbye" 
     })  
 
     message_page = requests.get(config.url + 'channel/messages/v2', params={
@@ -213,7 +227,11 @@ def tests_member_message_was_editd_message_member_editd_dm():
     })
     dm_id = dm.json()
     #the member user sends a message to channel
-    
+    requests.post(config.url + 'message/senddm/v1', json={
+        'token': user_token2['token'], 
+        'dm_id': dm_id['dm_id'],
+        'message': "hi",
+    })
     message_send = requests.post(config.url + 'message/senddm/v1', json={
         'token': user_token2['token'], 
         'dm_id': dm_id['dm_id'],
