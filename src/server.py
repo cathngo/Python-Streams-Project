@@ -20,6 +20,7 @@ from src.users_all_v1_helper import get_all_users
 from src.user_profile_v1_helper import get_user_profile, check_valid_u_id
 from src.user_profile_put_helpers import set_username, set_handle, set_email
 from src.send_message import message_send_channel, message_send_dm
+from src.message_remove import message_remove_v1 
 
 def quit_gracefully(*args):
     '''For coverage'''
@@ -337,7 +338,7 @@ def get_dm_messages():
 
     messages_dm = messages_dm_v1(user_token['u_id'], dm_id, start)
     
-    return dumps(
+    return jsonify(
         messages_dm
     )
 
@@ -366,16 +367,23 @@ def post_send_message_dm():
     
     user_token = decode_jwt(token)
     check_valid_token(user_token)
-    
+
     return dumps(
         message_send_dm(user_token['u_id'], dm_id, message)
     )
 
 @APP.route("/message/remove/v1", methods=['DELETE'])
 def delete_message_remove():
-    # data = request.get_json()
-    # dm_remove_v1(data['token'], data['dm_id'])
+    data = request.get_json()
+    user_token = data['token']
+    
+    token = decode_jwt(user_token)
+    check_valid_token(token)
+    
+    message_remove_v1(token['u_id'], data['message_id'])
+    
     return dumps({})
+
 
 #### NO NEED TO MODIFY BELOW THIS POINT
 
