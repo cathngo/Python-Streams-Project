@@ -210,19 +210,28 @@ def tests_member_message_was_removed_message_member_removed_dm():
     })
     dm_id = dm.json()
     #the member user sends a message to channel
-    
-    message_send = requests.post(config.url + 'message/senddm/v1', json={
+    message_send1 = requests.post(config.url + 'message/senddm/v1', json={
+        'token': user_token['token'], 
+        'dm_id': dm_id['dm_id'],
+        'message': "hello",
+    })
+    message_send2 = requests.post(config.url + 'message/senddm/v1', json={
         'token': user_token2['token'], 
         'dm_id': dm_id['dm_id'],
         'message': "hello",
     })
-    message_id = message_send.json()
+    message_id1 = message_send1.json()
+    message_id2 = message_send2.json()
     
     #the channel owner removes the message   
     requests.delete(config.url + 'message/remove/v1', json={ 
         'token': user_token2['token'],
-        'message_id': message_id['message_id'], 
-    })  
+        'message_id': message_id1['message_id'], 
+    })
+    requests.delete(config.url + 'message/remove/v1', json={ 
+        'token': user_token['token'],
+        'message_id': message_id2['message_id'], 
+    })
 
     message_page = requests.get(config.url + 'dm/messages/v1', params={
         'token': user_token2['token'], 
