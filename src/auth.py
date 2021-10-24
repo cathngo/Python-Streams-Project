@@ -10,11 +10,12 @@ from src.auth_register_helper import (
     hash_user_password,
     generate_new_session_id,
 )
+from src.data_persistence import savej, openj, savep, openp
 
 def auth_login_v1(email, password):
     
     store = data_store.get()
-    
+  
     # Checks that the email is valid 
     check_email(email)
      
@@ -68,7 +69,8 @@ Return Value:
     if user is successfully registered into the datastore
 '''
 def auth_register_v1(email, password, name_first, name_last):
-    store = data_store.get()
+    store = openp()
+    
 
     # Checks user details for validity
     check_email(email)
@@ -109,6 +111,7 @@ def auth_register_v1(email, password, name_first, name_last):
     )
 
     data_store.set(store)
+    savep()
     
     return {
         'token': token,
