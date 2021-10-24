@@ -226,11 +226,11 @@ def tests_member_message_was_removed_message_member_removed_dm():
     #the channel owner removes the message   
     requests.delete(config.url + 'message/remove/v1', json={ 
         'token': user_token2['token'],
-        'message_id': message_id1['message_id'], 
+        'message_id': message_id2['message_id'], 
     })
     requests.delete(config.url + 'message/remove/v1', json={ 
         'token': user_token['token'],
-        'message_id': message_id2['message_id'], 
+        'message_id': message_id1['message_id'], 
     })
 
     message_page = requests.get(config.url + 'dm/messages/v1', params={
