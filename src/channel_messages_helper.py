@@ -39,3 +39,4 @@ def check_message_is_right_character_length(message_length):
     elif message_length > 1000:
         raise InputError(description="Message is over 1000 character") 
     return
+

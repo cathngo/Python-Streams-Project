@@ -20,7 +20,7 @@ def message_send_channel(u_id, channel_id, message):
     
     message_id = message_id_generate()
     
-    time_created = float(datetime.utcnow().timestamp())
+    time_created = int(datetime.utcnow().timestamp())
     
     channel['messages'].append(
         {
@@ -31,6 +31,8 @@ def message_send_channel(u_id, channel_id, message):
         }
     )
 
+    data_store.set(store)
+    save_pickle()
     return {
         'message_id': message_id
     }
@@ -46,11 +48,11 @@ def message_send_dm(u_id, dm_id, message):
     
     message_id = message_id_generate()
     
-    time_created = float(datetime.utcnow().timestamp())
+    time_created = int(datetime.utcnow().timestamp())
     
     dm['messages'].append(
         {
-        'message_id': message_id,
+        'message_id': message_id, 
         'u_id': u_id, 
         'message': message,
         'time_created': time_created,    
