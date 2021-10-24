@@ -117,9 +117,9 @@ def test_multiple_channel_invite_once_works():
     #create another user
     user2 = requests.post(config.url + 'auth/register/v2', json={'email': 'validemail12@gmail.com', 'password': '122abc!@#2', 'name_first': 'Tomas', 'name_last': 'Lam'})
     user_token2 = user2.json()
-    #create a channel with user1
+    #create multiple channels with user1
     requests.post(config.url + 'channels/create/v2', json={'token': user_token['token'], 'name': 'Alpaca', 'is_public': True})
-    #create 2nd channel
+    requests.post(config.url + 'channels/create/v2', json={'token': user_token['token'], 'name': 'Alpaca1', 'is_public': True})
     r = requests.post(config.url + 'channels/create/v2', json={'token': user_token['token'], 'name': 'Hello', 'is_public': True})
     payload = r.json()
     #invite user2 to channel 2
