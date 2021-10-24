@@ -2,6 +2,26 @@ from src.data_store import data_store
 from src.data_persistence import save_pickle, open_pickle
 from src.error import InputError, AccessError
 
+'''
+Remove an existing user from the Stream, so the user is removed from all channels/DMs.
+This can only be done by global owners which are able to remove other global owners unless
+they are the last global owner. When removing the user it changes it's name and email.
+
+Arguments:
+    token (string) - user's token
+    u_id (integer) - unique id of an user
+
+Exceptions:
+    InputError - u_id does not refer to a valid user
+    InputError - u_id refers to a user who is the only global owner
+    AccessError - Occurs when any of:
+        - Invalid token is passed through.
+        - The authorised user is not a global owner.
+
+Return Value:
+    Returns an empty dictionary
+'''
+
 def remove_from_streams(global_user_id, u_id):
     store = open_pickle()
 
