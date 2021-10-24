@@ -4,6 +4,24 @@ from src.data_persistence import save_pickle, open_pickle
 
 #input error is message_id was not found
 
+'''
+Given a message_id for a message, this message is removed from the channel/DM
+
+Arguments:
+    u_id (int) - the id of the authorised user that is sending the channel
+    message_id (int) - the id of the channel that the user is deleting
+
+Exceptions:
+    InputError - Occurs when any of:
+        -message_id does not refer to a valid message within a channel/DM that the authorised user has joined
+    AccessError - Occurs when:
+    when message_id refers to a valid message in a joined channel/DM and none of the following are true:    
+        -the message was sent by the authorised user making this request
+        -the authorised user has owner permissions in the channel/DM
+Return Value: 
+    Returns an empty dictionary if the message is successfully removed
+'''
+
 def message_remove_v1(u_id, message_id): 
     store = open_pickle()
 
