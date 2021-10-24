@@ -188,10 +188,16 @@ def test_pagination_works():
             'message': "Repeat",
         })
 
-    resp = requests.get(config.url + 'channel/messages/v2', params={
+    resp1 = requests.get(config.url + 'channel/messages/v2', params={
+        'token': user_token['token'], 
+        'channel_id': channel_id['channel_id'],
+        'start': 55,
+    })
+    resp2 = requests.get(config.url + 'channel/messages/v2', params={
         'token': user_token['token'], 
         'channel_id': channel_id['channel_id'],
         'start': 55,
     })
 
-    assert resp.status_code == 200
+    assert resp1.status_code == 200
+    assert resp2.status_code == 200

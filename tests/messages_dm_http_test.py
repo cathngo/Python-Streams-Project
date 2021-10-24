@@ -169,7 +169,6 @@ def test_start_greater_than_messages_dm():
 
     assert resp.status_code == 400
 
-'''
 # Check pagination works when there are more than 50 messages
 def test_pagination_works():
     requests.delete(config.url + 'clear/v1')
@@ -196,11 +195,16 @@ def test_pagination_works():
         })
 
     #pass in a start that is greater to the number of messages in the system
-    resp = requests.get(config.url + 'dm/messages/v1', params={
+    resp1 = requests.get(config.url + 'dm/messages/v1', params={
+        'token': user_token['token'], 
+        'dm_id': dm_reg['dm_id'],
+        'start': 55,
+    })
+    resp2 = requests.get(config.url + 'dm/messages/v1', params={
         'token': user_token['token'], 
         'dm_id': dm_reg['dm_id'],
         'start': 55,
     })
 
-    assert resp.status_code == 200
-'''
+    assert resp1.status_code == 200
+    assert resp2.status_code == 200
