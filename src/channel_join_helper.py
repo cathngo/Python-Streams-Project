@@ -1,14 +1,10 @@
 from src.error import InputError, AccessError
 def find_user(auth_user_id, store):
-    found = False
     temp_user = {}
     for user in store['users']:
         if user['u_id'] == auth_user_id:
             temp_user = user
-            found = True
-    if found == True:
-        return temp_user
-    raise AccessError
+    return temp_user
 
 def find_channel(channel_id, store):
     temp_channel = {}
