@@ -6,11 +6,11 @@ from src.channel_details_helper import check_authorised_user
 from datetime import datetime
 from src.channel_messages_helper import get_channel, check_message_is_right_character_length
 from src.dm_helper import check_dm_id_exists, check_user_in_dm
-from src.data_persistence import savej, openj, savep, openp
+from src.data_persistence import save_pickle, open_pickle
 
  
 def message_send_channel(u_id, channel_id, message):
-    store = data_store.get()
+    store = open_pickle()
     
     channel = get_channel(channel_id, store)
     check_authorised_user(u_id, channel_id, store)
@@ -36,7 +36,7 @@ def message_send_channel(u_id, channel_id, message):
     }
 
 def message_send_dm(u_id, dm_id, message):
-    store = openp()
+    store = open_pickle()
     
     dm = check_dm_id_exists(dm_id, store)
     check_user_in_dm(u_id, dm)
@@ -57,7 +57,7 @@ def message_send_dm(u_id, dm_id, message):
         }
     )
     data_store.set(store)
-    savep()
+    save_pickle()
 
     return {
         'message_id': message_id

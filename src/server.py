@@ -21,7 +21,8 @@ from src.user_profile_v1_helper import get_user_profile, check_valid_u_id
 from src.user_profile_put_helpers import set_username, set_handle, set_email
 from src.send_message import message_send_channel, message_send_dm
 
-from src.data_persistence import savej, openj
+from src.data_persistence import open_pickle
+from src.data_store import data_store
 
 def quit_gracefully(*args):
     '''For coverage'''
@@ -376,5 +377,6 @@ def post_send_message_dm():
 #### NO NEED TO MODIFY BELOW THIS POINT
 
 if __name__ == "__main__":
+    store = open_pickle() #set the datastore to the pickle file
     signal.signal(signal.SIGINT, quit_gracefully) # For coverage
     APP.run(port=config.port) # Do not edit this port

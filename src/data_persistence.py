@@ -3,15 +3,12 @@ from src.data_store import data_store
 from json import dumps, loads
 from src.error import AccessError
 
-def savep():
+def save_pickle():
     store = data_store.get()
-
     with open('database.p', 'wb') as FILE:
         pickle.dump(store, FILE)
 
-    
-
-def openp():
+def open_pickle():
     success = True
     try:
         store = data_store.get()
@@ -31,7 +28,6 @@ def savej():
     
 
 def openj():
-    #need to change if no file so first time saving to databse dont raise accesserror but just do normal one?
     success = True
     store = data_store.get()
     try:
