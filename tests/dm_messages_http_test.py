@@ -168,3 +168,37 @@ def test_start_greater_than_messages_dm():
     })
 
     assert resp.status_code == 400
+
+# Check pagination works when there are more than 50 messages
+def test_pagination_works():
+    requests.delete(config.url + 'clear/v1')
+
+    user = requests.post(config.url + 'auth/register/v2', json={
+        'email': 'validemail@gmail.com', 
+        'password': '123abc!@#', 
+        'name_first': 'Sam', 
+        'name_last': 'Smith'
+    })
+    user_token = user.json()
+
+    dm = requests.post(config.url + 'dm/create/v1', json={
+        'token': user_token['token'], 
+        'u_ids': [],
+    })
+    dm_reg = dm.json()
+
+    for _ in range(60):
+        requests.post(config.url + 'message/senddm/v1', json={
+                'token': user_token['token'], 
+                'dm_id': dm_reg['dm_id'],
+                'message': "repeat",
+        })
+
+    #pass in a start that is greater to the number of messages in the system
+    resp = requests.get(config.url + 'dm/messages/v1', params={
+        'token': user_token['token'], 
+        'dm_id': dm_reg['dm_id'],
+        'start': 55,
+    })
+
+    assert resp.status_code == 200
