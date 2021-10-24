@@ -14,26 +14,9 @@ def open_pickle():
         store = data_store.get()
         with open('database.p', 'rb') as FILE:
             store = pickle.load(FILE)
+            print(store)
     except:
         success = False
         if success == False:
             store = data_store.get()
-    return store
-
-def savej():
-    store = data_store.get()
-    with open('database.json', 'w') as FILE:
-       FILE.write(dumps(store))
-    
-
-def openj():
-    success = True
-    store = data_store.get()
-    try:
-        with open('database.json', 'r') as FILE:
-            store = loads(FILE.read())
-    except:
-        success = False
-    if success == False:
-        store = data_store.get()
     return store
