@@ -50,7 +50,7 @@ def message_send_dm(u_id, dm_id, message):
     
     dm['messages'].append(
         {
-        'message_id': message_id,
+        'message_id': message_id, 
         'u_id': u_id, 
         'message': message,
         'time_created': time_created,    

@@ -21,6 +21,7 @@ from src.user_profile_v1_helper import get_user_profile, check_valid_u_id
 from src.user_profile_put_helpers import set_username, set_handle, set_email
 from src.send_message import message_send_channel, message_send_dm
 from src.message_remove import message_remove_v1 
+from src.message_edit import message_edit_v1 
 
 def quit_gracefully(*args):
     '''For coverage'''
@@ -379,11 +380,21 @@ def delete_message_remove():
     
     token = decode_jwt(user_token)
     check_valid_token(token)
+    message_remove_v1(token['u_id'], data['message_id']) 
+    return dumps({})
+
+@APP.route("/message/edit/v1", methods=['PUT'])
+def put_message_edit():
+    data = request.get_json()
+    user_token = data['token']
     
-    return jsonify(
-        message_remove_v1(token['u_id'], data['message_id']) )
+    token = decode_jwt(user_token)
+    check_valid_token(token)
     
-    # return dumps({})
+    message_edit_v1(token['u_id'], data['message_id'], data['message']) 
+    
+    return dumps({})
+       
 
 
 #### NO NEED TO MODIFY BELOW THIS POINT
