@@ -45,6 +45,8 @@ def auth_login_v1(email, password):
                 new_session_id = generate_new_session_id()
                 user['session_list'].append(new_session_id)
                 token = generate_jwt(user['u_id'], new_session_id)
+                data_store.set(store)
+                save_pickle()
                 return {
                     'token': token,
                     'auth_user_id': user['u_id'],

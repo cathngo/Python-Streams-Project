@@ -30,8 +30,6 @@ def channel_invite_v1(auth_user_id, channel_id, u_id):
                     raise InputError
             #if u_id is not part of the channel then append as a dictionary
             channel['all_members'].append({'u_id': u_id})
-            #break to prevent having to checking other channels
-            break
     
     data_store.set(store)
     save_pickle()

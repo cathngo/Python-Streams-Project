@@ -49,8 +49,20 @@ def test_http_auth_double_logout():
     })
     assert r3.status_code == 403
 
-
-
-
-    
-
+def test_http_login_logout():
+    requests.delete(config.url + 'clear/v1')
+    requests.post(config.url + 'auth/register/v2', json={
+        'email': 'user1@email.com',
+        'password': 'user1password',
+        'name_first': 'Kanye',
+        'name_last': 'Yeezus',
+    })
+    r2 = requests.post(config.url + 'auth/login/v2', json={
+        'email': 'user1@email.com',
+        'password': 'user1password',
+    })
+    payload2 = r2.json()
+    r3 = requests.post(config.url + 'auth/logout/v1', json={
+        'token': payload2['token'],
+    })
+    assert r3.status_code == 200
