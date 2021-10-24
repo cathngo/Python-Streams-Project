@@ -1,8 +1,8 @@
 from src.token_helper import decode_jwt, check_valid_token
 from src.data_store import data_store
-
+from src.data_persistence import save_pickle, open_pickle
 def get_all_users():  
-    store = data_store.get()
+    store = open_pickle()
 
     all_users = []
     #check all the users in the database

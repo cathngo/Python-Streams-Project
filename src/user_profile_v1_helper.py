@@ -2,9 +2,9 @@ from src.token_helper import decode_jwt, check_valid_token
 from src.data_store import data_store
 from src.error import AccessError
 from src.error import InputError
-
+from src.data_persistence import save_pickle, open_pickle
 def get_user_profile(token, user_id):
-    store = data_store.get()
+    store = open_pickle()
     #check valid token
 
     user_profile = {}
@@ -21,7 +21,7 @@ def get_user_profile(token, user_id):
 
 
 def check_valid_u_id(auth_user_id):
-    store = data_store.get()
+    store = open_pickle()
 
     found = False
     #search for u_id in users
