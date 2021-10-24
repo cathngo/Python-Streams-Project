@@ -21,11 +21,11 @@ def change_permissions_helper(global_owner_id, u_id, permission_id):
             global_found = True 
 
     if not global_found:   
-        raise AccessError
+        raise AccessError(description='The authorised user is not a global owner.')
     elif not new_global_found or (new_global_found == True and owners_count == 1 and permission_id == 2):
-       raise InputError
+       raise InputError(description='Invalid u_id.')
     elif permission_id != 1 and permission_id != 2:
-        raise InputError
+        raise InputError(description='Invalid permission_id. ')
 
     
     for user in store['users']:
@@ -36,4 +36,3 @@ def change_permissions_helper(global_owner_id, u_id, permission_id):
                 user['is_streams_owner'] = False
     data_store.set(store)
     save_pickle()
-    return 0

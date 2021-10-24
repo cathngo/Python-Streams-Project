@@ -9,6 +9,7 @@ from src.other import clear_v1
 from src.auth import auth_register_v1, auth_login_v1, auth_logout_v1
 from src.admi_helper import change_permissions_helper
 from src.error import AccessError
+from src.admi_remove import remove_from_streams
 from src.channels import channels_create_v1, channels_list_v1, channels_listall_v1
 from src.channel import channel_details_v1, messages_channel_v1, messages_dm_v1, channel_join_v1, channel_leave_v1, channel_addowner_v1, channel_invite_v1, channel_removeowner_v1
 from src.token_helper import decode_jwt, check_valid_token
@@ -383,6 +384,19 @@ def post_send_message_dm():
         message_send_dm(user_token['u_id'], dm_id, message)
     )
 
+@APP.route("/admin/user/remove/v1", methods=['DELETE'])
+def remove_user_streams():
+    data = request.get_json()
+    
+    token = data['token']
+    u_id = data['u_id']
+
+    user_token = decode_jwt(token)
+    check_valid_token(user_token)
+    remove_from_streams(user_token['u_id'], u_id)
+
+    return dumps({})
+    
 @APP.route("/message/remove/v1", methods=['DELETE'])
 def delete_message_remove():
     data = request.get_json()

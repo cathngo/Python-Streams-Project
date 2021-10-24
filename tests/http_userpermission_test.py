@@ -50,7 +50,7 @@ def test_adding_global_owner_2():
     channel = requests.post(config.url + 'channels/create/v2',json={'token': user_token['token'],'name': 'Fox' , 'is_public' : False})
     channel_id = channel.json()
 
-    re = requests.post(config.url + 'channel/join/v2', json={'token': user_token2['token'], 'channel_id':channel_id['channel_id']})
+    re = requests.post(config.url + 'channel/join/v2', json={'token': user_token3['token'], 'channel_id':channel_id['channel_id']})
     assert re.status_code == 200
 
 #check if the token is valid
@@ -119,3 +119,26 @@ def test_authorised_user_not_global_owner():
     #pass valid channel id but invalid token
     resp = requests.post(config.url + 'admin/userpermission/change/v1', json={'token': user_token2['token'], 'u_id': user_token['auth_user_id'], 'permission_id': 1})
     assert resp.status_code == 403
+
+#test when permission_id is 2
+def test_basic_remove_global_owner():
+    #Reset route
+    requests.delete(config.url + 'clear/v1')
+
+    user_2 = requests.post(config.url + 'auth/register/v2', json={'email': 'validemail2@gmail.com', 'password': '123abc!@#2', 'name_first': 'Masoko', 'name_last': 'West'})
+    user_token2 = user_2.json() 
+    user = requests.post(config.url + 'auth/register/v2', json={'email': 'validemail@gmail.com', 'password': '123abc!@#', 'name_first': 'Kanye', 'name_last': 'San'})
+    user_token = user.json()
+    user3 = requests.post(config.url + 'auth/register/v2', json={'email': 'validemail3@gmail.com', 'password': '122abc!@#2', 'name_first': 'Samor', 'name_last': 'Narco'})
+    user_token3 = user3.json()
+
+    #user_2 (global owner) promotes user_3 to global owner
+    requests.post(config.url + 'admin/userpermission/change/v1',json={'token': user_token2['token'] , 'u_id': user_token3['auth_user_id'], 'permission_id': 1})
+    #user makes a channel
+    channel = requests.post(config.url + 'channels/create/v2',json={'token': user_token['token'],'name': 'Fox' , 'is_public' : False})
+    channel_id = channel.json()
+
+    res = requests.post(config.url + 'admin/userpermission/change/v1',json={'token': user_token2['token'] , 'u_id': user_token3['auth_user_id'], 'permission_id': 2})
+    assert res.status_code == 200
+    re = requests.post(config.url + 'channel/join/v2', json={'token': user_token3['token'], 'channel_id':channel_id['channel_id']})
+    assert re.status_code == 403
