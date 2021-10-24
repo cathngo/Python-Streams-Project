@@ -7,9 +7,10 @@ from src.error import InputError
 from src import config
 from src.other import clear_v1
 from src.auth import auth_register_v1, auth_login_v1, auth_logout_v1
+from src.admi_helper import change_permissions_helper
 from src.error import AccessError
 from src.channels import channels_create_v1, channels_list_v1, channels_listall_v1
-from src.channel import channel_details_v1, messages_channel_v1, messages_dm_v1, channel_join_v1, channel_leave_v1, channel_addowner_v1, channel_invite_v1
+from src.channel import channel_details_v1, messages_channel_v1, messages_dm_v1, channel_join_v1, channel_leave_v1, channel_addowner_v1, channel_invite_v1, channel_removeowner_v1
 from src.token_helper import decode_jwt, check_valid_token
 from src.dm_create import dm_create_v1
 from src.dm_list import dm_list_v1
@@ -163,6 +164,15 @@ def channel_addowner():
     channel_addowner_v1(token['u_id'], data['channel_id'], data['u_id'])
     return dumps({})
 
+# Route function for channel_removeowner_v1
+@APP.route("/channel/removeowner/v1", methods=['POST'])
+def channel_removeowner():
+    data = request.get_json()
+    user_token = data['token']
+    token = decode_jwt(user_token)
+    check_valid_token(token)
+    channel_removeowner_v1(token['u_id'], data['channel_id'], data['u_id'])
+    return dumps({})
 
 #channel_invite_v2
 @APP.route("/channel/invite/v2", methods=['POST'])
@@ -396,6 +406,20 @@ def put_message_edit():
     return dumps({})
        
 
+@APP.route("/admin/userpermission/change/v1", methods=['POST'])
+def change_permissions_user():
+    data = request.get_json()
+    
+    token = data['token']
+    u_id = data['u_id']
+    permission = data['permission_id']
+
+    user_token = decode_jwt(token)
+    check_valid_token(user_token)
+
+    change_permissions_helper(user_token['u_id'], u_id, permission)
+
+    return dumps({})
 
 #### NO NEED TO MODIFY BELOW THIS POINT
 

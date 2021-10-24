@@ -11,10 +11,29 @@ from src.auth_register_helper import (
     generate_new_session_id,
 )
 
+from src.data_persistence import save_pickle, open_pickle
+
+'''
+Logs in user into streams
+
+Arguments:
+    email (string) - user's email
+    password (string) - user's password
+
+Exceptions:
+    InputError - Occurs when any of:
+        - invalid email entered
+        - Incorrect password
+        - Email entered does not belong to a user
+
+Return Value:
+    Returns a dictionary containing a unique token and auth_user_id
+    if user is successfully logs in
+'''
 def auth_login_v1(email, password):
     
-    store = data_store.get()
-    
+    store = open_pickle()
+  
     # Checks that the email is valid 
     check_email(email)
      
@@ -26,6 +45,8 @@ def auth_login_v1(email, password):
                 new_session_id = generate_new_session_id()
                 user['session_list'].append(new_session_id)
                 token = generate_jwt(user['u_id'], new_session_id)
+                data_store.set(store)
+                save_pickle()
                 return {
                     'token': token,
                     'auth_user_id': user['u_id'],
@@ -34,14 +55,27 @@ def auth_login_v1(email, password):
                 raise InputError('Error: Incorrect password')
     raise InputError('Error: Email entered does not belong to a user')
 
+'''
+Logs out user from streams
+
+Arguments:
+    token 
+
+Exceptions:
+    AccessError - Occurs when any of:
+        - invalid token
+
+Return Value = {}
+'''
 def auth_logout_v1(token):
-    store = data_store.get()
+    store = open_pickle()
     session_id = token
     for user in store['users']:
         for session in user['session_list']:
             if session_id == session:
                 user['session_list'].remove(session_id)
                 data_store.set(store)
+                save_pickle()
                 return
     raise AccessError('Token invalid')
 
@@ -68,7 +102,7 @@ Return Value:
     if user is successfully registered into the datastore
 '''
 def auth_register_v1(email, password, name_first, name_last):
-    store = data_store.get()
+    store = open_pickle()
 
     # Checks user details for validity
     check_email(email)
@@ -109,6 +143,7 @@ def auth_register_v1(email, password, name_first, name_last):
     )
 
     data_store.set(store)
+    save_pickle()
     
     return {
         'token': token,

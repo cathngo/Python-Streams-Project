@@ -1,10 +1,11 @@
 from src.data_store import data_store
 from src.error import AccessError, InputError
+from src.data_persistence import save_pickle, open_pickle
 
 #input error is message_id was not found
 
 def message_remove_v1(u_id, message_id): 
-    store = data_store.get()        
+    store = open_pickle()
 
     owner_channel = False       
     for channel in store['channels']: 
@@ -60,5 +61,6 @@ def message_remove_v1(u_id, message_id):
                 dm['messages'].remove(message)    
 
     data_store.set(store)
+    save_pickle()
 
     return {}

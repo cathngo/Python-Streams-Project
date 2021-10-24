@@ -1,18 +1,11 @@
 from src.data_store import data_store
-from src.token_helper import decode_jwt, check_valid_token
-from src.message_id_generator import MESSAGE_ID, message_id_generate
-from src.data_store import data_store
-from src.channel_details_helper import check_authorised_user
-from datetime import datetime
-from src.channel_messages_helper import get_channel, check_message_is_right_character_length, messages_pagination
-from src.dm_helper import check_dm_id_exists, check_user_in_dm
-from src.channels import channels_list_v1
-from src.dm_list import dm_list_v1
 from src.error import AccessError, InputError
+from src.data_persistence import save_pickle, open_pickle
+
+
 
 def message_edit_v1(u_id, message_id, message_given): 
-    store = data_store.get()
-    
+    store = open_pickle() 
     owner_channel = False       
     for channel in store['channels']: 
         for owner in channel['owner_members']: 
@@ -74,5 +67,5 @@ def message_edit_v1(u_id, message_id, message_given):
                     dm['messages'].remove(message)
 
     data_store.set(store)
-
+    save_pickle()
     return {}

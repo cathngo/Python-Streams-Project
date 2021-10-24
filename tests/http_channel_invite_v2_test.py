@@ -107,3 +107,22 @@ def test_invitation_not_authorised():
     re = requests.post(config.url + 'channel/invite/v2',json={'token': user_token3['token'],'channel_id': channel_id['channel_id'], 'u_id': user_token2['auth_user_id']})
 
     assert re.status_code == 403
+
+# Check if invite works when there are multiple channels
+def test_multiple_channel_invite_once_works():
+    requests.delete(config.url + 'clear/v1')
+    #create a user
+    user = requests.post(config.url + 'auth/register/v2', json={'email': 'validemail@gmail.com', 'password': '123abc!@#', 'name_first': 'Sam', 'name_last': 'Smith'})
+    user_token = user.json()
+    #create another user
+    user2 = requests.post(config.url + 'auth/register/v2', json={'email': 'validemail12@gmail.com', 'password': '122abc!@#2', 'name_first': 'Tomas', 'name_last': 'Lam'})
+    user_token2 = user2.json()
+    #create multiple channels with user1
+    requests.post(config.url + 'channels/create/v2', json={'token': user_token['token'], 'name': 'Alpaca', 'is_public': True})
+    requests.post(config.url + 'channels/create/v2', json={'token': user_token['token'], 'name': 'Alpaca1', 'is_public': True})
+    r = requests.post(config.url + 'channels/create/v2', json={'token': user_token['token'], 'name': 'Hello', 'is_public': True})
+    payload = r.json()
+    #invite user2 to channel 2
+    re = requests.post(config.url + 'channel/invite/v2',json={'token': user_token['token'],'channel_id': payload['channel_id'], 'u_id': user_token2['auth_user_id']})
+
+    assert re.status_code == 200
