@@ -26,7 +26,7 @@ def message_edit_v1(u_id, message_id, message_given):
     store = open_pickle() 
 
     if len(message_given) > 1000: 
-        raise InputError(description= "Message is greater than one thousand characters")
+        raise InputError(description='Message is greater than one thousand characters')
 
     owner_channel = False       
     for channel in store['channels']: 
@@ -66,10 +66,10 @@ def message_edit_v1(u_id, message_id, message_given):
                 message_id_exists_dm = True
     
     if (owner_dm == False and user_sent_dm == False) and (owner_channel == False and user_sent_channel == False):
-        raise AccessError(description="Cannot edit message because you do not have the needed permissions")
+        raise AccessError(description='Cannot edit message because you do not have the needed permissions')
 
     if message_id_exists_channel == False and message_id_exists_dm == False:
-        raise InputError(description="Message id was not found in channels or dms")
+        raise InputError(description='Message id was not found in channels or dms')
     
     #edit implementation
     for channel in store['channels']:

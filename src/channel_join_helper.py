@@ -18,5 +18,5 @@ def check_authorised_member(auth_user_id, channel_id, store):
         if channel['channel_id'] == channel_id:
             for member in channel['all_members']:
                 if member['u_id'] == auth_user_id:
-                    raise InputError
+                    raise InputError(description='not an authorised member')
     return

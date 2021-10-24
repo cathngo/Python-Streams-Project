@@ -233,7 +233,7 @@ def channel_join_v1(auth_user_id, channel_id):
     # If channel is private and user is not global owner
     # prevent user from joining 
     if channel_join['is_public'] == False and user_join['is_streams_owner'] == False:
-        raise AccessError
+        raise AccessError(description='channel is private and user is not global owner')
         
     # Check if user is already member of channel
     check_authorised_member(auth_user_id, channel_id, store)    
@@ -291,7 +291,7 @@ def channel_leave_v1(auth_user_id, channel_id):
             data_store.set(store)
             save_pickle()
             return {}
-    raise AccessError(description = 'Cannot leave channel you have not joined')
+    raise AccessError(description ='Cannot leave channel you have not joined')
     
 '''
 Make user with user id u_id an owner of the channel
@@ -341,7 +341,7 @@ def channel_addowner_v1(auth_user_id, channel_id, u_id):
             data_store.set(store)
             save_pickle()
             return {}
-    raise InputError(description = 'Not a member of the channel cannot be promoted')
+    raise InputError(description ='Not a member of the channel cannot be promoted')
    
 '''
 Remove user with user id u_id as an owner of the channel
@@ -383,7 +383,7 @@ def channel_removeowner_v1(auth_user_id, channel_id, u_id):
             found = True
 
     if found == False:
-        raise InputError(description = 'CUser with u_id is not an owner of the channel')
+        raise InputError(description ='CUser with u_id is not an owner of the channel')
 
     found1 = False
     for owner in channel['owner_members']:

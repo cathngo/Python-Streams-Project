@@ -6,6 +6,4 @@ def check_u_id_exists(auth_user_id, store):
         if user['u_id'] == auth_user_id:
             break
     else:
-        raise InputError
-        
-
+        raise InputError(description='u_id does not exist')
