@@ -2,6 +2,27 @@ from src.data_store import data_store
 from src.error import InputError, AccessError
 from src.data_persistence import save_pickle, open_pickle
 
+'''
+Changes the permissions of an user from the Stream, the new permissions are
+decided by 'permission_id'
+
+Arguments:
+    token (string) - user's token
+    u_id (integer) - unique id of an user
+    permision_id (integer) - decides which what permission we want to change into
+
+Exceptions:
+    InputError - u_id does not refer to a valid user
+    InputError - u_id refers to a user who is the only global owner
+    InputError - permission_id is not 1 or 2
+    AccessError - Occurs when any of:
+        - Invalid token is passed through.
+        - The authorised user is not a global owner.
+
+Return Value:
+    Returns an empty dictionary
+'''
+
 def change_permissions_helper(global_owner_id, u_id, permission_id):
     store = open_pickle()
 

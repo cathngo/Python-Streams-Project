@@ -3,6 +3,21 @@ from src.auth import auth_register_v1
 from src.channels_create_helper import check_valid_name, check_auth_id_exists
 from src.auth import auth_register_v1
 from src.data_persistence import save_pickle, open_pickle
+
+'''
+Make a list with all the channels that the given auth_user_id is part of 
+
+Arguments:
+    auth_user_id (int) - user's id that is created when they first register into Streams
+
+Exceptions:
+InputError - Occurs when:
+    - auth_user_id is invalid
+
+Return Value:
+    returns a list of dictionaries with the keys 'channel_id' and 'name' of the channels
+    that auth_user_id is part of
+'''
 def channels_list_v1(auth_user_id):
     store = open_pickle()
     check_auth_id_exists(auth_user_id, store)
@@ -24,7 +39,19 @@ def channels_list_v1(auth_user_id):
     return {
         'channels': joined_channels
     }
+'''
+Make a list with all the channels in the database 
 
+Arguments:
+    auth_user_id (int) - user's id that is created when they first register into Streams
+
+Exceptions:
+InputError - Occurs when:
+    - auth_user_id is invalid
+
+Return Value:
+    returns a list of dictionaries with the keys 'channel_id' and 'name'
+'''
 def channels_listall_v1(auth_user_id):
     store = open_pickle()
     check_auth_id_exists(auth_user_id, store)
