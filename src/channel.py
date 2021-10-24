@@ -223,9 +223,52 @@ def channel_addowner_v1(auth_user_id, channel_id, u_id):
 
     for member in channel['all_members']:
         if member['u_id'] == u_id:
-            channel['owner_members'].append(u_id)
+            channel['owner_members'].append({'u_id': u_id})
             data_store.set(store)
             return {}
     raise InputError(description = 'Not a member of the channel cannot be promoted')
    
-   
+def channel_removeowner_v1(auth_user_id, channel_id, u_id):
+    store = data_store.get()
+    
+    # Checks if user exists and if so stores location in list
+    user = find_user(auth_user_id, store)
+    
+    # Check if channel_id valid 
+    check_channel_id(channel_id, store)
+
+    # Stores location of channel in list
+    channel = find_channel(channel_id, store)
+
+    # user with u_id is not an owner of the channel
+    found = False
+    for owner in channel['owner_members']:
+        if owner['u_id'] == u_id:
+            found = True
+
+    if found == False:
+        raise InputError(description = 'CUser with u_id is not an owner of the channel')
+
+    found1 = False
+    for owner in channel['owner_members']:
+        if owner['u_id'] == auth_user_id:
+            found1 = True
+
+    if found1 == False and user['is_streams_owner'] == False:
+          raise AccessError(description='Bauth_user is not an owner of the channel or an owner of streams')
+    #if auth_user_id not in channel['owner_members'] and user['is_streams_owner'] == False:
+       # raise AccessError(description='Bauth_user is not an owner of the channel or an owner of streams')
+
+    # user with u_id is the only owner of the channel
+    if len(channel['owner_members']) == 1:
+        raise InputError(description='AUser with u_id is the only owner of the channel')
+
+
+    new_owner_list = [owner_dict for owner_dict in channel['owner_members'] if owner_dict.get('u_id') != u_id]
+    for channel in store['channels']:
+        if channel_id == channel['channel_id']: 
+            channel['owner_members'] = new_owner_list
+
+    data_store.set(store)
+    return {}
+    
