@@ -7,8 +7,8 @@ from src.channel_join_helper import find_user, find_channel, check_authorised_me
 from src.message_id_generator import message_id_generate
 from src.channel_messages_helper import get_channel, messages_pagination
 from src.dm_helper import check_dm_id_exists, check_user_in_dm
-
 from src.data_persistence import save_pickle, open_pickle
+
 def channel_invite_v1(auth_user_id, channel_id, u_id):
     store = open_pickle()
 
@@ -188,6 +188,7 @@ def channel_join_v1(auth_user_id, channel_id):
     data_store.set(store)
     save_pickle()
     return {}
+
 
 '''
 Allows user to leave a channel 
