@@ -52,8 +52,8 @@ def auth_login_v1(email, password):
                     'auth_user_id': user['u_id'],
                 }
             else:
-                raise InputError('Error: Incorrect password')
-    raise InputError('Error: Email entered does not belong to a user')
+                raise InputError(description='Error: Incorrect password')
+    raise InputError(description='Error: Email entered does not belong to a user')
 
 '''
 Given an active token, invalidates the token to log the user out.
@@ -77,7 +77,7 @@ def auth_logout_v1(token):
                 data_store.set(store)
                 save_pickle()
                 return
-    raise AccessError('Token invalid')
+    raise AccessError(description='Token invalid')
 
             
 '''

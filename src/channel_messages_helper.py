@@ -1,16 +1,16 @@
-from src.error import InputError, AccessError
+from src.error import InputError
 
 def get_channel(channel_id, store):
     for channel in store['channels']:
         if channel['channel_id'] == channel_id:
             return channel
-    raise InputError(description="Channel was not found")
+    raise InputError(description='Channel was not found')
 
 def messages_pagination(len_message_channel_dm, start):
     #checks that the number of messages has not been over counted or
     #if start is greater than the number of messages in the page
     if start < 0 or start > len_message_channel_dm:
-        raise InputError
+        raise InputError(description='invalid start value')
  
     #checks that the last page is not reached otherwise it continues 
     #that there will be another page to come by not making end = -1.      
@@ -35,9 +35,9 @@ def messages_pagination(len_message_channel_dm, start):
 
 def check_message_is_right_character_length(message_length): 
     if message_length < 1:
-        raise InputError(description="Message is less than one character")
+        raise InputError(description='Message is less than one character')
     elif message_length > 1000:
-        raise InputError(description="Message is over 1000 character") 
+        raise InputError(description='Message is over 1000 character') 
     return
 
 
