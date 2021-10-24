@@ -386,6 +386,5 @@ def post_send_message_dm():
 #### NO NEED TO MODIFY BELOW THIS POINT
 
 if __name__ == "__main__":
-    #store = open_pickle() set the datastore to the pickle file
     signal.signal(signal.SIGINT, quit_gracefully) # For coverage
     APP.run(port=config.port) # Do not edit this port

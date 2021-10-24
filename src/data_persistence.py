@@ -14,7 +14,6 @@ def open_pickle():
         store = data_store.get()
         with open('database.p', 'rb') as FILE:
             store = pickle.load(FILE)
-            print(store)
     except:
         success = False
         if success == False:
