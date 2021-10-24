@@ -203,7 +203,7 @@ def test_pagination_works():
     resp2 = requests.get(config.url + 'dm/messages/v1', params={
         'token': user_token['token'], 
         'dm_id': dm_reg['dm_id'],
-        'start': 55,
+        'start': 0,
     })
 
     assert resp1.status_code == 200

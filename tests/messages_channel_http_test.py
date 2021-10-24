@@ -196,7 +196,7 @@ def test_pagination_works():
     resp2 = requests.get(config.url + 'channel/messages/v2', params={
         'token': user_token['token'], 
         'channel_id': channel_id['channel_id'],
-        'start': 55,
+        'start': 0,
     })
 
     assert resp1.status_code == 200
