@@ -102,7 +102,7 @@ def create_channel():
 
     channel = channels_create_v1(user_token['u_id'], name, is_public)
 
-    return dumps({
+    return jsonify({
         'channel_id': channel['channel_id']
     })
 
@@ -114,7 +114,7 @@ def get_list_channels():
     user_token = decode_jwt(token)
     check_valid_token(user_token)
     
-    return dumps(
+    return jsonify(
         channels_list_v1(user_token['u_id'])
     )
 
@@ -126,7 +126,7 @@ def get_listall_channels():
     user_token = decode_jwt(token)
     check_valid_token(user_token)
     
-    return dumps(
+    return jsonify(
         channels_listall_v1(user_token['u_id'])
     )
  
@@ -380,9 +380,10 @@ def delete_message_remove():
     token = decode_jwt(user_token)
     check_valid_token(token)
     
-    message_remove_v1(token['u_id'], data['message_id'])
+    return jsonify(
+        message_remove_v1(token['u_id'], data['message_id']) )
     
-    return dumps({})
+    # return dumps({})
 
 
 #### NO NEED TO MODIFY BELOW THIS POINT

@@ -323,65 +323,52 @@ def test_owner_can_remove_message_from_member_dm_message_remove():
 
 def test_owner_can_remove_message_from_member_channel_message_remove():  
     requests.delete(config.url + 'clear/v1')
-    #register owner
-    owner = requests.post(config.url + 'auth/register/v2', json={
-        'email': 'validemail@gmail.com', 
+    #create a user
+    user = requests.post(config.url + 'auth/register/v2', json={'email': 'validemail@gmail.com', 
         'password': '123abc!@#', 
         'name_first': 'Sam', 
         'name_last': 'Smith'
     })
-    owner_token = owner.json()
-    #register member
-    member = requests.post(config.url + 'auth/register/v2', json={
-        'email': 'validemail2@gmail.com', 
-        'password': '122abc!@#', 
-        'name_first': 'tam', 
-        'name_last': 'lam'
-    })
-    member_token = member.json()
-    #register the channel owner
+    user_token = user.json()
+    #create a channel with that user
     channel = requests.post(config.url + 'channels/create/v2', json={
-        'token': owner_token['token'], 
+        'token': user_token['token'], 
         'name': 'Alpaca', 
         'is_public': True
     })
     channel_id = channel.json()
-    #second user channel joins the channel that the first user registered to
+    #create a user
+    user2 = requests.post(config.url + 'auth/register/v2', json={'email': 'validemail1@gmail.com', 
+        'password': '122abc!@#', 
+        'name_first': 'Tam', 
+        'name_last': 'Lam'
+    })
+    user_token2 = user2.json()
+    
     requests.post(config.url + 'channel/join/v2', json={
-        'token': member_token['token'], 
-        'channel_id': channel_id
+        'token': user_token2['token'], 
+        'channel_id': channel_id['channel_id']
     })
     
     #the member user sends a message to channel
     message_send = requests.post(config.url + 'message/send/v1', json={
-        'token': member_token['token'], 
+        'token': user_token['token'], 
         'channel_id': channel_id['channel_id'],
         'message': "hello",
     })
     message_id = message_send.json()
     
+    #the channel owner removes the message   
+    requests.delete(config.url + 'message/remove/v1', json={ 
+        'token': user_token['token'],
+        'message_id': message_id['message_id'], 
+    })  
+
     message_page = requests.get(config.url + 'channel/messages/v2', params={
-        'token': owner_token['token'], 
+        'token': user_token2['token'], 
         'channel_id': channel_id['channel_id'],
         'start': 0,
     })
     message_list = message_page.json()
-    
-    #the channel owner removes the message   
-    requests.delete(config.url + 'message/remove/v1', json={ 
-        'token': owner_token['token'],
-        'message_id': message_id,
-    })  
 
-    assert len(message_list['messages'])== 1
-
-
-
-
-
-
-
-
-
-
-
+    assert len(message_list['messages']) == 0

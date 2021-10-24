@@ -29,6 +29,8 @@ def message_send_channel(u_id, channel_id, message):
         }
     )
 
+    data_store.set(store)
+
     return {
         'message_id': message_id
     }
@@ -54,6 +56,8 @@ def message_send_dm(u_id, dm_id, message):
         'time_created': time_created,    
         }
     )
+    
+    data_store.set(store)
 
     return {
         'message_id': message_id
