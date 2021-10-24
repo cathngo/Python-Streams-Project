@@ -2,7 +2,7 @@ import jwt
 from src.error import AccessError
 from src.data_store import data_store
 from src.config import SECRET
-
+from src.data_persistence import save_pickle, open_pickle
 def decode_jwt(encoded_jwt):
     success = True
     try:
@@ -16,10 +16,9 @@ def decode_jwt(encoded_jwt):
     
 
 def check_valid_token(user_token):
-    store = data_store.get()
+    store = open_pickle()
 
     for user in store['users']:
         if user['u_id'] == user_token['u_id'] and user_token['session_id'] in user['session_list']:
             return
     raise AccessError("Invalid token - no user associated") 
-    
