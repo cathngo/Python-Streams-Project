@@ -143,4 +143,25 @@ def test_remove_dm_owner():
     re = requests.post(config.url + 'dm/leave/v1', json={'token': user_token2['token'], 'dm_id': dm_id['dm_id']})
     assert re.status_code == 403
 
+#test removing user with dm messages and channel messages 
+def test_remove_messages_owner():
+    requests.delete(config.url + 'clear/v1')
+    #create users
+    user = requests.post(config.url + 'auth/register/v2', json={'email': 'validemail@gmail.com', 'password': '123abc!@#', 'name_first': 'Kanye', 'name_last': 'Chan'})
+    user_token = user.json()
+    user_2 = requests.post(config.url + 'auth/register/v2', json={'email': 'validemail2@gmail.com', 'password': '123abc!@#2', 'name_first': 'Masoko', 'name_last': 'West'})
+    user_token2 = user_2.json() 
 
+    #user2 creates channel
+    channel = requests.post(config.url + 'channels/create/v2',json={'token': user_token2['token'],'name': 'Fox' , 'is_public' : True})
+    channel_id = channel.json()
+    #user2 creates dm
+    dm_i = requests.post(config.url + 'dm/create/v1', json={'token': user_token2['token'],'u_ids': [user_token['auth_user_id']]})
+    dm_id = dm_i.json()
+
+    requests.post(config.url + 'message/senddm/v1', json={'token': user_token2['token'], 'dm_id': dm_id['dm_id'],'message': "hello"})
+    requests.post(config.url + 'message/send/v1', json={'token': user_token2, 'channel_id': channel_id['channel_id'],'message': "hello"})
+
+    #remove user2
+    re = requests.delete(config.url + 'admin/user/remove/v1', json={'token': user_token['token'], 'u_id':user_token2['auth_user_id']})
+    assert re.status_code == 200
