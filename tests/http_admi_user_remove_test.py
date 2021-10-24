@@ -160,8 +160,7 @@ def test_remove_messages_owner():
     dm_id = dm_i.json()
 
     requests.post(config.url + 'message/senddm/v1', json={'token': user_token2['token'], 'dm_id': dm_id['dm_id'],'message': "hello"})
-    requests.post(config.url + 'message/send/v1', json={'token': user_token2, 'channel_id': channel_id['channel_id'],'message': "hello"})
-
+    requests.post(config.url + 'message/send/v1', json={'token': user_token2['token'], 'channel_id': channel_id['channel_id'],'message': "hello"})
     #remove user2
     re = requests.delete(config.url + 'admin/user/remove/v1', json={'token': user_token['token'], 'u_id':user_token2['auth_user_id']})
     assert re.status_code == 200
