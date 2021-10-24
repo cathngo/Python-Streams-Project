@@ -141,7 +141,22 @@ def messages_dm_v1(auth_user_id, dm_id, start):
         'start': start,
         'end': pagination['end'],
     }
+'''
+Allows user to join a channel is a member
 
+Arguments:
+    auth_user_id (int) - the id of the authorised user that is to join the channel.
+    channel_id (int) - the id of the channel that authorised user is to join.
+
+Exceptions:
+    InputError - Occurs when any of:
+        - channel_id does not refer to a valid channel
+        - The authorised user is already a member of the channel
+    AccessError - Occurs when:
+        - channel_id refers to a channel that is private and the authorised user is not already a channel member and is not a global owner
+
+Return Value = {}
+'''
 def channel_join_v1(auth_user_id, channel_id):
     store = data_store.get()
     
@@ -173,6 +188,21 @@ def channel_join_v1(auth_user_id, channel_id):
     data_store.set(store)
     return {}
 
+'''
+Allows user to leave a channel 
+
+Arguments:
+    auth_user_id (int) - the id of the authorised user that is to leave the channel.
+    channel_id (int) - the id of the channel that authorised user is to leave
+
+Exceptions:
+    InputError - Occurs when any of:
+        - channel_id does not refer to a valid channel
+    AccessError - Occurs when:
+        - channel_id is valid and the authorised user is not a member of the channel
+
+Return Value = {}
+'''
 def channel_leave_v1(auth_user_id, channel_id):
     store = data_store.get()
     
@@ -199,7 +229,27 @@ def channel_leave_v1(auth_user_id, channel_id):
             return {}
     raise AccessError(description = 'Cannot leave channel you have not joined')
     
-    
+'''
+Make user with user id u_id an owner of the channel
+
+Arguments:
+    auth_user_id (int) - the id of the authorised user that is promoting a member
+    channel_id (int) - the id of the channel where the promotion is to occur
+    u_id (int) - the id of the user to be promoted  
+
+
+Exceptions:
+    InputError - Occurs when any of:
+        - channel_id does not refer to a valid channel
+        - u_id does not refer to a valid user
+        - u_id refers to a user who is not a member of the channel
+        - u_id refers to a user who is already an owner of the channel
+
+    AccessError - Occurs when:
+        - channel_id is valid and the authorised user does not have owner permissions in the channel
+
+Return Value = {}
+'''  
 
 def channel_addowner_v1(auth_user_id, channel_id, u_id):
     store = data_store.get()
@@ -228,6 +278,27 @@ def channel_addowner_v1(auth_user_id, channel_id, u_id):
             return {}
     raise InputError(description = 'Not a member of the channel cannot be promoted')
    
+'''
+Remove user with user id u_id as an owner of the channel
+
+Arguments:
+    auth_user_id (int) - the id of the authorised user that is promoting a member
+    channel_id (int) - the id of the channel where the promotion is to occur
+    u_id (int) - the id of the user to be promoted  
+
+
+Exceptions:
+    InputError - Occurs when any of:
+        - channel_id does not refer to a valid channel
+        - u_id does not refer to a valid user
+        - u_id refers to a user who is not an owner of the channel
+        - u_id refers to a user who is currently the only owner of the channel
+
+    AccessError - Occurs when:
+        - channel_id is valid and the authorised user does not have owner permissions in the channel
+
+Return Value = {}
+'''    
 def channel_removeowner_v1(auth_user_id, channel_id, u_id):
     store = data_store.get()
     
