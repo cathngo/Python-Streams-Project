@@ -29,4 +29,4 @@ def check_valid_u_id(auth_user_id):
         if user['u_id'] == auth_user_id:
             found = True
     if found == False:
-        raise InputError("Invalid user - could not find u_id")
+        raise InputError(description='Invalid user - could not find u_id')

@@ -1,7 +1,5 @@
 from src.data_store import data_store
-from src.auth import auth_register_v1
-from src.channels_create_helper import check_valid_name, check_auth_id_exists
-from src.auth import auth_register_v1
+from src.channels_create_helper import check_valid_name
 from src.data_persistence import save_pickle, open_pickle
 
 '''
@@ -20,7 +18,6 @@ Return Value:
 '''
 def channels_list_v1(auth_user_id):
     store = open_pickle()
-    check_auth_id_exists(auth_user_id, store)
     
     joined_channels = []
     
@@ -54,7 +51,6 @@ Return Value:
 '''
 def channels_listall_v1(auth_user_id):
     store = open_pickle()
-    check_auth_id_exists(auth_user_id, store)
     
     all_channels = []
     
@@ -92,7 +88,6 @@ def channels_create_v1(auth_user_id, name, is_public):
     store = open_pickle()
 
     check_valid_name(name)
-    check_auth_id_exists(auth_user_id, store)
     
     #create channel_id
     channel_id = len(store['channels'])

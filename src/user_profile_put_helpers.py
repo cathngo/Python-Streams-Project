@@ -63,7 +63,7 @@ def set_handle(auth_user_id, handle_str):
 
     #check duplicate handle str
     if check_duplicate_handle(handle_str, store) == True:
-        raise InputError("Handle already exists")
+        raise InputError(description='Handle already exists')
 
     for user in store['users']:
         if user['u_id'] == auth_user_id:

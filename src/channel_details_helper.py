@@ -4,7 +4,7 @@ def check_channel_id(channel_id, store):
     for channel in store['channels']:
         if channel['channel_id'] == channel_id:
             return 
-    raise InputError("Invalid channel id - channel id not found")
+    raise InputError(description='Invalid channel id - channel id not found')
 
 def check_authorised_user(auth_user_id, channel_id, store):
     for channel in store['channels']:
@@ -12,7 +12,7 @@ def check_authorised_user(auth_user_id, channel_id, store):
             for member in channel['all_members']:
                 if member['u_id'] == auth_user_id:
                     return 
-    raise AccessError("Invalid user - u_id not found")
+    raise AccessError(description='Invalid user - u_id not found')
 
 def get_user_details(auth_user_id, store):
     owner_dictionary = {}

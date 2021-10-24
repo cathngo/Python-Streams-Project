@@ -10,7 +10,7 @@ def decode_jwt(encoded_jwt):
     except:
         success = False
     if success == False:
-        raise AccessError("Could not decode token")
+        raise AccessError(description='Could not decode token')
     return token
         
     
@@ -21,4 +21,4 @@ def check_valid_token(user_token):
     for user in store['users']:
         if user['u_id'] == user_token['u_id'] and user_token['session_id'] in user['session_list']:
             return
-    raise AccessError("Invalid token - no user associated") 
+    raise AccessError(description='Invalid token - no user associated') 

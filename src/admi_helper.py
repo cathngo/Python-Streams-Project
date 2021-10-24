@@ -46,7 +46,7 @@ def change_permissions_helper(global_owner_id, u_id, permission_id):
     elif not new_global_found or (new_global_found == True and owners_count == 1 and permission_id == 2):
        raise InputError(description='Invalid u_id.')
     elif permission_id != 1 and permission_id != 2:
-        raise InputError(description='Invalid permission_id. ')
+        raise InputError(description='Invalid permission_id.')
 
     
     for user in store['users']:

@@ -63,10 +63,10 @@ def message_remove_v1(u_id, message_id):
                 message_id_exists_dm = True
     
     if (owner_dm == False and user_sent_dm == False) and (owner_channel == False and user_sent_channel == False):
-        raise AccessError(description="Cannot delete message because you do not have the needed permissions")
+        raise AccessError(description='Cannot delete message because you do not have the needed permissions')
 
     if message_id_exists_channel == False and message_id_exists_dm == False: 
-        raise InputError(description="Message id was not found in channels or dms")
+        raise InputError(description='Message id was not found in channels or dms')
     
     for channel in store['channels']:
         for message in channel['messages']:

@@ -52,14 +52,14 @@ def auth_login_v1(email, password):
                     'auth_user_id': user['u_id'],
                 }
             else:
-                raise InputError('Error: Incorrect password')
-    raise InputError('Error: Email entered does not belong to a user')
+                raise InputError(description='Error: Incorrect password')
+    raise InputError(description='Error: Email entered does not belong to a user')
 
 '''
-Logs out user from streams
+Given an active token, invalidates the token to log the user out.
 
 Arguments:
-    token 
+    token (string) - the active token the user is given when they log in. 
 
 Exceptions:
     AccessError - Occurs when any of:
@@ -77,7 +77,7 @@ def auth_logout_v1(token):
                 data_store.set(store)
                 save_pickle()
                 return
-    raise AccessError('Token invalid')
+    raise AccessError(description='Token invalid')
 
             
 '''
