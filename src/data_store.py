@@ -88,19 +88,10 @@ data = {
             'all_members': [
                 {          
                     'u_id': 0,
-                },
-                {          
                     'u_id': 1,
-                },
+                }
             ],
-            'messages': [
-                {
-                'message_id': 1,
-                'u_id': 1, 
-                'message': 'hello',
-                'time_created': 1635077917,
-                },
-            ],
+            'messages': [],
         },
         {
             'channel_id': 1,
@@ -109,12 +100,12 @@ data = {
             'owner_members': [
                 {            
                     'u_id': 1,   
-                },
+                }
             ],
             'all_members': [
                 {          
                     'u_id': 1,
-                },
+                }
             ],
             'messages': [],
         },
@@ -124,29 +115,24 @@ data = {
             'dm_id': 1,
             'name': 'kanyesouth, kanyewest',
             'owner_id': 0
-            'members': [1,0],
-            'messages': [
-                {
-                'message_id': 2,
-                'u_id': 1, 
-                'message': 'hello',
-                'time_created': 1635077932,
-                },
+            'members': [
+                {          
+                    'u_id': 1,
+                    'u_id': 0,
+                }
             ],
+            'messages': [],
         },
         {
             'dm_id': 2,
             'name': 'kanyesouth',
             'owner_id': 1
-            'members': [1],
-            'messages': [
-                {
-                'message_id': 3,
-                'u_id': 1, 
-                'message': 'hello',
-                'time_created': 1635077952,
-                },
+            'members': [
+                {          
+                    'u_id': 1,
+                }
             ],
+            'messages': [],
         },
     ],
 }

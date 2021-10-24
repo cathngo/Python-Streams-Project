@@ -1,6 +1,5 @@
 from src.data_store import data_store
 from src.token_helper import decode_jwt, check_valid_token
-from src.data_persistence import save_pickle, open_pickle
 
 '''
 Returns the list of DMs that the user is a member of
@@ -17,7 +16,7 @@ Return Value:
     where each dictionary contains types { dm_id, name }
 '''
 def dm_list_v1(token):
-    store = open_pickle()
+    store = data_store.get()
 
     # Check valid token
     user_token = decode_jwt(token)
