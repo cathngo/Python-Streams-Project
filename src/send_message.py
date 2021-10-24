@@ -1,5 +1,4 @@
 from src.data_store import data_store
-from src.token_helper import decode_jwt, check_valid_token
 from src.message_id_generator import message_id_generate
 from src.data_store import data_store
 from src.channel_details_helper import check_authorised_user
@@ -8,7 +7,24 @@ from src.channel_messages_helper import get_channel, check_message_is_right_char
 from src.dm_helper import check_dm_id_exists, check_user_in_dm
 from src.data_persistence import save_pickle, open_pickle
 
- 
+'''
+Send a message from the authorised user to the channel specified by channel_id.
+
+Arguments:
+    u_id (int) - the id of the authorised user that is sending the channel
+    channel_id (int) - the id of the channel that the user is sending the message to
+    message (string) - the message the authorised user wishes to send to the specified channel
+
+Exceptions:
+    InputError - Occurs when any of:
+        -channel_id does not refer to a valid channel
+        -length of message is less than 1 or over 1000 characters
+    AccessError - Occurs when:
+        -channel is valid and the authorised user is not a member of the channel
+Return Value: 
+    Returns a messaged_id of type int when the message is sent in the channel
+'''
+
 def message_send_channel(u_id, channel_id, message):
     store = open_pickle()
     
@@ -36,7 +52,23 @@ def message_send_channel(u_id, channel_id, message):
     return {
         'message_id': message_id
     }
+'''
+Send a message from the authorised user to the dm specified by dm_id.
 
+Arguments:
+    u_id (int) - the id of the authorised user that is sending the dm
+    dm_id (int) - the id of the dm that the user is sending the message to
+    message (string) - the message the authorised user wishes to send to the specified dm
+
+Exceptions:
+    InputError - Occurs when any of:
+        -dm_id does not refer to a valid dm
+        -length of message is less than 1 or over 1000 characters
+    AccessError - Occurs when:
+        -dm is valid and the authorised user is not a member of the dm
+Return Value: 
+    Returns a messaged_id of type int when the message is sent in the dm
+'''
 def message_send_dm(u_id, dm_id, message):
     store = open_pickle()
     

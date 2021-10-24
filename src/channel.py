@@ -8,7 +8,25 @@ from src.message_id_generator import message_id_generate
 from src.channel_messages_helper import get_channel, messages_pagination
 from src.dm_helper import check_dm_id_exists, check_user_in_dm
 from src.data_persistence import save_pickle, open_pickle
+'''
+Allows user to invite a user in streams to a channel
 
+Arguments:
+    auth_user_id (int) - the id of the authorised user that is inviting the other streams user to the their channel
+    channel_id (int) - the id of the channel that the user is inviting the othe streams user to
+    u_id (int) - the id of the authorised user that is beiung invited to the channel
+
+Exceptions:
+    InputError - Occurs when any of:
+        - channel_id does not refer to a valid channel
+        - the other streams user to the their channel
+        - the authorised user is already a member of the channel
+    AccessError - Occurs when:
+        - channel_id refers to a channel that is private and the authorised user is not already a channel member and is not a global owner
+        - token is not valid
+Return Value = {}
+
+'''
 def channel_invite_v1(auth_user_id, channel_id, u_id):
     store = open_pickle()
 
@@ -27,7 +45,7 @@ def channel_invite_v1(auth_user_id, channel_id, u_id):
             #check u_id is already part of the channel
             for dict in channel['all_members']:
                 if dict['u_id'] == u_id:
-                    raise InputError
+                    raise InputError(description="This member cannot be invited as they are already part of the channel")
             #if u_id is not part of the channel then append as a dictionary
             channel['all_members'].append({'u_id': u_id})
     
@@ -95,6 +113,28 @@ def channel_details_v1(auth_user_id, channel_id):
 
     return channel_dictionary
 
+'''
+Given a channel with ID channel_id that the authorised user is a member of,
+return up to 50 messages between index "start" and "start + 50".
+
+Arguments:
+    auth_user_id (int) - the id of the authorised user that is accessing the messages page in channel
+    channel_id (int) - the id of the channel that authorised user is to  accessing the messages of
+    start (int) - the value that the messages page starts
+Exceptions:
+    InputError - Occurs when any of:
+        - channel_id does not refer to a valid channel
+        - start is greater than the total number of messages in the channel
+    AccessError - Occurs when:
+        - channel_id is valid and the authorised user is not a member of the channel
+Return Value: 
+    Returns a list of message dictionatries if messages were found in the channel orderd in lists of 50 messages starting with 
+    message index 50 going all the way to down to the most recent message with index 0. The last message changes 
+    with the amount of messages that it was given
+    Returns the start that it was given.  
+    Returns end = start + 50. If there are more messages in the channel then end == -1. 
+''' 
+
 #the caller must decrease messages['message_id'] by 50 everytime it called until it is < 50, otherwise this funciton will not work. 
 def messages_channel_v1(auth_user_id, channel_id, start):
     store = open_pickle()
@@ -118,6 +158,27 @@ def messages_channel_v1(auth_user_id, channel_id, start):
         'start': start,
         'end': pagination['end'],
     }
+'''
+Given a dm with ID dm_id that the authorised user is a member of,
+return up to 50 messages between index "start" and "start + 50".
+
+Arguments:
+    auth_user_id (int) - the id of the authorised user that is accessing the messages page in dm
+    dm_id (int) - the id of the dm that authorised user is to  accessing the messages of
+    start (int) - the value that the messages page starts
+Exceptions:
+    InputError - Occurs when any of:
+        - dm_id does not refer to a valid dm
+        - start is greater than the total number of messages in the dm
+    AccessError - Occurs when:
+        - dm_id is valid and the authorised user is not a member of the dm
+Return Value: 
+    Returns a list of message dictionatries if messages were found in the dm orderd in lists of 50 messages starting with 
+    message index 50 going all the way to down to the most recent message with index 0. The last message changes 
+    with the amount of messages that it was given
+    Returns the start that it was given.  
+    Returns end = start + 50. If there are more messages in the dm then end == -1. 
+''' 
 
 def messages_dm_v1(auth_user_id, dm_id, start):
     store = open_pickle()
