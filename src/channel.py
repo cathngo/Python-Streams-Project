@@ -1,10 +1,8 @@
 from src.error import InputError, AccessError
 from src.data_store import data_store
 from src.channel_details_helper import check_authorised_user, check_channel_id, get_user_details
-from src.channels_create_helper import check_auth_id_exists
 from src.channels_invite_helper import check_u_id_exists
 from src.channel_join_helper import find_user, find_channel, check_authorised_member
-from src.message_id_generator import message_id_generate
 from src.channel_messages_helper import get_channel, messages_pagination
 from src.dm_helper import check_dm_id_exists, check_user_in_dm
 from src.data_persistence import save_pickle, open_pickle
@@ -29,9 +27,7 @@ Return Value = {}
 '''
 def channel_invite_v1(auth_user_id, channel_id, u_id):
     store = open_pickle()
-
-    #check valid auth_id
-    check_auth_id_exists(auth_user_id, store)    
+  
     #check channel_id exists
     check_channel_id(channel_id, store)
     #check inviter is part of given channel_id
@@ -76,8 +72,6 @@ def channel_details_v1(auth_user_id, channel_id):
 
     store = open_pickle()
 
-    #check valid u_id
-    check_auth_id_exists(auth_user_id, store)
     #check channel_id exists
     check_channel_id(channel_id, store)
     #check user is part of given channel_id 
@@ -233,7 +227,7 @@ def channel_join_v1(auth_user_id, channel_id):
     # If channel is private and user is not global owner
     # prevent user from joining 
     if channel_join['is_public'] == False and user_join['is_streams_owner'] == False:
-        raise AccessError
+        raise AccessError(description='channel is private and user is not global owner')
         
     # Check if user is already member of channel
     check_authorised_member(auth_user_id, channel_id, store)    
@@ -291,7 +285,7 @@ def channel_leave_v1(auth_user_id, channel_id):
             data_store.set(store)
             save_pickle()
             return {}
-    raise AccessError(description = 'Cannot leave channel you have not joined')
+    raise AccessError(description ='Cannot leave channel you have not joined')
     
 '''
 Make user with user id u_id an owner of the channel
@@ -341,7 +335,7 @@ def channel_addowner_v1(auth_user_id, channel_id, u_id):
             data_store.set(store)
             save_pickle()
             return {}
-    raise InputError(description = 'Not a member of the channel cannot be promoted')
+    raise InputError(description ='Not a member of the channel cannot be promoted')
    
 '''
 Remove user with user id u_id as an owner of the channel
@@ -383,7 +377,7 @@ def channel_removeowner_v1(auth_user_id, channel_id, u_id):
             found = True
 
     if found == False:
-        raise InputError(description = 'CUser with u_id is not an owner of the channel')
+        raise InputError(description ='CUser with u_id is not an owner of the channel')
 
     found1 = False
     for owner in channel['owner_members']:
