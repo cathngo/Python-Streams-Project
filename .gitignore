@@ -125,6 +125,3 @@ dmypy.json
 
 # Other
 *.py~
-
-#database
-database.p

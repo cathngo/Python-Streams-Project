@@ -8,9 +8,8 @@ from src.message_id_generator import message_id_generate
 from src.channel_messages_helper import get_channel, messages_pagination
 from src.dm_helper import check_dm_id_exists, check_user_in_dm
 
-from src.data_persistence import save_pickle, open_pickle
 def channel_invite_v1(auth_user_id, channel_id, u_id):
-    store = open_pickle()
+    store = data_store.get()
 
     #check valid auth_id
     check_auth_id_exists(auth_user_id, store)    
@@ -34,7 +33,6 @@ def channel_invite_v1(auth_user_id, channel_id, u_id):
             break
     
     data_store.set(store)
-    save_pickle()
     return {
     }
     
@@ -58,7 +56,7 @@ Return Value:
 '''
 def channel_details_v1(auth_user_id, channel_id):
 
-    store = open_pickle()
+    store = data_store.get()
 
     #check valid u_id
     check_auth_id_exists(auth_user_id, store)
@@ -99,7 +97,7 @@ def channel_details_v1(auth_user_id, channel_id):
 
 #the caller must decrease messages['message_id'] by 50 everytime it called until it is < 50, otherwise this funciton will not work. 
 def messages_channel_v1(auth_user_id, channel_id, start):
-    store = open_pickle()
+    store = data_store.get()
     
     channel = get_channel(channel_id, store)
     check_authorised_user(auth_user_id, channel_id, store)
@@ -122,7 +120,7 @@ def messages_channel_v1(auth_user_id, channel_id, start):
     }
 
 def messages_dm_v1(auth_user_id, dm_id, start):
-    store = open_pickle()
+    store = data_store.get()
 
     dm = check_dm_id_exists(dm_id, store)
     check_user_in_dm(auth_user_id, dm)
@@ -160,7 +158,7 @@ Exceptions:
 Return Value = {}
 '''
 def channel_join_v1(auth_user_id, channel_id):
-    store = open_pickle()
+    store = data_store.get()
     
     # Checks if user exists and if so stores location in list
     user_join = find_user(auth_user_id, store)
@@ -188,7 +186,6 @@ def channel_join_v1(auth_user_id, channel_id):
     channel_join['all_members'].append(member_dictionary)
     
     data_store.set(store)
-    save_pickle()
     return {}
 
 '''
@@ -207,7 +204,7 @@ Exceptions:
 Return Value = {}
 '''
 def channel_leave_v1(auth_user_id, channel_id):
-    store = open_pickle()
+    store = data_store.get()
     
 
     # Checks if user exists and if so stores location in list
@@ -229,7 +226,6 @@ def channel_leave_v1(auth_user_id, channel_id):
         if member['u_id'] == auth_user_id:
             channel['all_members'].remove(member)
             data_store.set(store)
-            save_pickle()
             return {}
     raise AccessError(description = 'Cannot leave channel you have not joined')
     
@@ -256,7 +252,7 @@ Return Value = {}
 '''  
 
 def channel_addowner_v1(auth_user_id, channel_id, u_id):
-    store = open_pickle()
+    store = data_store.get()
     
     # Checks if user exists and if so stores location in list
     user = find_user(auth_user_id, store)
@@ -279,7 +275,6 @@ def channel_addowner_v1(auth_user_id, channel_id, u_id):
         if member['u_id'] == u_id:
             channel['owner_members'].append({'u_id': u_id})
             data_store.set(store)
-            save_pickle()
             return {}
     raise InputError(description = 'Not a member of the channel cannot be promoted')
    

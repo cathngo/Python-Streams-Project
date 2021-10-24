@@ -35,27 +35,6 @@ def test_invalid_channel_id():
     resp = requests.get(config.url + 'channel/details/v2', params={'token': invalid_token, 'channel_id': invalid_channel_id })
     assert resp.status_code == 403
 
-#check acccess error for invalid token in string format
-def test_string_token():
-    requests.delete(config.url + 'clear/v1')
-    user = requests.post(config.url + 'auth/register/v2', json={'email': 'validemail@gmail.com', 'password': '123abc!@#', 'name_first': 'Sam', 'name_last': 'Smith'})
-    user_token = user.json()
-    channel = requests.post(config.url + 'channels/create/v2', json={'token': user_token['token'], 'name': 'Alpaca', 'is_public': True})
-    channel_id = channel.json()
-    resp = requests.get(config.url + 'channel/details/v2', params={'token': 'invalid', 'channel_id': channel_id['channel_id'] })
-    assert resp.status_code == 403
-
-#check acccess error for token that has been logged out
-def test_logout_token():
-    requests.delete(config.url + 'clear/v1')
-    user = requests.post(config.url + 'auth/register/v2', json={'email': 'validemail@gmail.com', 'password': '123abc!@#', 'name_first': 'Sam', 'name_last': 'Smith'})
-    user_token = user.json()
-    channel = requests.post(config.url + 'channels/create/v2', json={'token': user_token['token'], 'name': 'Alpaca', 'is_public': True})
-    channel_id = channel.json()
-    requests.post(config.url + 'auth/logout/v1', json={'token': user_token['token']})
-    resp = requests.get(config.url + 'channel/details/v2', params={'token': user_token['token'], 'channel_id': channel_id['channel_id']})
-    assert resp.status_code == 403
-
 #check access error for valid channel id and unauthorised user
 def test_unauthorised_user():
     requests.delete(config.url + 'clear/v1')

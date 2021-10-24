@@ -1,7 +1,6 @@
 from src.data_store import data_store
 from src.token_helper import decode_jwt, check_valid_token
 from src.dm_helper import check_dm_id_exists, check_user_in_dm, obtain_user_details
-from src.data_persistence import save_pickle, open_pickle
 
 '''
 Given a DM with ID dm_id that the authorised user is a member of,
@@ -21,7 +20,7 @@ Return Value:
     Returns a dictionary containing the name of the DM and a list of members in the DM
 '''
 def dm_details_v1(token, dm_id):
-    store = open_pickle()
+    store = data_store.get()
 
     # Check valid token
     user_token = decode_jwt(token)
