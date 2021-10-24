@@ -56,10 +56,10 @@ def auth_login_v1(email, password):
     raise InputError('Error: Email entered does not belong to a user')
 
 '''
-Logs out user from streams
+Given an active token, invalidates the token to log the user out.
 
 Arguments:
-    token 
+    token (string) - the active token the user is given when they log in. 
 
 Exceptions:
     AccessError - Occurs when any of:
