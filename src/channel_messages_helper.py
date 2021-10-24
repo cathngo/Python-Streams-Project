@@ -1,4 +1,4 @@
-from src.error import InputError, AccessError
+from src.error import InputError
 
 def get_channel(channel_id, store):
     for channel in store['channels']:

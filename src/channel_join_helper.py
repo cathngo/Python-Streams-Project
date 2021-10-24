@@ -1,4 +1,4 @@
-from src.error import InputError, AccessError
+from src.error import InputError
 def find_user(auth_user_id, store):
     temp_user = {}
     for user in store['users']:

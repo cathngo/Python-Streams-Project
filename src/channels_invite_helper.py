@@ -1,4 +1,4 @@
-from src.error import InputError, AccessError
+from src.error import InputError
 
 #check u_id exists
 def check_u_id_exists(auth_user_id, store):

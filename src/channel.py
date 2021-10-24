@@ -3,7 +3,6 @@ from src.data_store import data_store
 from src.channel_details_helper import check_authorised_user, check_channel_id, get_user_details
 from src.channels_invite_helper import check_u_id_exists
 from src.channel_join_helper import find_user, find_channel, check_authorised_member
-from src.message_id_generator import message_id_generate
 from src.channel_messages_helper import get_channel, messages_pagination
 from src.dm_helper import check_dm_id_exists, check_user_in_dm
 from src.data_persistence import save_pickle, open_pickle
