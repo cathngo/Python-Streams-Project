@@ -1,6 +1,7 @@
 from src.data_store import data_store
 from src.token_helper import decode_jwt, check_valid_token
 from src.dm_helper import check_dm_id_exists, check_user_in_dm
+from src.data_persistence import save_pickle, open_pickle
 
 '''
 Given a DM ID, the user is removed as a member of this DM.
@@ -21,7 +22,7 @@ Return Value:
     Returns an empty dictionary
 '''
 def dm_leave_v1(token, dm_id):
-    store = data_store.get()
+    store = open_pickle()
 
     # Check valid token
     user_token = decode_jwt(token)
@@ -40,5 +41,6 @@ def dm_leave_v1(token, dm_id):
             dm_iter['members'] = new_member_list
 
     data_store.set(store)
+    save_pickle()
 
     return {}

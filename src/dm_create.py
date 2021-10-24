@@ -1,6 +1,7 @@
 from src.data_store import data_store
 from src.dm_helper import check_valid_u_id_list, generate_dm_id, generate_dm_names
 from src.token_helper import decode_jwt, check_valid_token
+from src.data_persistence import save_pickle, open_pickle
 
 '''
 Creates a dm based on input and returns a unique dm id
@@ -17,7 +18,7 @@ Return Value:
     Returns a dictionary containing a unique dm_id
 '''
 def dm_create_v1(token , u_ids):
-    store = data_store.get()
+    store = open_pickle()
 
     # Check valid token
     user_token = decode_jwt(token)
@@ -45,6 +46,7 @@ def dm_create_v1(token , u_ids):
     })
 
     data_store.set(store)
+    save_pickle()
 
     return {
         'dm_id': dm_id

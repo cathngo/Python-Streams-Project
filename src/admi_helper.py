@@ -1,8 +1,9 @@
 from src.data_store import data_store
 from src.error import InputError, AccessError
+from src.data_persistence import save_pickle, open_pickle
 
 def change_permissions_helper(global_owner_id, u_id, permission_id):
-    store = data_store.get()
+    store = open_pickle()
 
     #check if the u_id is a streams owner if they are a streams owner 
     #check if the person receiving the invitation is a streams owner 
@@ -34,4 +35,5 @@ def change_permissions_helper(global_owner_id, u_id, permission_id):
             else:
                 user['is_streams_owner'] = False
     data_store.set(store)
+    save_pickle()
     return 0
