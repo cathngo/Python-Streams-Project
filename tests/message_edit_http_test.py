@@ -162,7 +162,16 @@ def tests_member_message_was_editd_message_member_editd_channel():
         'channel_id': channel_id['channel_id']
     })
     
-    #the member user sends a message to channel
+    requests.post(config.url + 'message/send/v1', json={
+        'token': user_token['token'], 
+        'channel_id': channel_id['channel_id'],
+        'message': "hi",
+    })
+    requests.post(config.url + 'message/send/v1', json={
+        'token': user_token2['token'], 
+        'channel_id': channel_id['channel_id'],
+        'message': "hi",
+    })
     requests.post(config.url + 'message/send/v1', json={
         'token': user_token2['token'], 
         'channel_id': channel_id['channel_id'],
