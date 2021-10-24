@@ -10,8 +10,26 @@ from src.auth_register_helper import (
     hash_user_password,
     generate_new_session_id,
 )
+
 from src.data_persistence import save_pickle, open_pickle
 
+'''
+Logs in user into streams
+
+Arguments:
+    email (string) - user's email
+    password (string) - user's password
+
+Exceptions:
+    InputError - Occurs when any of:
+        - invalid email entered
+        - Incorrect password
+        - Email entered does not belong to a user
+
+Return Value:
+    Returns a dictionary containing a unique token and auth_user_id
+    if user is successfully logs in
+'''
 def auth_login_v1(email, password):
     
     store = open_pickle()
@@ -35,6 +53,18 @@ def auth_login_v1(email, password):
                 raise InputError('Error: Incorrect password')
     raise InputError('Error: Email entered does not belong to a user')
 
+'''
+Logs out user from streams
+
+Arguments:
+    token 
+
+Exceptions:
+    AccessError - Occurs when any of:
+        - invalid token
+
+Return Value = {}
+'''
 def auth_logout_v1(token):
     store = open_pickle()
     session_id = token

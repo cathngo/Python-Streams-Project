@@ -143,7 +143,22 @@ def messages_dm_v1(auth_user_id, dm_id, start):
         'start': start,
         'end': pagination['end'],
     }
+'''
+Allows user to join a channel is a member
 
+Arguments:
+    auth_user_id (int) - the id of the authorised user that is to join the channel.
+    channel_id (int) - the id of the channel that authorised user is to join.
+
+Exceptions:
+    InputError - Occurs when any of:
+        - channel_id does not refer to a valid channel
+        - The authorised user is already a member of the channel
+    AccessError - Occurs when:
+        - channel_id refers to a channel that is private and the authorised user is not already a channel member and is not a global owner
+
+Return Value = {}
+'''
 def channel_join_v1(auth_user_id, channel_id):
     store = open_pickle()
     
@@ -176,6 +191,21 @@ def channel_join_v1(auth_user_id, channel_id):
     save_pickle()
     return {}
 
+'''
+Allows user to leave a channel 
+
+Arguments:
+    auth_user_id (int) - the id of the authorised user that is to leave the channel.
+    channel_id (int) - the id of the channel that authorised user is to leave
+
+Exceptions:
+    InputError - Occurs when any of:
+        - channel_id does not refer to a valid channel
+    AccessError - Occurs when:
+        - channel_id is valid and the authorised user is not a member of the channel
+
+Return Value = {}
+'''
 def channel_leave_v1(auth_user_id, channel_id):
     store = open_pickle()
     
@@ -203,7 +233,27 @@ def channel_leave_v1(auth_user_id, channel_id):
             return {}
     raise AccessError(description = 'Cannot leave channel you have not joined')
     
-    
+'''
+Make user with user id u_id an owner of the channel
+
+Arguments:
+    auth_user_id (int) - the id of the authorised user that is promoting a member
+    channel_id (int) - the id of the channel where the promotion is to occur
+    u_id (int) - the id of the user to be promoted  
+
+
+Exceptions:
+    InputError - Occurs when any of:
+        - channel_id does not refer to a valid channel
+        - u_id does not refer to a valid user
+        - u_id refers to a user who is not a member of the channel
+        - u_id refers to a user who is already an owner of the channel
+
+    AccessError - Occurs when:
+        - channel_id is valid and the authorised user does not have owner permissions in the channel
+
+Return Value = {}
+'''  
 
 def channel_addowner_v1(auth_user_id, channel_id, u_id):
     store = open_pickle()
@@ -227,10 +277,74 @@ def channel_addowner_v1(auth_user_id, channel_id, u_id):
 
     for member in channel['all_members']:
         if member['u_id'] == u_id:
-            channel['owner_members'].append(u_id)
+            channel['owner_members'].append({'u_id': u_id})
             data_store.set(store)
             save_pickle()
             return {}
     raise InputError(description = 'Not a member of the channel cannot be promoted')
    
-   
+'''
+Remove user with user id u_id as an owner of the channel
+
+Arguments:
+    auth_user_id (int) - the id of the authorised user that is promoting a member
+    channel_id (int) - the id of the channel where the promotion is to occur
+    u_id (int) - the id of the user to be promoted  
+
+
+Exceptions:
+    InputError - Occurs when any of:
+        - channel_id does not refer to a valid channel
+        - u_id does not refer to a valid user
+        - u_id refers to a user who is not an owner of the channel
+        - u_id refers to a user who is currently the only owner of the channel
+
+    AccessError - Occurs when:
+        - channel_id is valid and the authorised user does not have owner permissions in the channel
+
+Return Value = {}
+'''    
+def channel_removeowner_v1(auth_user_id, channel_id, u_id):
+    store = data_store.get()
+    
+    # Checks if user exists and if so stores location in list
+    user = find_user(auth_user_id, store)
+    
+    # Check if channel_id valid 
+    check_channel_id(channel_id, store)
+
+    # Stores location of channel in list
+    channel = find_channel(channel_id, store)
+
+    # user with u_id is not an owner of the channel
+    found = False
+    for owner in channel['owner_members']:
+        if owner['u_id'] == u_id:
+            found = True
+
+    if found == False:
+        raise InputError(description = 'CUser with u_id is not an owner of the channel')
+
+    found1 = False
+    for owner in channel['owner_members']:
+        if owner['u_id'] == auth_user_id:
+            found1 = True
+
+    if found1 == False and user['is_streams_owner'] == False:
+          raise AccessError(description='Bauth_user is not an owner of the channel or an owner of streams')
+    #if auth_user_id not in channel['owner_members'] and user['is_streams_owner'] == False:
+       # raise AccessError(description='Bauth_user is not an owner of the channel or an owner of streams')
+
+    # user with u_id is the only owner of the channel
+    if len(channel['owner_members']) == 1:
+        raise InputError(description='AUser with u_id is the only owner of the channel')
+
+
+    new_owner_list = [owner_dict for owner_dict in channel['owner_members'] if owner_dict.get('u_id') != u_id]
+    for channel in store['channels']:
+        if channel_id == channel['channel_id']: 
+            channel['owner_members'] = new_owner_list
+
+    data_store.set(store)
+    return {}
+    
