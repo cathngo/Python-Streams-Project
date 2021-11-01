@@ -11,8 +11,8 @@ def test_name_updated_once():
     requests.put(config.url + 'user/profile/setname/v1', json={'token': user_token['token'], 'name_first': 'UpdatedFirstName', 'name_last': 'UpdatedLastName'})
     resp = requests.get(config.url + 'user/profile/v1', params={'token': user_token['token'], 'u_id': user_token['auth_user_id']})
     names = resp.json()
-    assert names['name_first'] == 'UpdatedFirstName'
-    assert names['name_last'] == 'UpdatedLastName'
+    assert names['user']['name_first'] == 'UpdatedFirstName'
+    assert names['user']['name_last'] == 'UpdatedLastName'
 
 #check name can be updated multiple times
 def test_name_updated_multiples():
@@ -23,8 +23,8 @@ def test_name_updated_multiples():
     requests.put(config.url + 'user/profile/setname/v1', json={'token': user_token['token'], 'name_first': 'Hailey', 'name_last': 'Moon'})
     resp = requests.get(config.url + 'user/profile/v1', params={'token': user_token['token'], 'u_id': user_token['auth_user_id']})
     names = resp.json()
-    assert names['name_first'] == 'Hailey'
-    assert names['name_last'] == 'Moon'
+    assert names['user']['name_first'] == 'Hailey'
+    assert names['user']['name_last'] == 'Moon'
 
 #check input error if first name less than 1 character
 def test_short_first_name():
@@ -105,5 +105,5 @@ def test_name_least_recent():
     requests.put(config.url + 'user/profile/setname/v1', json={'token': user_token['token'], 'name_first': 'Taco', 'name_last': 'Kebab'})
     resp = requests.get(config.url + 'user/profile/v1', params={'token': user_token['token'], 'u_id': user_token['auth_user_id']})
     names = resp.json()
-    assert names['name_first'] == 'Taco'
-    assert names['name_last'] == 'Kebab'
+    assert names['user']['name_first'] == 'Taco'
+    assert names['user']['name_last'] == 'Kebab'

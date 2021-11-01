@@ -24,10 +24,10 @@ def test_correct_details():
     user_token = user.json()
     resp = requests.get(config.url + 'user/profile/v1', params={'token': user_token['token'], 'u_id': user_token['auth_user_id']})
     r = resp.json()
-    assert r['name_first'] == 'Sam'
-    assert r['name_last'] == 'Smith'
-    assert r['email'] == 'validemail@gmail.com'
-    assert r['u_id'] == user_token['auth_user_id']
+    assert r['user']['name_first'] == 'Sam'
+    assert r['user']['name_last'] == 'Smith'
+    assert r['user']['email'] == 'validemail@gmail.com'
+    assert r['user']['u_id'] == user_token['auth_user_id']
 
 #check returns correct user details given multiple users registered
 def test_multiple_users():
@@ -38,10 +38,10 @@ def test_multiple_users():
     requests.post(config.url + 'auth/register/v2', json={'email': 'validemail3@gmail.com', 'password': '123abc3!@#', 'name_first': 'Sean', 'name_last': 'Ocean'})
     resp = requests.get(config.url + 'user/profile/v1', params={'token': user2['token'], 'u_id': user2['auth_user_id']})
     r = resp.json()
-    assert r['name_first'] == 'Donut'
-    assert r['name_last'] == 'King'
-    assert r['email'] == 'validemail2@gmail.com'
-    assert r['u_id'] == user2['auth_user_id']
+    assert r['user']['name_first'] == 'Donut'
+    assert r['user']['name_last'] == 'King'
+    assert r['user']['email'] == 'validemail2@gmail.com'
+    assert r['user']['u_id'] == user2['auth_user_id']
 
 #check accesserror for BOTH invalid token and invalid u_id
 def test_invalid_token():
