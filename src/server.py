@@ -67,7 +67,7 @@ def clear():
 @APP.route("/auth/register/v2", methods=['POST'])
 def auth_register_v2_http():
     data = request.get_json()
-    return jsonify(
+    return dumps(
         auth_register_v1(data['email'], data['password'], data['name_first'], data['name_last'])
     )
 
