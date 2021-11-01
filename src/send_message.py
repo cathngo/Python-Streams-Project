@@ -36,7 +36,7 @@ def message_send_channel(u_id, channel_id, message):
     
     message_id = message_id_generate()
     
-    time_created = int(datetime.utcnow().timestamp())
+    time_created = int(datetime.now().timestamp())
     
     channel['messages'].append(
         {

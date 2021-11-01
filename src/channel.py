@@ -359,7 +359,7 @@ Exceptions:
 Return Value = {}
 '''    
 def channel_removeowner_v1(auth_user_id, channel_id, u_id):
-    store = data_store.get()
+    store = open_pickle()
     
     # Checks if user exists and if so stores location in list
     user = find_user(auth_user_id, store)
@@ -400,4 +400,6 @@ def channel_removeowner_v1(auth_user_id, channel_id, u_id):
             channel['owner_members'] = new_owner_list
 
     data_store.set(store)
+    save_pickle()
+
     return {}
