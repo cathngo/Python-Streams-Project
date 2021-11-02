@@ -326,7 +326,7 @@ def channel_addowner_v1(auth_user_id, channel_id, u_id):
         if u_id == owner['u_id']: 
             raise InputError(description='User with u_id is already an owner of the channel')
    
-    if auth_user_id not in channel['owner_members'] and user['is_streams_owner'] == False:
+    if {'u_id' : auth_user_id} not in channel['owner_members'] and user['is_streams_owner'] == False:
         raise AccessError(description='auth_user is not an owner of the channel or an owner of streams')
 
     for member in channel['all_members']:
@@ -359,7 +359,7 @@ Exceptions:
 Return Value = {}
 '''    
 def channel_removeowner_v1(auth_user_id, channel_id, u_id):
-    store = data_store.get()
+    store = open_pickle()
     
     # Checks if user exists and if so stores location in list
     user = find_user(auth_user_id, store)
@@ -400,4 +400,6 @@ def channel_removeowner_v1(auth_user_id, channel_id, u_id):
             channel['owner_members'] = new_owner_list
 
     data_store.set(store)
+    save_pickle()
+
     return {}

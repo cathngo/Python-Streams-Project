@@ -69,8 +69,8 @@ def test_update_email():
     r2 = requests.get(config.url + 'user/profile/v1', params={'token': user2_token['token'], 'u_id': user2_token['auth_user_id']})
     email1 = r1.json()
     email2 = r2.json()
-    assert email1['email'] =='SamNewemail@gmail.com'
-    assert email2['email'] == 'KellyNewemail@gmail.com'
+    assert email1['user']['email'] =='SamNewemail@gmail.com'
+    assert email2['user']['email'] == 'KellyNewemail@gmail.com'
 
 #check email successfuly updated for the same user
 def test_multiple_update():
@@ -81,7 +81,7 @@ def test_multiple_update():
     requests.put(config.url + 'user/profile/setemail/v1', json={'token': user_token['token'], 'email': 'second@gmail.com'})   
     r1 = requests.get(config.url + 'user/profile/v1', params={'token': user_token['token'], 'u_id': user_token['auth_user_id']})
     email1 = r1.json()
-    assert email1['email'] =='second@gmail.com'
+    assert email1['user']['email'] =='second@gmail.com'
 
 
 #check successfullly updates the least recent  user
@@ -92,5 +92,5 @@ def test_least_recent():
     user1_token = user1.json()
     requests.put(config.url + 'user/profile/setemail/v1', json={'token': user1_token['token'], 'email': 'leastrecent@gmail.com'})   
     r1 = requests.get(config.url + 'user/profile/v1', params={'token': user1_token['token'], 'u_id': user1_token['auth_user_id']})
-    email = r1.json()
-    assert email['email'] == 'leastrecent@gmail.com'
+    payload = r1.json()
+    assert payload['user']['email'] == 'leastrecent@gmail.com'

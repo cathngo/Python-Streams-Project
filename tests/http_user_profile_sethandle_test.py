@@ -10,7 +10,7 @@ def test_duplicate_handle():
     user_token = user.json()
     r1 = requests.get(config.url + 'user/profile/v1', params={'token': user_token['token'], 'u_id': user_token['auth_user_id']})
     details = r1.json()
-    existing_handle = details['handle_str']
+    existing_handle = details['user']['handle_str']
     r = requests.put(config.url + 'user/profile/sethandle/v1', json={'token': user_token['token'], 'handle_str': existing_handle})  
     assert r.status_code == 400   
 
@@ -80,8 +80,8 @@ def test_updated_handle():
     r2 = requests.get(config.url + 'user/profile/v1', params={'token': user2_token['token'], 'u_id': user2_token['auth_user_id']})
     user1_details = r1.json()
     user2_details = r2.json()
-    assert user1_details['handle_str'] == 'updateFirst'
-    assert user2_details['handle_str'] == 'updateSecond'
+    assert user1_details['user']['handle_str'] == 'updateFirst'
+    assert user2_details['user']['handle_str'] == 'updateSecond'
 
 #check can update same handle multiple times
 def test_update_multiple():
@@ -92,7 +92,7 @@ def test_update_multiple():
     requests.put(config.url + 'user/profile/sethandle/v1', json={'token': user_token['token'], 'handle_str': 'updateTwo'})  
     r2 = requests.get(config.url + 'user/profile/v1', params={'token': user_token['token'], 'u_id': user_token['auth_user_id']})
     details = r2.json()
-    assert details['handle_str'] == 'updateTwo'
+    assert details['user']['handle_str'] == 'updateTwo'
 
 #check returns empty dictionary
 def test_empty_dictoinary():

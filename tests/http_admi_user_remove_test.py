@@ -107,9 +107,9 @@ def test_remove_and_check_profile():
     #check profile details
     resp = requests.get(config.url + 'user/profile/v1', params={'token': user_token2['token'], 'u_id': user_token2['auth_user_id']})
     r = resp.json()
-    assert r['name_first'] == 'Removed'
-    assert r['name_last'] == 'user'
-    assert r['email'] == ''
+    assert r['user']['name_first'] == 'Removed'
+    assert r['user']['name_last'] == 'user'
+    assert r['user']['email'] == ''
     assert resp.status_code == 200
 
 #remove an user and try to registed another user with the same email as the removed user
