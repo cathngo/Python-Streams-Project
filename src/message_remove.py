@@ -3,7 +3,10 @@ from src.error import AccessError, InputError
 from src.data_persistence import save_pickle, open_pickle
 from src.remove_edit_message_helper import in_channel_search, in_dm_search, remove_channel_message, remove_dm_message
 
-'''
+
+
+def message_remove_v1(u_id, message_id):
+    '''
 Given a message_id for a message, this message is removed from the channel/DM
 
 Arguments:
@@ -20,9 +23,6 @@ Exceptions:
 Return Value: 
     Returns an empty dictionary if the message is successfully removed
 '''
-
-def message_remove_v1(u_id, message_id): 
-
     in_channel_found = in_channel_search(message_id)
     
     in_dm_found = in_dm_search(message_id)

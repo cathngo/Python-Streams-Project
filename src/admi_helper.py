@@ -2,7 +2,10 @@ from src.data_store import data_store
 from src.error import InputError, AccessError
 from src.data_persistence import save_pickle, open_pickle
 
-'''
+
+
+def change_permissions_helper(global_owner_id, u_id, permission_id):
+    '''
 Changes the permissions of an user from the Stream, the new permissions are
 decided by 'permission_id'
 
@@ -23,7 +26,6 @@ Return Value:
     Returns an empty dictionary
 '''
 
-def change_permissions_helper(global_owner_id, u_id, permission_id):
     store = open_pickle()
 
     #check if the u_id is a streams owner if they are a streams owner 

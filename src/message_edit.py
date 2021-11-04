@@ -3,7 +3,10 @@ from src.error import AccessError, InputError
 from src.data_persistence import save_pickle, open_pickle
 from src.remove_edit_message_helper import in_channel_search, in_dm_search, edit_channel_message, edit_dm_message
 
-'''
+
+
+def message_edit_v1(u_id, message_id, message_given):
+    '''
 Given a message, update its text with new text. If the new message is an empty string, the message is deleted.
 
 Arguments:
@@ -21,10 +24,7 @@ Exceptions:
         -the authorised user has owner permissions in the channel/DM
 Return Value: 
     Returns an empty dictionary if the message is successfully edited
-'''
-
-def message_edit_v1(u_id, message_id, message_given): 
-
+''' 
     if len(message_given) > 1000: 
         raise InputError(description='Message is greater than one thousand characters')
     
