@@ -80,7 +80,7 @@ def message_send_dm(u_id, dm_id, message):
     
     message_id = message_id_generate()
     
-    time_created = int(datetime.utcnow().timestamp())
+    time_created = int(datetime.now().timestamp())
     
     dm['messages'].append(
         {
