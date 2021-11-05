@@ -5,9 +5,7 @@ from datetime import datetime
 from src import config
 from src.other import clear_v1
 import jwt
-from tests.message_send_dm_http_test import (
-    test_check_messagge_ids_are_not_the_same_for_different_channel_and_dm_message_send
-)
+
 
 def test_invalid_channel_id_message_send_later():
     requests.delete(config.url + 'clear/v1')
