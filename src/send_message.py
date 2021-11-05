@@ -7,7 +7,10 @@ from src.channel_messages_helper import get_channel, check_message_is_right_char
 from src.dm_helper import check_dm_id_exists, check_user_in_dm
 from src.data_persistence import save_pickle, open_pickle
 
-'''
+
+
+def message_send_channel(u_id, channel_id, message):
+    '''
 Send a message from the authorised user to the channel specified by channel_id.
 
 Arguments:
@@ -24,8 +27,6 @@ Exceptions:
 Return Value: 
     Returns a messaged_id of type int when the message is sent in the channel
 '''
-
-def message_send_channel(u_id, channel_id, message):
     store = open_pickle()
     
     channel = get_channel(channel_id, store)
@@ -80,7 +81,7 @@ def message_send_dm(u_id, dm_id, message):
     
     message_id = message_id_generate()
     
-    time_created = int(datetime.utcnow().timestamp())
+    time_created = int(datetime.now().timestamp())
     
     dm['messages'].append(
         {
