@@ -24,6 +24,7 @@ from src.user_profile_put_helpers import set_username, set_handle, set_email
 from src.send_message import message_send_channel, message_send_dm
 from src.message_remove import message_remove_v1 
 from src.message_edit import message_edit_v1 
+from src.photo_helper import download_image, crop_image, check_valid_coordinates, check_valid_format
 
 def quit_gracefully(*args):
     '''For coverage'''
@@ -435,6 +436,27 @@ def change_permissions_user():
 
     return dumps({})
 
+@APP.route("/user/profile/uploadphoto/v1", methods=['POST'])
+def upload_profile():
+    data = request.get_json()
+    
+    token = data['token']
+    img_url= data['img_url']
+    x_start = data['x_start']
+    y_start = data['y_start']
+    x_end = data['x_end']
+    y_end = data['y_end']
+
+    user_token = decode_jwt(token)
+    check_valid_token(user_token)
+
+    
+    img = download_image(img_url, user_token['u_id'])
+    check_valid_coordinates(img, x_start, y_start, x_end, y_end)
+    check_valid_format(img)
+    crop_image(img, x_start, y_start, x_end, y_end)
+    
+    return dumps({'img_url': img_url})
 #### NO NEED TO MODIFY BELOW THIS POINT
 
 if __name__ == "__main__":
