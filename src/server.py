@@ -24,6 +24,7 @@ from src.user_profile_put_helpers import set_username, set_handle, set_email
 from src.send_message import message_send_channel, message_send_dm
 from src.message_remove import message_remove_v1 
 from src.message_edit import message_edit_v1 
+from src.message_send_later import message_sendlater_v1
 
 def quit_gracefully(*args):
     '''For coverage'''
@@ -419,6 +420,23 @@ def put_message_edit():
     
     return dumps({})
        
+@APP.route("/message/sendlater/v1", methods=['POST'])
+def send_message_later():
+    data = request.get_json()
+    
+    token = data['token']
+    channel_id = data['channel_id']
+    message = data['message']
+    time_sent = data['time_sent']
+    
+    user_token = decode_jwt(token)
+    check_valid_token(user_token)
+
+    sending_message = message_sendlater_v1(user_token['u_id'], channel_id, message, time_sent)
+    return jsonify({
+        'message_id': sending_message['message_id']
+    })
+    
 
 @APP.route("/admin/userpermission/change/v1", methods=['POST'])
 def change_permissions_user():
