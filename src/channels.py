@@ -1,6 +1,7 @@
 from src.data_store import data_store
 from src.channels_create_helper import check_valid_name
 from src.data_persistence import save_pickle, open_pickle
+from src.user_stats_helper import update_channels_joined
 
 '''
 Make a list with all the channels that the given auth_user_id is part of 
@@ -111,8 +112,11 @@ def channels_create_v1(auth_user_id, name, is_public):
             'messages': [],                  
         }
     )
-    
+        
+    #increment user stats count for channels_joined by one
+    update_channels_joined(auth_user_id, store, 1)
     data_store.set(store)
+    
     save_pickle()
     
     return {

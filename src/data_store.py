@@ -29,6 +29,8 @@ initial_object = {
     'users': [],
     'channels': [],
     'dm': [],
+    'all_user_stats': [],
+    'workspace_stats': {},
 }
 ## YOU SHOULD MODIFY THIS OBJECT ABOVE
 

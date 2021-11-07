@@ -12,6 +12,8 @@ from src.auth_register_helper import (
 )
 
 from src.data_persistence import save_pickle, open_pickle
+from src.user_stats_helper import create_user_stats
+from src.users_stats_helper import create_workspace_stats
 
 
 def auth_login_v1(email, password):
@@ -142,6 +144,12 @@ def auth_register_v1(email, password, name_first, name_last):
         }
     )
 
+    #initialise user stats
+    create_user_stats(u_id, store)
+    #if this is the first user to sign up, intialise workspace stats
+    if (u_id == 0):
+        create_workspace_stats(u_id, store)
+    
     data_store.set(store)
     save_pickle()
     

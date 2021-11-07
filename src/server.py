@@ -24,6 +24,7 @@ from src.user_profile_put_helpers import set_username, set_handle, set_email
 from src.send_message import message_send_channel, message_send_dm
 from src.message_remove import message_remove_v1 
 from src.message_edit import message_edit_v1 
+from src.user_stats_helper import get_user_stats
 
 def quit_gracefully(*args):
     '''For coverage'''
@@ -437,14 +438,16 @@ def change_permissions_user():
 
 
 @APP.route("/user/stats/v1", methods=['GET'])
-def get_channel_message():
+def retrieve_user_stats():
     token = request.args.get('token')
 
     #check valid token
     user_token = decode_jwt(token)
     check_valid_token(user_token)
+
+    stats = get_user_stats(user_token['u_id'])
    
-    return dumps({}))
+    return dumps({'user_stats': stats})
 
 #### NO NEED TO MODIFY BELOW THIS POINT
 
