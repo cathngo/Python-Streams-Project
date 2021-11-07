@@ -435,6 +435,17 @@ def change_permissions_user():
 
     return dumps({})
 
+
+@APP.route("/user/stats/v1", methods=['GET'])
+def get_channel_message():
+    token = request.args.get('token')
+
+    #check valid token
+    user_token = decode_jwt(token)
+    check_valid_token(user_token)
+   
+    return dumps({}))
+
 #### NO NEED TO MODIFY BELOW THIS POINT
 
 if __name__ == "__main__":
