@@ -24,7 +24,6 @@ Exceptions:
 Return Value: 
     Returns an empty dictionary if the message is successfully removed
 '''
-    store = open_pickle()
 
     in_channel_found = in_channel_search(message_id)
     
