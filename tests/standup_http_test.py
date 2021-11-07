@@ -125,6 +125,62 @@ def test_standup_start_not_a_member():
 
     assert r4.status_code == AccessError.code
 
+def test_standup_start_invalid_token():
+    '''
+    Case: non registered user tried to call standup/start
+    '''
+    requests.delete(config.url + 'clear/v1')
+    r1 = requests.post(config.url + 'auth/register/v2', json={
+        'email': 'user1@email.com',
+        'password': 'user1password',
+        'name_first': 'Kanye',
+        'name_last': 'Yeezus',
+    })
+    payload1 = r1.json()
+
+    r2 = requests.post(config.url + 'channels/create/v2', json={
+        'token': payload1['token'],
+        'name': 'Alpaca',
+        'is_public': True,
+    })
+    payload2 = r2.json()
+
+    r3 = requests.post(config.url + 'standup/start/v1', json={
+        'token': 'invalidtoken',
+        'channel_id': payload2['channel_id'],
+        'length': 33,
+    })
+
+    assert r3.status_code == AccessError.code
+
+def test_standup_start_works():
+    '''
+    Case: standup/start works
+    '''
+    requests.delete(config.url + 'clear/v1')
+    r1 = requests.post(config.url + 'auth/register/v2', json={
+        'email': 'user1@email.com',
+        'password': 'user1password',
+        'name_first': 'Kanye',
+        'name_last': 'Yeezus',
+    })
+    payload1 = r1.json()
+
+    r2 = requests.post(config.url + 'channels/create/v2', json={
+        'token': payload1['token'],
+        'name': 'Alpaca',
+        'is_public': True,
+    })
+    payload2 = r2.json()
+
+    r3 = requests.post(config.url + 'standup/start/v1', json={
+        'token': payload1['token'],
+        'channel_id': payload2['channel_id'],
+        'length': 33,
+    })
+
+    assert r3.status_code == 200
+
 
 
 '''
@@ -218,3 +274,76 @@ def test_standup_active_invalid_token():
     })
 
     assert r3.status_code == AccessError.code
+
+def test_standup_active_clear_works():
+    '''
+    Case: standup_active check in standup_start clears properly
+    '''
+    requests.delete(config.url + 'clear/v1')
+    r1 = requests.post(config.url + 'auth/register/v2', json={
+        'email': 'user1@email.com',
+        'password': 'user1password',
+        'name_first': 'Kanye',
+        'name_last': 'Yeezus',
+    })
+    payload1 = r1.json()
+
+    r2 = requests.post(config.url + 'channels/create/v2', json={
+        'token': payload1['token'],
+        'name': 'Alpaca',
+        'is_public': True,
+    })
+    payload2 = r2.json()
+
+    requests.post(config.url + 'standup/start/v1', json={
+        'token': payload1['token'],
+        'channel_id': payload2['channel_id'],
+        'length': 0,
+    })
+    requests.post(config.url + 'standup/start/v1', json={
+        'token': payload1['token'],
+        'channel_id': payload2['channel_id'],
+        'length': 0,
+    })
+
+    r3 = requests.post(config.url + 'standup/start/v1', json={
+        'token': payload1['token'],
+        'channel_id': payload2['channel_id'],
+        'length': 33,
+    })
+
+    assert r3.status_code == 200
+
+def test_standup_active_works():
+    '''
+    Case: standup_active works
+    '''
+    requests.delete(config.url + 'clear/v1')
+    r1 = requests.post(config.url + 'auth/register/v2', json={
+        'email': 'user1@email.com',
+        'password': 'user1password',
+        'name_first': 'Kanye',
+        'name_last': 'Yeezus',
+    })
+    payload1 = r1.json()
+
+    r2 = requests.post(config.url + 'channels/create/v2', json={
+        'token': payload1['token'],
+        'name': 'Alpaca',
+        'is_public': True,
+    })
+    payload2 = r2.json()
+
+    requests.post(config.url + 'standup/start/v1', json={
+        'token': payload1['token'],
+        'channel_id': payload2['channel_id'],
+        'length': 33,
+    })
+
+    r3 = requests.get(config.url + 'standup/active/v1', params={
+        'token': payload1['token'],
+        'channel_id': payload2['channel_id'],
+    })
+    payload3 = r3.json()
+
+    assert payload3['is_active'] == True
