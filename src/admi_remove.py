@@ -1,6 +1,7 @@
 from src.data_store import data_store
 from src.data_persistence import save_pickle, open_pickle
 from src.error import InputError, AccessError
+from src.user_stats_helper import remove_user_stats
 
 
 
@@ -80,6 +81,9 @@ Return Value:
         for message in dm['messages']:
             if message['u_id'] == u_id:
                 message['message'] = 'Removed user'
+    
+    #remove the user from user_stats
+    remove_user_stats(u_id, store)
 
     data_store.set(store)
     save_pickle()

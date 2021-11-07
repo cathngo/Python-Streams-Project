@@ -32,18 +32,10 @@ Return Value:
 
     if in_channel_found != {}:
         remove_channel_message(u_id, message_id, in_channel_found['message'], in_channel_found['channel'])
-        #decrement workspace stats for existing messsages by one if removed
-        update_messages_exist(store, -1)
-        data_store.set(store)
-        save_pickle()
         return {}
 
     if  in_dm_found != {}:
         remove_dm_message(u_id, message_id, in_dm_found['message'], in_dm_found['dm'])
-        #decrement workspace stats for existing messsages by one if removed
-        update_messages_exist(store, -1)
-        data_store.set(store)
-        save_pickle()
         return {}
 
     raise InputError(description= "message_id is not valid")

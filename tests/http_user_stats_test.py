@@ -92,7 +92,7 @@ def test_involvement_rate_between_zero_one():
     r = resp.json()
     resp2 = requests.get(config.url + 'user/stats/v1', params={'token': user1_token['token']})
     r2 = resp2.json()
-    #assert r2['user_stats']['involvement_rate'] == float(1)
+    assert r2['user_stats']['involvement_rate'] == float(1)
     #involvement rate should be 1/2
     assert r['user_stats']['involvement_rate'] == float(1/2)
 
@@ -190,6 +190,19 @@ def test_correct_messages_sent():
     #sent two msgs, removed a msg but total sent msgs should still be two
     assert r['user_stats']['messages_sent'][-1]['num_messages_sent'] == 2
 
-
+#test user stats not retrievable after user has been removed from admin/user/remove
+def test_user_removed():
+    requests.delete(config.url + 'clear/v1')
+    #create users
+    user = requests.post(config.url + 'auth/register/v2', json={'email': 'validemail@gmail.com', 'password': '123abc!@#', 'name_first': 'Kanye', 'name_last': 'Chan'})
+    user_token = user.json()
+    user_2 = requests.post(config.url + 'auth/register/v2', json={'email': 'validemail2@gmail.com', 'password': '123abc!@#2', 'name_first': 'Masoko', 'name_last': 'West'})
+    user_token2 = user_2.json() 
+    #remove the second user
+    requests.delete(config.url + 'admin/user/remove/v1', json={'token': user_token['token'], 'u_id':user_token2['auth_user_id']})
+    #get user stats
+    resp = requests.get(config.url + 'user/stats/v1', params={'token': user_token2['token']})
+    r = resp.json()
+    assert r['user_stats'] == None
 #test correct output of whole dictionary
 

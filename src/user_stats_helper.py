@@ -88,3 +88,11 @@ def update_messages_sent(u_id, store, increment):
             #increment the count if it increases msgs sent (message/senddm, message/send)
             new_count = recent['num_messages_sent']  + increment
             user['user_stats']['messages_sent'].append({'num_messages_sent': new_count, 'time_stamp': time_created})
+
+#if user removed from stream (admin remove), then remove their stats as well
+def remove_user_stats(u_id, store):
+    for user in store['all_user_stats']:
+        if user['u_id'] == u_id:
+            #remove the user
+            store['all_user_stats'].remove(user)
+

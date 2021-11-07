@@ -23,14 +23,10 @@ from src.user_profile_v1_helper import get_user_profile, check_valid_u_id
 from src.user_profile_put_helpers import set_username, set_handle, set_email
 from src.send_message import message_send_channel, message_send_dm
 from src.message_remove import message_remove_v1 
-<<<<<<< HEAD
 from src.message_edit import message_edit_v1 
 from src.user_stats_helper import get_user_stats
 from src.users_stats_helper import get_workspace_stats
-=======
-from src.message_edit import message_edit_v1
 from src.standup import standup_start
->>>>>>> master
 
 def quit_gracefully(*args):
     '''For coverage'''
