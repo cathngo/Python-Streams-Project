@@ -19,7 +19,7 @@ def test_invalid_channel_id():
     })
     payload1 = r1.json()
 
-    r2 = requests.post(config.url + 'standup/start', json={
+    r2 = requests.post(config.url + 'standup/start/v1', json={
         'token': payload1['token'],
         'channel_id': -1,
         'length': 33,
@@ -47,7 +47,7 @@ def test_invalid_length():
     })
     payload2 = r2.json()
 
-    r3 = requests.post(config.url + 'standup/start', json={
+    r3 = requests.post(config.url + 'standup/start/v1', json={
         'token': payload1['token'],
         'channel_id': payload2['channel_id'],
         'length': -33,
@@ -75,13 +75,13 @@ def test_already_active_standup():
     })
     payload2 = r2.json()
 
-    requests.post(config.url + 'standup/start', json={
+    requests.post(config.url + 'standup/start/v1', json={
         'token': payload1['token'],
         'channel_id': payload2['channel_id'],
         'length': 33,
     })
     
-    r3 = requests.post(config.url + 'standup/start', json={
+    r3 = requests.post(config.url + 'standup/start/v1', json={
         'token': payload1['token'],
         'channel_id': payload2['channel_id'],
         'length': 66,
@@ -117,7 +117,7 @@ def test_not_a_member():
     })
     payload3 = r3.json()
 
-    r4 = requests.post(config.url + 'standup/start', json={
+    r4 = requests.post(config.url + 'standup/start/v1', json={
         'token': payload3['token'],
         'channel_id': payload2['channel_id'],
         'length': 33,
