@@ -55,10 +55,9 @@ def test_invalid_length():
 
     assert r3.status_code == InputError.code
 
+'''
 def test_already_active_standup():
-    '''
-    Case: an active standup is currently running in the channel
-    '''
+
     requests.delete(config.url + 'clear/v1')
     r1 = requests.post(config.url + 'auth/register/v2', json={
         'email': 'user1@email.com',
@@ -88,6 +87,7 @@ def test_already_active_standup():
     })
 
     assert r3.status_code == InputError.code
+'''
 
 def test_not_a_member():
     '''
@@ -110,8 +110,8 @@ def test_not_a_member():
     payload2 = r2.json()
 
     r3 = requests.post(config.url + 'auth/register/v2', json={
-        'email': 'user1@email.com',
-        'password': 'user1password',
+        'email': 'user2@email.com',
+        'password': 'user2password',
         'name_first': 'Kim',
         'name_last': 'Kardashian',
     })
