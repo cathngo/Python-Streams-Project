@@ -106,6 +106,9 @@ def standup_active(token, channel_id):
         time_finish = None
         temp['standup'].clear()
 
+    data_store.set(store)
+    save_pickle()
+
     return {
         'is_active': is_active,
         'time_finish': time_finish,

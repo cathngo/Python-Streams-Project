@@ -55,9 +55,10 @@ def test_standup_start_invalid_length():
 
     assert r3.status_code == InputError.code
 
-'''
 def test_standup_start_already_active_standup():
-
+    '''
+    Case: an active standup is currently running in the channel
+    '''
     requests.delete(config.url + 'clear/v1')
     r1 = requests.post(config.url + 'auth/register/v2', json={
         'email': 'user1@email.com',
@@ -87,7 +88,6 @@ def test_standup_start_already_active_standup():
     })
 
     assert r3.status_code == InputError.code
-'''
 
 def test_standup_start_not_a_member():
     '''
