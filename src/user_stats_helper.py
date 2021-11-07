@@ -26,14 +26,13 @@ def get_user_stats(u_id):
     num_msgs = store['workspace_stats']['messages_exist'][-1]['num_messages_exist']
     list_denom = [num_channels, num_dms, num_msgs]
     denominator = sum(list_denom)
-    
-    involvement = numerator/denominator
 
     if denominator == 0:
         involvement = 0
-    
-    if involvement > 1:
+    elif numerator/denominator > 1:
         involvement = 1
+    else:
+        involvement = numerator/denominator
 
     #update involvment
     store['all_user_stats']
@@ -75,6 +74,17 @@ def update_dms_joined(u_id, store, increment):
         if user['u_id'] == u_id:
             #get the last dictionary value in the list
             recent = user['user_stats']['dms_joined'][-1]
-            #increment the count if it increases dm joined (dmcreate) or decrement it (dm/leave or dm/remove) 
+            #increment the count if it increases dm joined (dmcreate) or decrement it (dm/leave or dm/remove <- need to double check for dmremove)
             new_count = recent['num_dms_joined'] + increment
             user['user_stats']['dms_joined'].append({'num_dms_joined': new_count, 'time_stamp': time_created})
+
+#this will only ever increase message count for user stats
+def update_messages_sent(u_id, store, increment):
+    time_created = int(datetime.now().timestamp())
+    for user in store['all_user_stats']:
+        if user['u_id'] == u_id:
+            #get the last dictionary value in the list
+            recent = user['user_stats']['messages_sent'][-1]
+            #increment the count if it increases msgs sent (message/senddm, message/send)
+            new_count = recent['num_messages_sent']  + increment
+            user['user_stats']['messages_sent'].append({'num_messages_sent': new_count, 'time_stamp': time_created})

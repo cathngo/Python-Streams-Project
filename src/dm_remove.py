@@ -2,6 +2,7 @@ from src.data_store import data_store
 from src.token_helper import decode_jwt, check_valid_token
 from src.dm_helper import check_dm_id_exists, check_user_is_dm_owner
 from src.data_persistence import save_pickle, open_pickle
+from src.users_stats_helper import update_dms_exist
 
 
 def dm_remove_v1(token, dm_id):
@@ -34,6 +35,18 @@ def dm_remove_v1(token, dm_id):
 
     # Check if authorised user is a member of the DM
     check_user_is_dm_owner(user_token['u_id'], dm_check)
+    '''
+    #user stats - idk yet if this will affect user stats or only workspace stats
+    #for now, will just implement for workspace stats
+    for dm in store['dm']:
+        if dm['dm_id'] == dm_id:
+        #find all users in the dm
+            for id in dm['members']:
+                #decrement number of dms joined for the user's stats by one
+                #update_dms_joined(id, store, -1)
+    '''
+     #decrement number of existing dms for workspace stats by one
+    update_dms_exist(store, -1)
 
     # Create new dm list which does not contain the removed DM
     new_dm_list = [dm_dict for dm_dict in store['dm'] if dm_dict.get('dm_id') != dm_id]

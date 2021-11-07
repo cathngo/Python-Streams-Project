@@ -2,6 +2,7 @@ from src.data_store import data_store
 from src.error import AccessError, InputError
 from src.data_persistence import save_pickle, open_pickle
 from src.remove_edit_message_helper import in_channel_search, in_dm_search, remove_channel_message, remove_dm_message
+from src.users_stats_helper import update_messages_exist
 
 
 
@@ -23,17 +24,30 @@ Exceptions:
 Return Value: 
     Returns an empty dictionary if the message is successfully removed
 '''
+    store = open_pickle()
+
     in_channel_found = in_channel_search(message_id)
     
     in_dm_found = in_dm_search(message_id)
 
     if in_channel_found != {}:
         remove_channel_message(u_id, message_id, in_channel_found['message'], in_channel_found['channel'])
+        #decrement workspace stats for existing messsages by one if removed
+        update_messages_exist(store, -1)
+        data_store.set(store)
+        save_pickle()
         return {}
 
     if  in_dm_found != {}:
         remove_dm_message(u_id, message_id, in_dm_found['message'], in_dm_found['dm'])
+        #decrement workspace stats for existing messsages by one if removed
+        update_messages_exist(store, -1)
+        data_store.set(store)
+        save_pickle()
         return {}
 
     raise InputError(description= "message_id is not valid")
+
+    
+
     
