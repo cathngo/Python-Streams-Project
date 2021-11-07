@@ -23,7 +23,8 @@ from src.user_profile_v1_helper import get_user_profile, check_valid_u_id
 from src.user_profile_put_helpers import set_username, set_handle, set_email
 from src.send_message import message_send_channel, message_send_dm
 from src.message_remove import message_remove_v1 
-from src.message_edit import message_edit_v1 
+from src.message_edit import message_edit_v1
+from src.standup import standup_start
 
 def quit_gracefully(*args):
     '''For coverage'''
@@ -434,6 +435,18 @@ def change_permissions_user():
     change_permissions_helper(user_token['u_id'], u_id, permission)
 
     return dumps({})
+
+@APP.route("/standup/start/v1", methods=['POST'])
+def start_standup():
+    data = request.get_json()
+    
+    token = data['token']
+    channel_id = data['channel_id']
+    length = data['length']
+
+    return dumps(
+        standup_start(token, channel_id, length)
+    )
 
 #### NO NEED TO MODIFY BELOW THIS POINT
 

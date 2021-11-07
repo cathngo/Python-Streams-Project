@@ -108,7 +108,8 @@ def channels_create_v1(auth_user_id, name, is_public):
                     'u_id': auth_user_id,
                 }
             ],      
-            'messages': [],                  
+            'messages': [],
+            'standup': {},
         }
     )
     
