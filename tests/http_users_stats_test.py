@@ -34,7 +34,7 @@ def test_correct_utilization_rate():
     #user1 and user_2 join dm
     requests.post(config.url + 'dm/create/v1', json={
         'token': user1_token['token'],
-        'u_ids': user2_token['auth_user_id'],
+        'u_ids': [user2_token['auth_user_id']],
     })
     #get users stats
     resp = requests.get(config.url + 'users/stats/v1', params={'token': user1_token['token']})
@@ -71,15 +71,15 @@ def test_correct_dms_exist():
     #create three dms
     dm = requests.post(config.url + 'dm/create/v1', json={
         'token': user1_token['token'],
-        'u_ids': user2_token['auth_user_id'],
+        'u_ids': [user2_token['auth_user_id']],
     })
     requests.post(config.url + 'dm/create/v1', json={
         'token': user1_token['token'],
-        'u_ids': user3_token['auth_user_id'],
+        'u_ids': [user3_token['auth_user_id']],
     })
     requests.post(config.url + 'dm/create/v1', json={
         'token': user2_token['token'],
-        'u_ids': user3_token['auth_user_id'],
+        'u_ids': [user3_token['auth_user_id']],
     })
     dm_reg = dm.json()
 
@@ -92,7 +92,7 @@ def test_correct_dms_exist():
     resp = requests.get(config.url + 'users/stats/v1', params={'token': user1_token['token']})
     r = resp.json()
     #assert latest record is 2 dms
-    assert r['workspace_stats']['dms_exist'][-1]['num_dms_exist'] == 0
+    assert r['workspace_stats']['dms_exist'][-1]['num_dms_exist'] == 2
 
 
 def test_correct_messages_exist():
@@ -106,7 +106,7 @@ def test_correct_messages_exist():
     #create a dms
     dm = requests.post(config.url + 'dm/create/v1', json={
         'token': user1_token['token'],
-        'u_ids': user2_token['auth_user_id'],
+        'u_ids': [user2_token['auth_user_id']],
     })
     dm_reg = dm.json()
     #send two msgs
@@ -127,7 +127,7 @@ def test_correct_messages_exist():
         'message_id': msg1_id['message_id'], 
     })  
     #get user stats
-    resp = requests.get(config.url + 'user/stats/v1', params={'token': user1_token['token']})
+    resp = requests.get(config.url + 'users/stats/v1', params={'token': user1_token['token']})
     r = resp.json()
     #sent two msgs, removed a msg so total msgs is now 1
     assert r['workspace_stats']['messages_exist'][-1]['num_messages_exist'] == 1
