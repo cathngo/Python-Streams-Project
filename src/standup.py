@@ -92,14 +92,15 @@ def standup_start(token, channel_id, length):
     check_authorised_user(user_token['u_id'], channel_id, store)
     check_standup_length(length)
 
-    check = standup_active(token, channel_id)
-    if check['is_active'] is True:
-        raise InputError(description='an active standup is currently running in the channel')
+    temp = find_channel(channel_id, store)
+
+    if temp['standup'] != {}:
+        check = standup_active(token, channel_id)
+        if check['is_active'] is True:
+            raise InputError(description='an active standup is currently running in the channel')
 
     time_current = int(datetime.now().timestamp())
     time_finish = time_current + length
-
-    temp = find_channel(channel_id, store)
 
     temp['standup'] = {
         'channel_id': channel_id,

@@ -128,7 +128,7 @@ def test_standup_start_not_a_member():
 
 
 '''
-Tests for standup/start
+Tests for standup/active
 '''
 
 def test_standup_active_invalid_channel():
