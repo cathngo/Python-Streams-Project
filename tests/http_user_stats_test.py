@@ -4,6 +4,7 @@ import json
 from src import config
 import jwt
 
+
 #check stats are 0 when user first registers
 def test_initalise_stats():
     #Reset route
@@ -14,8 +15,8 @@ def test_initalise_stats():
     resp = requests.get(config.url + 'user/stats/v1', params={'token': user_token['token']})
     r = resp.json()
     assert r['user_stats']['channels_joined'][0]['num_channels_joined'] == 0
-    assert r['user_stats']['channels_joined'][0]['num_dms_joined'] == 0
-    assert r['user_stats']['channels_joined'][0]['num_messages_sent'] == 0
+    assert r['user_stats']['dms_joined'][0]['num_dms_joined'] == 0
+    assert r['user_stats']['messages_sent'][0]['num_messages_sent'] == 0
 
 #test involvement_rate is 0 when denom is 0
 def test_involvement_rate_zero():
@@ -40,7 +41,7 @@ def test_involvement_rate_one():
     #create a dm
     dm = requests.post(config.url + 'dm/create/v1', json={
         'token': user1_token['token'],
-        'u_ids': user2_token['auth_user_id'],
+        'u_ids': [user2_token['auth_user_id']],
     })
     dm_reg = dm.json()
     #send two msgs
@@ -77,16 +78,21 @@ def test_involvement_rate_between_zero_one():
     requests.delete(config.url + 'clear/v1')
     #Register two users
     user1 = requests.post(config.url + 'auth/register/v2', json={'email': 'validemail@gmail.com', 'password': '123abc!@#', 'name_first': 'Sam', 'name_last': 'Smith'})
+    user2 = requests.post(config.url + 'auth/register/v2', json={'email': 'valid1email@gmail.com', 'password': '123abc!@#', 'name_first': 'Sam', 'name_last': 'Smith'})
     user1_token = user1.json()
-    #create two channels
+    user2_token = user2.json()
+    #create two channels for first user
     channel1 = requests.post(config.url + 'channels/create/v2', json={'token': user1_token['token'], 'name': 'Alpaca', 'is_public': True})
     requests.post(config.url + 'channels/create/v2', json={'token': user1_token['token'], 'name': 'Snow', 'is_public': True})
     channel1_id = channel1.json() 
-    #join one channel
-    requests.post(config.url + 'channel/join/v2', json={'token': user1_token['token'], 'channel_id': channel1_id['channel_id']})
+    #get user2 to join one of the channels
+    requests.post(config.url + 'channel/join/v2', json={'token': user2_token['token'], 'channel_id': channel1_id['channel_id']})
     #get user stats
-    resp = requests.get(config.url + 'user/stats/v1', params={'token': user1_token['token']})
+    resp = requests.get(config.url + 'user/stats/v1', params={'token': user2_token['token']})
     r = resp.json()
+    resp2 = requests.get(config.url + 'user/stats/v1', params={'token': user1_token['token']})
+    r2 = resp2.json()
+    #assert r2['user_stats']['involvement_rate'] == float(1)
     #involvement rate should be 1/2
     assert r['user_stats']['involvement_rate'] == float(1/2)
 
@@ -127,12 +133,12 @@ def test_correct_dms_joined():
     #create two dms
     dm = requests.post(config.url + 'dm/create/v1', json={
         'token': user1_token['token'],
-        'u_ids': user2_token['auth_user_id'],
+        'u_ids': [user2_token['auth_user_id']],
     })
     dm_reg = dm.json()
     requests.post(config.url + 'dm/create/v1', json={
         'token': user1_token['token'],
-        'u_ids': user3_token['auth_user_id'],
+        'u_ids': [user3_token['auth_user_id']],
     })
     #leave one dm
     requests.post(config.url + 'dm/leave/v1', json={
@@ -157,7 +163,7 @@ def test_correct_messages_sent():
     #create a dms
     dm = requests.post(config.url + 'dm/create/v1', json={
         'token': user1_token['token'],
-        'u_ids': user2_token['auth_user_id'],
+        'u_ids': [user2_token['auth_user_id']],
     })
     dm_reg = dm.json()
     #send two messages
@@ -186,5 +192,4 @@ def test_correct_messages_sent():
 
 
 #test correct output of whole dictionary
-
 
