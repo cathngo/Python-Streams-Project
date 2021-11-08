@@ -3,7 +3,8 @@ from src.data_persistence import save_pickle, open_pickle
 from src.token_helper import decode_jwt, check_valid_token
 from src.channel_details_helper import check_channel_id, check_authorised_user
 from src.channel_join_helper import find_channel
-from src.standup_helper import check_standup_length, finish_standup
+from src.standup_helper import check_standup_length, finish_standup, check_standup_message_length
+from src.dm_helper import find_user_handle
 from datetime import datetime
 from threading import Timer
 from src.error import InputError
@@ -14,7 +15,7 @@ def standup_active(token, channel_id):
 
     Arguments:
         token (string) - user's token
-        channel_id (int) - id of channel to start startup
+        channel_id (int) - id of channel to check if standup is active
 
     Exceptions:
         InputError - Occurs when:
@@ -40,6 +41,12 @@ def standup_active(token, channel_id):
     check_authorised_user(user_token['u_id'], channel_id, store)
 
     temp = find_channel(channel_id, store)
+
+    if temp['standup'] == {}:
+        return {
+            'is_active': False,
+            'time_finish': None,
+        }
 
     time_current = int(datetime.now().timestamp())
     time_finish = temp['standup']['time_finish']
@@ -92,15 +99,14 @@ def standup_start(token, channel_id, length):
     check_authorised_user(user_token['u_id'], channel_id, store)
     check_standup_length(length)
 
-    temp = find_channel(channel_id, store)
-
-    if temp['standup'] != {}:
-        check = standup_active(token, channel_id)
-        if check['is_active'] is True:
-            raise InputError(description='an active standup is currently running in the channel')
+    check = standup_active(token, channel_id)
+    if check['is_active'] is True:
+        raise InputError(description='an active standup is currently running in the channel')
 
     time_current = int(datetime.now().timestamp())
     time_finish = time_current + length
+
+    temp = find_channel(channel_id, store)
 
     temp['standup'] = {
         'channel_id': channel_id,
@@ -118,3 +124,53 @@ def standup_start(token, channel_id, length):
     return {
         'time_finish': time_finish
     }
+
+def standup_send(token, channel_id, message):
+    '''
+    Send a message to get buffered in the standup queue
+
+    Arguments:
+        token (string) - user's token
+        channel_id (int) - id of channel to send startup message
+        message (string) - user's message
+
+    Exceptions:
+        InputError - Occurs when any of:
+            - channel_id does not refer to a valid channel
+            - length of message is over 1000 characters
+            - an active standup is not currently running in the channel
+        
+        AccessError - Occurs when any of:
+            - Invalid token
+            - channel_id is valid and the authorised user is not a member of the channel
+
+    Return Value:
+        Returns an empty dictionary
+    '''
+    store = open_pickle()
+
+    # Check valid token
+    user_token = decode_jwt(token)
+    check_valid_token(user_token)
+
+    # Error checks
+    check_channel_id(channel_id, store)
+    check_authorised_user(user_token['u_id'], channel_id, store)
+    check_standup_message_length(message)
+
+    check = standup_active(token, channel_id)
+    if check['is_active'] is False:
+        raise InputError(description='an active standup is not currently running in the channel')
+
+    user_handle = find_user_handle(user_token['u_id'], store)
+    temp = find_channel(channel_id, store)
+
+    temp['standup']['messages'].append({
+        'handle': user_handle,
+        'message': message,
+    })
+
+    data_store.set(store)
+    save_pickle()
+    
+    return {}

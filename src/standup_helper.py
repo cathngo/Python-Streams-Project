@@ -30,3 +30,7 @@ def finish_standup(u_id, channel_id, store):
         'time_created': time_created,    
         }
     )
+
+def check_standup_message_length(message):
+    if len(message) > 1000:
+        raise InputError(description='length of message cannot be over 1000 characters')
