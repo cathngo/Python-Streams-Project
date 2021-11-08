@@ -9,84 +9,6 @@ from src.channel_join_helper import find_channel
 from src.message_id_generator import message_id_generate
 from datetime import datetime
 
-'''
-Helper functions
-'''
-def check_valid_channel_id(channel_id):
-    '''
-    Checks if the given channel id exists in the database
-    '''
-    store = open_pickle()
-    channel_exists = False
-
-    for channel in store['channels']:
-        if channel['channel_id'] == channel_id:
-            channel_exists = True
-    
-    return channel_exists
-
-def check_valid_dm_id(dm_id):
-    '''
-    Checks if the given dm id exists in the database
-    '''
-    store = open_pickle()
-    dm_exists = False
-
-    for dm in store['dm']:
-        if dm['dm_id'] == dm_id:
-            dm_exists = True
-
-    return dm_exists
-
-def find_user_channels(u_id):
-    '''
-    Returns a list of the channels the user has joined
-    '''
-    store = open_pickle()
-    user_channels = []
-
-    for channel in store['channels']:
-        for member in channel['all_members']:
-            if member['u_id'] == u_id:
-                user_channels.append(channel)
-
-    return user_channels
-
-def find_user_dms(u_id):
-    '''
-    Returns a list of the dms the user has joined
-    '''
-    store = open_pickle()
-    user_dms = []
-
-    for dm in store['dm']:
-        for member_id in dm['members']:
-            if member_id == u_id:
-                user_dms.append(dm)
-
-    return user_dms
-
-def find_og_message_id(og_message_id, u_id):
-    '''
-    Checks if og_message_id refers to a valid message within a channel/DM that the authorised user has joined
-    '''
-    user_channels = find_user_channels(u_id)
-    user_dms = find_user_dms(u_id)
-
-    for channel in user_channels:
-        for message in channel['messages']:
-            if message['message_id'] == og_message_id:
-                return message
-                
-    for dm in user_dms:
-        for message in dm['messages']:
-            if message['message_id'] == og_message_id:
-                return message
-
-    raise InputError(description='og_message_id does not refer to a valid message within a channel/DM that the authorised user has joined')
-
-
-
 def message_share(token, og_message_id, message, channel_id, dm_id):
     '''
     Share an existing message across channels and dms
@@ -165,3 +87,81 @@ def message_share(token, og_message_id, message, channel_id, dm_id):
     return {
         'shared_message_id': shared_message_id,
     }
+
+
+
+'''
+Helper functions
+'''
+def check_valid_channel_id(channel_id):
+    '''
+    Checks if the given channel id exists in the database
+    '''
+    store = open_pickle()
+    channel_exists = False
+
+    for channel in store['channels']:
+        if channel['channel_id'] == channel_id:
+            channel_exists = True
+    
+    return channel_exists
+
+def check_valid_dm_id(dm_id):
+    '''
+    Checks if the given dm id exists in the database
+    '''
+    store = open_pickle()
+    dm_exists = False
+
+    for dm in store['dm']:
+        if dm['dm_id'] == dm_id:
+            dm_exists = True
+
+    return dm_exists
+
+def find_user_channels(u_id):
+    '''
+    Returns a list of the channels the user has joined
+    '''
+    store = open_pickle()
+    user_channels = []
+
+    for channel in store['channels']:
+        for member in channel['all_members']:
+            if member['u_id'] == u_id:
+                user_channels.append(channel)
+
+    return user_channels
+
+def find_user_dms(u_id):
+    '''
+    Returns a list of the dms the user has joined
+    '''
+    store = open_pickle()
+    user_dms = []
+
+    for dm in store['dm']:
+        for member_id in dm['members']:
+            if member_id == u_id:
+                user_dms.append(dm)
+
+    return user_dms
+
+def find_og_message_id(og_message_id, u_id):
+    '''
+    Checks if og_message_id refers to a valid message within a channel/DM that the authorised user has joined
+    '''
+    user_channels = find_user_channels(u_id)
+    user_dms = find_user_dms(u_id)
+
+    for channel in user_channels:
+        for message in channel['messages']:
+            if message['message_id'] == og_message_id:
+                return message
+                
+    for dm in user_dms:
+        for message in dm['messages']:
+            if message['message_id'] == og_message_id:
+                return message
+
+    raise InputError(description='og_message_id does not refer to a valid message within a channel/DM that the authorised user has joined')
