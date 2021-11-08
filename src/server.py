@@ -26,6 +26,7 @@ from src.message_remove import message_remove_v1
 from src.message_react import message_react_v1
 from src.message_edit import message_edit_v1
 from src.standup import standup_active, standup_start, standup_send
+from src.message_share import message_share
 
 def quit_gracefully(*args):
     '''For coverage'''
@@ -483,6 +484,20 @@ def send_standup_message():
 
     return dumps(
         standup_send(token, channel_id, message)
+    )
+
+@APP.route("/message/share/v1", methods=['POST'])
+def share_message():
+    data = request.get_json()
+    
+    token = data['token']
+    og_message_id = data['og_message_id']
+    message = data['message']
+    channel_id = data['channel_id']
+    dm_id = data['dm_id']
+
+    return dumps(
+        message_share(token, og_message_id, message, channel_id, dm_id)
     )
 
 #### NO NEED TO MODIFY BELOW THIS POINT
