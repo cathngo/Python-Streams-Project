@@ -128,5 +128,3 @@ dmypy.json
 
 #database
 database.p
-#ignore images folder
-src/images
