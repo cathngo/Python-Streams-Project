@@ -7,8 +7,9 @@ from src.error import InputError, AccessError
 from tests.pytest_fixtures import (
     clear, reg_user1, reg_user2, reg_channel_user1, send_channel_message_user1, 
     send_channel_message_user2, send_dm_message_user1, reg_dm_user1, reg_dm_2users, 
-    send_dm_message_user1_in_dm_with_two_users, user2_channel_join, send_channel_message_with_two_users_user2, 
-    send_dm_message_user2_in_dm_with_two_users, user1_react_to_their_message_in_channel, user1_react_to_their_message_in_dm
+    send_dm_message_user1_in_dm_with_two_users, user2_channel_join, send_channel_message_with_two_users_user1, 
+    send_dm_message_user2_in_dm_with_two_users, user1_react_to_their_message_in_channel, user1_react_to_their_message_in_dm,
+    user2_react_to_user1_message_in_dm, user2_react_to_user1_message_in_channel
 )
 from hypothesis import given, strategies, Verbosity, settings
 import string
@@ -101,8 +102,7 @@ def test_react_message_alreaded_react_to_in_by_user_in_channel(
     })
     assert reacted.status_code == InputError.code 
     
-
-def test_user1_reacted_to_their_message_in_channel_true(
+def test_user1_reacted_to_their_message_in_channel_is_true(
     clear, reg_user1, reg_channel_user1, user1_react_to_their_message_in_channel
     ):
     user1 = reg_user1
@@ -110,6 +110,51 @@ def test_user1_reacted_to_their_message_in_channel_true(
 
     message_page = requests.get(config.url + 'channel/messages/v2', params={
         'token': user1['token'], 
+        'channel_id': channel_id,
+        'start': 0,
+    })
+    message_list = message_page.json()
+    
+    assert message_list['messages']['reacts'][0]['is_this_user_reacted'] == True
+
+def test_user1_reacted_to_their_message_in_dm_is_true(
+    clear, reg_user1, reg_dm_user1, user1_react_to_their_message_in_dm
+    ):
+    user1 = reg_user1
+    dm_id = reg_dm_user1
+
+    message_page = requests.get(config.url + 'dm/messages/v1', params={
+        'token': user1['token'], 
+        'dm_id': dm_id['dm_id'],
+        'start': 0,
+    })
+    message_list = message_page.json()
+    
+    assert message_list['messages']['reacts'][0]['is_this_user_reacted'] == True
+
+def test_user2_react_to_user1_message_in_dm_is_true(
+    clear, reg_user2, reg_dm_2users, user2_react_to_user1_message_in_dm
+    ):
+    user2 = reg_user2
+    dm_id = reg_dm_2users
+
+    message_page = requests.get(config.url + 'dm/messages/v1', params={
+        'token': user2['token'], 
+        'dm_id': dm_id['dm_id'],
+        'start': 0,
+    })
+    message_list = message_page.json()
+    
+    assert message_list['messages']['reacts'][0]['is_this_user_reacted'] == True
+
+def test_user2_react_to_user1_message_in_channel_is_true(
+    clear, reg_user2, reg_channel_user1, user2_react_to_user1_message_in_channel
+    ):
+    user2 = reg_user2
+    channel_id = reg_channel_user1
+
+    message_page = requests.get(config.url + 'channel/messages/v2', params={
+        'token': user2['token'], 
         'channel_id': channel_id,
         'start': 0,
     })
