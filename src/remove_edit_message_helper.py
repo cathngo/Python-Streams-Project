@@ -86,7 +86,8 @@ def in_channel_search(message_id):
         for message_store in channel_store['messages']:
             if message_store['message_id'] == message_id:
                 temp_dic_channel['channel'] = channel_store
-                temp_dic_channel['message'] = message_store
+                temp_dic_channel['message'] = message_store                    
+
     return temp_dic_channel
 
 def in_dm_search(message_id):
