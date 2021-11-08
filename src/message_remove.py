@@ -27,11 +27,11 @@ Return Value:
     
     in_dm_found = in_dm_search(message_id)
 
-    if in_channel_found != {}:
+    if in_channel_found:
         remove_channel_message(u_id, message_id, in_channel_found['message'], in_channel_found['channel'])
         return {}
 
-    if  in_dm_found != {}:
+    if in_dm_found:
         remove_dm_message(u_id, message_id, in_dm_found['message'], in_dm_found['dm'])
         return {}
 

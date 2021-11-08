@@ -26,7 +26,7 @@ Return Value:
     in_channel_found = in_channel_search(message_id)
     in_dm_found = in_dm_search(message_id)
 
-    if in_channel_found != {}:
+    if in_channel_found:
         react_channel_message(u_id, react_id, in_channel_found['message'], in_channel_found['channel'])
         return {}
     
