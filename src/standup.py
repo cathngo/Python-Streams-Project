@@ -115,7 +115,7 @@ def standup_start(token, channel_id, length):
     }
 
     # End startup after 'length' seconds
-    t = Timer(length, finish_standup, args=[user_token['u_id'], channel_id, store])
+    t = Timer(length, finish_standup, args=[user_token['u_id'], channel_id])
     t.start()
 
     data_store.set(store)

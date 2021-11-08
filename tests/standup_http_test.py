@@ -1,6 +1,7 @@
 import requests
 from src import config
 from src.error import InputError, AccessError
+import time
 
 '''
 Tests for standup/start
@@ -536,7 +537,7 @@ def test_standup_send_works():
     requests.post(config.url + 'standup/start/v1', json={
         'token': payload1['token'],
         'channel_id': payload2['channel_id'],
-        'length': 33,
+        'length': 3,
     })
 
     requests.post(config.url + 'standup/send/v1', json={
@@ -557,4 +558,14 @@ def test_standup_send_works():
         'message': 'Message3',
     })
 
+    time.sleep(5)
+
+    r4 = requests.get(config.url + 'channel/messages/v2', params={
+        'token': payload1['token'], 
+        'channel_id': payload2['channel_id'],
+        'start': 0,
+    })
+    payload4 = r4.json()
+
     assert r3.status_code == 200
+    assert len(payload4['messages']) == 1
