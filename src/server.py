@@ -461,7 +461,7 @@ def upload_profile():
 
 @APP.route('/static/<filename>')
 def get_image(filename):
-    path = os.path.join(current_app.root_path, 'images')
+    #path = os.path.join(current_app.root_path, 'images')
     #filename = 'test.jpg'
     #return dumps({"path": path})
     return send_from_directory('images', filename=filename)
