@@ -109,7 +109,8 @@ Return Value:
                     'u_id': auth_user_id,
                 }
             ],      
-            'messages': [],                  
+            'messages': [],
+            'standup': {},
         }
     )
     
