@@ -1,6 +1,7 @@
 import urllib.request
 from PIL import Image
 from src.error import InputError
+from flask import current_app
 import os
 
 def check_valid_coordinates(img, x_start, y_start, x_end, y_end):
@@ -21,13 +22,13 @@ def download_image(img_url, auth_user_id):
     #raise input error if not a valid image url
     success = True
     try:
-        urllib.request.urlretrieve(img_url, "images/" + str(auth_user_id) + ".jpg")
+        urllib.request.urlretrieve(img_url, os.path.join(current_app.root_path, 'images/') + str(auth_user_id) + ".jpg")
     except:
         success = False
     if success == False:
         raise InputError(description="not a valid image url")
 
-    return "images/" + str(auth_user_id) + ".jpg"
+    return os.path.join(current_app.root_path, 'images/') + str(auth_user_id) + ".jpg"
 
 def check_valid_format(img):
     #raise input error if not jpg or jpeg

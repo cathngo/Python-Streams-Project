@@ -1,1 +1,0 @@
-This is a folder to store downloaded images for user/profile/uploadphoto/v1

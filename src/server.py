@@ -1,7 +1,7 @@
 import sys
 import signal
 from json import dumps
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory, current_app
 from flask_cors import CORS
 from src.error import InputError
 from src import config
@@ -25,6 +25,7 @@ from src.send_message import message_send_channel, message_send_dm
 from src.message_remove import message_remove_v1 
 from src.message_edit import message_edit_v1 
 from src.photo_helper import download_image, crop_image, check_valid_coordinates, check_valid_format
+import os
 
 def quit_gracefully(*args):
     '''For coverage'''
@@ -457,6 +458,14 @@ def upload_profile():
     crop_image(img, x_start, y_start, x_end, y_end)
     
     return dumps({'img_url': img_url})
+
+@APP.route('/static/<filename>')
+def get_image(filename):
+    path = os.path.join(current_app.root_path, 'images')
+    #filename = 'test.jpg'
+    #return dumps({"path": path})
+    return send_from_directory('images', filename=filename)
+   
 #### NO NEED TO MODIFY BELOW THIS POINT
 
 if __name__ == "__main__":
