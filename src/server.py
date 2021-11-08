@@ -24,6 +24,7 @@ from src.user_profile_put_helpers import set_username, set_handle, set_email
 from src.send_message import message_send_channel, message_send_dm
 from src.message_remove import message_remove_v1 
 from src.message_edit import message_edit_v1 
+from src.message_react import message_react_v1
 
 def quit_gracefully(*args):
     '''For coverage'''
@@ -434,6 +435,22 @@ def change_permissions_user():
     change_permissions_helper(user_token['u_id'], u_id, permission)
 
     return dumps({})
+
+@APP.route("/message/react/v1", methods=['POST'])
+def react_to_message():
+    data = request.get_json()
+    
+    token = data['token']
+    message_id = data['message_id']
+    react_id = data['react_id']
+    
+    user_token = decode_jwt(token)
+    check_valid_token(user_token)
+    
+    message_react_v1(user_token['u_id'], message_id, react_id)
+
+    return dumps({})
+        
 
 #### NO NEED TO MODIFY BELOW THIS POINT
 
