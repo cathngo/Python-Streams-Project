@@ -19,7 +19,7 @@ def check_valid_channel_id(channel_id):
     store = open_pickle()
     channel_exists = False
 
-    for channel in store['channel']:
+    for channel in store['channels']:
         if channel['channel_id'] == channel_id:
             channel_exists = True
     
