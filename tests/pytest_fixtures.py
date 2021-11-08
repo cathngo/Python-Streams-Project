@@ -272,6 +272,16 @@ def user1_react_to_their_message_in_channel(reg_user1, send_channel_message_user
     })
     return
 
+@pytest.fixture
+def user2_react_to_user1_message_in_channel(reg_user2, send_channel_message_with_two_users_user1):
+    user2 = reg_user2
+    message_id = send_channel_message_with_two_users_user1
+    requests.post(config.url + 'message/react/v1', json={ 
+        'token': user2['token'],
+        'message_id': message_id,
+        'react_id': 1      
+    })
+    return
 ########################################################################
 ###                FIXTURES TO MESSAGE REACT IN DM                   
 ########################################################################
@@ -297,13 +307,3 @@ def user2_react_to_user1_message_in_dm(reg_user2, send_dm_message_user1_in_dm_wi
     })
     return
 
-@pytest.fixture
-def user2_react_to_user1_message_in_channel(reg_user2, send_channel_message_with_two_users_user1):
-    user2 = reg_user2
-    message_id = send_channel_message_with_two_users_user1
-    requests.post(config.url + 'message/react/v1', json={ 
-        'token': user2['token'],
-        'message_id': message_id,
-        'react_id': 1      
-    })
-    return

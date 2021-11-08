@@ -155,7 +155,31 @@ def test_user2_react_to_user1_message_in_channel_is_true(
         'start': 0,
     })
     message_list = message_page.json()
-    
-    print(message_list)
-    
+        
     assert message_list['messages'][0]['reacts'][0]['is_this_user_reacted'] == True
+
+def test_user2_tries_to_react_to_a_message_in_a_channel_they_are_not_a_member_of(
+    clear, reg_user2, send_channel_message_user1
+    ): 
+    user2 = reg_user2
+    message_id = send_channel_message_user1
+
+    react = requests.post(config.url + 'message/react/v1', json={ 
+        'token': user2['token'],
+        'message_id': message_id,
+        'react_id': 1   
+    })
+    assert react.status_code == InputError.code
+
+def test_user2_tries_to_react_to_a_message_in_a_dm_they_are_not_a_member_of(
+    clear, reg_user2, send_dm_message_user1
+    ): 
+    user2 = reg_user2
+    message_id = send_dm_message_user1
+
+    react = requests.post(config.url + 'message/react/v1', json={ 
+        'token': user2['token'],
+        'message_id': message_id,
+        'react_id': 1   
+    })
+    assert react.status_code == InputError.code 
