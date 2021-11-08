@@ -24,7 +24,7 @@ from src.user_profile_put_helpers import set_username, set_handle, set_email
 from src.send_message import message_send_channel, message_send_dm
 from src.message_remove import message_remove_v1 
 from src.message_edit import message_edit_v1
-from src.standup import standup_active, standup_start
+from src.standup import standup_active, standup_start, standup_send
 
 def quit_gracefully(*args):
     '''For coverage'''
@@ -455,6 +455,18 @@ def check_standup_active():
     
     return dumps(
         standup_active(token, channel_id)
+    )
+
+@APP.route("/standup/send/v1", methods=['POST'])
+def send_standup_message():
+    data = request.get_json()
+    
+    token = data['token']
+    channel_id = data['channel_id']
+    message = data['message']
+
+    return dumps(
+        standup_send(token, channel_id, message)
     )
 
 #### NO NEED TO MODIFY BELOW THIS POINT
