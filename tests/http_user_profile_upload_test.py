@@ -37,7 +37,7 @@ def test_invalid_url():
         'x_end': 100,
         'y_end': 100,
     })
-    assert resp.status_code == 400
+    assert resp.status_code == InputError.code
 
 def test_png():
     #Reset route
@@ -54,7 +54,7 @@ def test_png():
         'x_end': 100,
         'y_end': 100,
     })
-    assert resp.status_code == 400
+    assert resp.status_code == InputError.code
 
 #input error if x,y start/end not in dimensions of image URL
 def test_invalid_x_start():
@@ -72,7 +72,7 @@ def test_invalid_x_start():
         'x_end': 100,
         'y_end': 100,
     })
-    assert resp.status_code == 400
+    assert resp.status_code == InputError.code
 
 def test_invalid_x_end():
     #Reset route
@@ -89,7 +89,7 @@ def test_invalid_x_end():
         'x_end': -1000,
         'y_end': 100,
     })
-    assert resp.status_code == 400
+    assert resp.status_code == InputError.code
 
 def test_invalid_y_start():
     #Reset route
@@ -106,7 +106,7 @@ def test_invalid_y_start():
         'x_end': 100,
         'y_end': 100,
     })
-    assert resp.status_code == 400
+    assert resp.status_code == InputError.code
 
 def test_invalid_y_end():
     #Reset route
@@ -123,7 +123,7 @@ def test_invalid_y_end():
         'x_end': 100,
         'y_end': -1000,
     })
-    assert resp.status_code == 400
+    assert resp.status_code == InputError.code
 
 #input error if x_end < x_start
 def test_x_end_less_than_x_start():
@@ -141,7 +141,7 @@ def test_x_end_less_than_x_start():
         'x_end': 2,
         'y_end': 100,
     })
-    assert resp.status_code == 400
+    assert resp.status_code == InputError.code
 
 #input error if y_end < y_start
 def test_y_end_less_than_y_start():
@@ -159,5 +159,5 @@ def test_y_end_less_than_y_start():
         'x_end': 100,
         'y_end': 2,
     })
-    assert resp.status_code == 400
+    assert resp.status_code == InputError.code
 
