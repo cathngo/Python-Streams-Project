@@ -41,10 +41,17 @@ Return Value:
     
     channel['messages'].append(
         {
-        'message_id': message_id,
+        'message_id': message_id, 
         'u_id': u_id, 
         'message': message,
         'time_created': time_created,    
+        'reacts':[
+                {
+                    'react_id': 1,
+                    'u_ids': [], 
+                    'is_this_user_reacted': False
+                }
+            ]
         }
     )
 
@@ -89,6 +96,13 @@ def message_send_dm(u_id, dm_id, message):
         'u_id': u_id, 
         'message': message,
         'time_created': time_created,    
+        'reacts':[
+                {
+                    'react_id': 1,
+                    'u_ids': [], 
+                    'is_this_user_reacted': False
+                }
+            ]
         }
     )
     data_store.set(store)

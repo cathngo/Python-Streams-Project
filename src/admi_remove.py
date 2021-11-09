@@ -51,7 +51,7 @@ Return Value:
             user_['name_last'] = 'user'
             user_['handle_str'] = ''
             user_['email'] = ''
-            user_['session_list'] = []
+            user_['session_list'].clear()
 
     #change the data stored in channels
     for channel in store['channels']: 

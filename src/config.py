@@ -1,4 +1,4 @@
-port = 5006
+port = 33324
 
 url = f"http://localhost:{port}/"
 

@@ -24,9 +24,11 @@ from src.users_all_v1_helper import get_all_users
 from src.user_profile_v1_helper import get_user_profile, check_valid_u_id
 from src.user_profile_put_helpers import set_username, set_handle, set_email
 from src.send_message import message_send_channel, message_send_dm
-from src.message_remove import message_remove_v1 
+from src.message_remove import message_remove_v1  
+from src.message_react import message_react_v1
 from src.message_edit import message_edit_v1
 from src.standup import standup_active, standup_start, standup_send
+from src.message_share import message_share
 
 def quit_gracefully(*args):
     '''For coverage'''
@@ -438,6 +440,21 @@ def change_permissions_user():
 
     return dumps({})
 
+@APP.route("/message/react/v1", methods=['POST'])
+def react_to_message():
+    data = request.get_json()
+    
+    token = data['token']
+    message_id = data['message_id']
+    react_id = data['react_id']
+    
+    user_token = decode_jwt(token)
+    check_valid_token(user_token)
+    
+    message_react_v1(user_token['u_id'], message_id, react_id)
+
+    return dumps({})
+        
 @APP.route("/standup/start/v1", methods=['POST'])
 def start_standup():
     data = request.get_json()
@@ -478,6 +495,20 @@ def send_password_code():
     send_email_to_reset(email)
     return dumps({})
     
+@APP.route("/message/share/v1", methods=['POST'])
+def share_message():
+    data = request.get_json()
+    
+    token = data['token']
+    og_message_id = data['og_message_id']
+    message = data['message']
+    channel_id = data['channel_id']
+    dm_id = data['dm_id']
+
+    return dumps(
+        message_share(token, og_message_id, message, channel_id, dm_id)
+    )
+
 #### NO NEED TO MODIFY BELOW THIS POINT
 
 if __name__ == "__main__":
