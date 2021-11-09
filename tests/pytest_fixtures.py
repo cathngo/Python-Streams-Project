@@ -282,6 +282,7 @@ def user2_react_to_user1_message_in_channel(reg_user2, send_channel_message_with
         'react_id': 1      
     })
     return
+
 ########################################################################
 ###                FIXTURES TO MESSAGE REACT IN DM                   
 ########################################################################
@@ -307,3 +308,62 @@ def user2_react_to_user1_message_in_dm(reg_user2, send_dm_message_user1_in_dm_wi
     })
     return
 
+########################################################################
+###                FIXTURES TO MESSAGE UNREACT IN CHANNEL                   
+########################################################################
+
+@pytest.fixture
+def user1_unreact_to_their_message_in_channel(
+    reg_user1, send_channel_message_user1, user1_react_to_their_message_in_channel
+    ):
+    user1 = reg_user1
+    message_id = send_channel_message_user1
+    requests.post(config.url + 'message/unreact/v1', json={ 
+        'token': user1['token'],
+        'message_id': message_id,
+        'react_id': 1    
+    })
+    return
+
+@pytest.fixture 
+def user2_unreact_to_user1_message_in_channel(
+    reg_user2, send_channel_message_with_two_users_user1, user2_react_to_user1_message_in_channel
+    ):
+    user2 = reg_user2
+    message_id = send_channel_message_with_two_users_user1
+    requests.post(config.url + 'message/unreact/v1', json={ 
+        'token': user2['token'],
+        'message_id': message_id,
+        'react_id': 1      
+    })
+    return
+    
+########################################################################
+###                FIXTURES TO MESSAGE UNREACT IN DM                   
+########################################################################
+
+@pytest.fixture
+def user1_unreact_to_their_message_in_dm(
+    reg_user1, send_dm_message_user1, user1_react_to_their_message_in_dm
+    ):
+    user1 = reg_user1
+    message_id = send_dm_message_user1
+    requests.post(config.url + 'message/unreact/v1', json={ 
+        'token': user1['token'],
+        'message_id': message_id,
+        'react_id': 1      
+    })
+    return
+
+@pytest.fixture
+def user2_unreact_to_user1_message_in_dm(
+    reg_user2, send_dm_message_user1_in_dm_with_two_users, user2_react_to_user1_message_in_dm
+    ):
+    user2 = reg_user2
+    message_id = send_dm_message_user1_in_dm_with_two_users
+    requests.post(config.url + 'message/unreact/v1', json={ 
+        'token': user2['token'],
+        'message_id': message_id,
+        'react_id': 1      
+    })
+    return

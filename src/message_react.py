@@ -36,3 +36,5 @@ Return Value:
 
     raise InputError(description= "message_id is not valid")
     
+def message_unreact_v1(u_id, message_id, react_id):
+    return {}
