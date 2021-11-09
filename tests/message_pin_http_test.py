@@ -110,10 +110,10 @@ def test_user_does_not_have_owner_permissions_to_pin_message_in_dm(
 
 #message_id refers to a valid message in a joined channel and the authorised user does not have owner permissions in the channel
 def test_user_does_not_have_owner_permissions_to_pin_message_in_channel(
-    clear, reg_user2, send_channel_message_with_two_users_user1
+    clear, send_channel_message_with_two_users_user1, reg_user2
     ):
-    user2 = reg_user2
     message_id = send_channel_message_with_two_users_user1
+    user2 = reg_user2
     pin = requests.post(config.url + 'message/pin/v1', json={ 
         'token': user2['token'],
         'message_id': message_id, 

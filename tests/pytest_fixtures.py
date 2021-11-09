@@ -287,7 +287,6 @@ def send_channel_message_with_two_users_user1(
 ):
     user_token = reg_user1
     channel_id = reg_channel_user1
-    user2_channel_join
     message_send = requests.post(config.url + 'message/send/v1', json={
         'token': user_token['token'], 
         'channel_id': channel_id,
