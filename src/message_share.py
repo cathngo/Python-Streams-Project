@@ -8,7 +8,8 @@ from src.dm_helper import check_user_in_dm
 from src.channel_join_helper import find_channel
 from src.message_id_generator import message_id_generate
 from datetime import datetime
-
+from src.user_stats_helper import update_messages_sent
+from src.users_stats_helper import update_messages_exist
 
 
 def message_share(token, og_message_id, message, channel_id, dm_id):
@@ -82,6 +83,12 @@ def message_share(token, og_message_id, message, channel_id, dm_id):
         for dm_iter in store['dm']:
             if dm_iter['dm_id'] == dm_id:
                 dm_iter['messages'].append(new_message)
+
+    #increase num_messages_sent for the user who sent the msg user stats
+    update_messages_sent(user_token['u_id'], store, 1)
+    #increase num_msgs_exist for workspace stats
+    update_messages_exist(store, 1)
+
 
     data_store.set(store)
     save_pickle()

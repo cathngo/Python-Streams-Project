@@ -8,6 +8,9 @@ from src.dm_helper import find_user_handle
 from datetime import datetime
 from threading import Timer
 from src.error import InputError
+from src.user_stats_helper import update_messages_sent
+from src.users_stats_helper import update_messages_exist
+
 
 def standup_active(token, channel_id):
     '''
@@ -169,6 +172,12 @@ def standup_send(token, channel_id, message):
         'handle': user_handle,
         'message': message,
     })
+
+    #increase num_messages_sent for the user who sent the msg user stats
+    update_messages_sent(user_token['u_id'], store, 1)
+    #increase num_msgs_exist for workspace stats
+    update_messages_exist(store, 1)
+
 
     data_store.set(store)
     save_pickle()
