@@ -453,18 +453,17 @@ def upload_profile():
 
     
     img = download_image(img_url, user_token['u_id'])
-    check_valid_coordinates(img, x_start, y_start, x_end, y_end)
-    check_valid_format(img)
+    check_valid_coordinates(img, x_start, y_start, x_end, y_end,user_token['u_id'])
+    check_valid_format(img,user_token['u_id'])
     crop_image(img, x_start, y_start, x_end, y_end)
     
     return dumps({'img_url': img_url})
 
 @APP.route('/static/<filename>')
 def get_image(filename):
-    #path = os.path.join(current_app.root_path, 'images')
-    #filename = 'test.jpg'
-    #return dumps({"path": path})
-    return send_from_directory('images', filename=filename)
+    path = os.path.join(current_app.root_path, 'images')
+
+    return send_from_directory(directory=path, filename=filename)
    
 #### NO NEED TO MODIFY BELOW THIS POINT
 
