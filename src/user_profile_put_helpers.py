@@ -3,7 +3,10 @@ from src.auth_register_helper import check_name, check_duplicate_handle, check_e
 from src.error import AccessError
 from src.error import InputError
 from src.data_persistence import save_pickle, open_pickle
-'''
+
+
+def set_username(auth_user_id, name_first, name_last):
+    '''
 Updates the authorised user's first and last name 
 
 Arguments:
@@ -19,9 +22,6 @@ InputError - Occurs when:
 Return Value:
     Does not return anything
 '''
-
-def set_username(auth_user_id, name_first, name_last):
-
     store = open_pickle()
     #check name between 1 and 50 ch
     check_name(name_first)
@@ -72,24 +72,24 @@ def set_handle(auth_user_id, handle_str):
     data_store.set(store)
     save_pickle()
 
-'''
-Updates the authorised email
 
-Arguments:
-    auth_user_id (int) - the target user's id to apply updates to
-    email (string) - the user's email after the update
-
-Exceptions:
-InputError - Occurs when:
-    - email is not a valid email 
-    - email address is already being used by another user
-
-Return Value:
-    Does not return anything
-'''
 
 def set_email(auth_user_id, email):
+    '''
+    Updates the authorised email
 
+    Arguments:
+        auth_user_id (int) - the target user's id to apply updates to
+        email (string) - the user's email after the update
+
+    Exceptions:
+    InputError - Occurs when:
+        - email is not a valid email 
+        - email address is already being used by another user
+
+    Return Value:
+        Does not return anything
+    '''
     store = open_pickle()
     #check email valid
     check_email(email)
