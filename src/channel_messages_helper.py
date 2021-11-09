@@ -47,13 +47,15 @@ def check_message_time(time_sent):
     return
 
 def find_time_delay(time_sent):
-    future_date = time_sent
-    past_date = int(datetime.now().timestamp())
+    future_time = time_sent
+    present_time = int(datetime.now().timestamp())
 
-    difference = (future_date - past_date)
-
-    #total_seconds = difference.total_seconds()
+    difference = (future_time - present_time)
 
     return difference
 
-
+def get_entry(data, field, field_id):
+    for entry in data[field]:
+        if field_id == entry['id']:
+            field_entry = entry
+    return field_entry
