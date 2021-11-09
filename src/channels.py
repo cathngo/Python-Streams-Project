@@ -4,7 +4,9 @@ from src.data_persistence import save_pickle, open_pickle
 from src.user_stats_helper import update_channels_joined
 from src.users_stats_helper import update_channels_exist
 
-'''
+
+def channels_list_v1(auth_user_id):
+    '''
 Make a list with all the channels that the given auth_user_id is part of 
 
 Arguments:
@@ -18,7 +20,6 @@ Return Value:
     returns a list of dictionaries with the keys 'channel_id' and 'name' of the channels
     that auth_user_id is part of
 '''
-def channels_list_v1(auth_user_id):
     store = open_pickle()
     
     joined_channels = []
@@ -38,7 +39,9 @@ def channels_list_v1(auth_user_id):
     return {
         'channels': joined_channels
     }
-'''
+
+def channels_listall_v1(auth_user_id):
+    '''
 Make a list with all the channels in the database 
 
 Arguments:
@@ -51,7 +54,6 @@ InputError - Occurs when:
 Return Value:
     returns a list of dictionaries with the keys 'channel_id' and 'name'
 '''
-def channels_listall_v1(auth_user_id):
     store = open_pickle()
     
     all_channels = []
@@ -69,7 +71,9 @@ def channels_listall_v1(auth_user_id):
         'channels': all_channels  
     }
     
-'''
+
+def channels_create_v1(auth_user_id, name, is_public):
+    '''
 Creates a new channel for a user and stores it in the datastore
 
 Arguments:
@@ -84,9 +88,6 @@ InputError - Occurs when:
 Return Value:
     returns a dictionary containing a unique channel_id if the channel is successfully created
 '''
-def channels_create_v1(auth_user_id, name, is_public):
-
-
     store = open_pickle()
 
     check_valid_name(name)

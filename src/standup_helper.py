@@ -1,6 +1,7 @@
-from src.error import InputError, AccessError
+from src.data_store import data_store
+from src.data_persistence import save_pickle, open_pickle
+from src.error import InputError
 from src.channel_join_helper import find_channel
-#from src.standup import standup_active
 from src.message_id_generator import message_id_generate
 from datetime import datetime
 
@@ -8,19 +9,14 @@ def check_standup_length(length):
     if length < 0:
         raise InputError(description='length is a negative integer')
 
-'''
-def check_active_standup(token, channel_id):
-    check = standup_active(token, channel_id)
-    if check['is_active'] is True:
-        raise InputError(description='an active standup is currently running in the channel')
-'''
-
-def finish_standup(u_id, channel_id, store):
+def finish_standup(u_id, channel_id):
     '''
     Once standups are finished, all of the messages sent to standup/send are packaged together
     in one single message posted by the user who started the standup and sent as a message to
     the channel the standup was started in, timestamped at the moment the standup finished
     '''
+    store = open_pickle()
+
     channel = find_channel(channel_id, store)
 
     standup_message = ''
@@ -39,4 +35,9 @@ def finish_standup(u_id, channel_id, store):
         }
     )
 
-    channel['standup'].clear()
+    data_store.set(store)
+    save_pickle()
+
+def check_standup_message_length(message):
+    if len(message) > 1000:
+        raise InputError(description='length of message cannot be over 1000 characters')
