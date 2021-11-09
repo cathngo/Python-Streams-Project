@@ -3,12 +3,14 @@ import signal
 from json import dumps
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+from src.email_helper import send_email_to_reset
 from src.error import InputError
 from src import config
 from src.other import clear_v1
 from src.auth import auth_register_v1, auth_login_v1, auth_logout_v1
 from src.admi_helper import change_permissions_helper
 from src.error import AccessError
+from src.email_helper import send_email_to_reset
 from src.admi_remove import remove_from_streams
 from src.channels import channels_create_v1, channels_list_v1, channels_listall_v1
 from src.channel import channel_details_v1, messages_channel_v1, messages_dm_v1, channel_join_v1, channel_leave_v1, channel_addowner_v1, channel_invite_v1, channel_removeowner_v1
@@ -469,6 +471,13 @@ def send_standup_message():
         standup_send(token, channel_id, message)
     )
 
+@APP.route("/auth/passwordreset/request/v1", methods=['POST'])
+def send_password_code():
+    data = request.get_json()
+    email = data['email']
+    send_email_to_reset(email)
+    return dumps({})
+    
 #### NO NEED TO MODIFY BELOW THIS POINT
 
 if __name__ == "__main__":
