@@ -3,7 +3,9 @@ from src.token_helper import decode_jwt, check_valid_token
 from src.dm_helper import check_dm_id_exists, check_user_in_dm
 from src.data_persistence import save_pickle, open_pickle
 
-'''
+
+def dm_leave_v1(token, dm_id):
+    '''
 Given a DM ID, the user is removed as a member of this DM.
 The creator is allowed to leave and the DM will still exist if this happens.
 This does not update the name of the DM.
@@ -21,7 +23,6 @@ Exceptions:
 Return Value:
     Returns an empty dictionary
 '''
-def dm_leave_v1(token, dm_id):
     store = open_pickle()
 
     # Check valid token
