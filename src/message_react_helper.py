@@ -8,6 +8,12 @@ def check_if_message_already_reacted_to(message, u_id):
             raise InputError(description="You already reacted to this message")
     return
 
+def check_if_message_already_unreacted_to(message, u_id): 
+    for react in message['reacts']: 
+        if u_id not in react['u_ids']: 
+            raise InputError(description="You already unreacted to this message")
+    return
+
 def check_user_in_channel(channel, u_id_given): 
     for member in channel['all_members']: 
         if member['u_id'] == u_id_given: 
@@ -59,6 +65,44 @@ def react_channel_message (u_id, react_id, message, channel):
                     if react['react_id'] == react_id: 
                         react['u_ids'].append(u_id)
                         react['is_this_user_reacted'] = True
+
+    data_store.set(store)
+    save_pickle()
+    return
+
+def unreact_dm_message(u_id, react_id, message, dm):
+    store = open_pickle()
+    
+    check_user_in_dm(dm, u_id)
+    check_react_id_is_valid(react_id, message)
+    check_if_message_already_unreacted_to(message, u_id)
+
+    for dm_store in store['dm']:
+        for message_store in dm_store['messages']:
+            if message_store['message_id'] == message['message_id']:
+                for react in message_store['reacts']:
+                    if react['react_id'] == react_id: 
+                        react['u_ids'].remove(u_id)
+                        react['is_this_user_reacted'] = False
+
+    data_store.set(store)
+    save_pickle()
+    return
+
+def unreact_channel_message (u_id, react_id, message, channel):
+    store = open_pickle()
+
+    check_user_in_channel(channel, u_id)
+    check_react_id_is_valid(react_id, message)
+    check_if_message_already_unreacted_to(message, u_id)
+
+    for channel_store in store['channels']:
+        for message_store in channel_store['messages']:
+            if message_store['message_id'] == message['message_id']:
+                for react in message_store['reacts']:
+                    if react['react_id'] == react_id: 
+                        react['u_ids'].remove(u_id)
+                        react['is_this_user_reacted'] = False
 
     data_store.set(store)
     save_pickle()
