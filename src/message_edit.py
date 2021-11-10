@@ -2,6 +2,7 @@ from src.data_store import data_store
 from src.error import AccessError, InputError
 from src.data_persistence import save_pickle, open_pickle
 from src.remove_edit_message_helper import in_channel_search, in_dm_search, edit_channel_message, edit_dm_message
+from src.standup_helper import check_standup_message_length
 
 
 
@@ -25,8 +26,7 @@ Exceptions:
 Return Value: 
     Returns an empty dictionary if the message is successfully edited
 ''' 
-    if len(message_given) > 1000: 
-        raise InputError(description='Message is greater than one thousand characters')
+    check_standup_message_length(message_given)
     
     in_channel_found = in_channel_search(message_id)
     

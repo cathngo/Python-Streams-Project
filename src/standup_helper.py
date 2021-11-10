@@ -30,10 +30,18 @@ def finish_standup(u_id, channel_id):
 
     channel['messages'].append(
         {
-        'message_id': standup_message_id,
+        'message_id': standup_message_id, 
         'u_id': u_id, 
         'message': standup_message,
-        'time_created': time_created,    
+        'time_created': time_created,
+        'is_pinned': False,    
+        'reacts':[
+                {
+                    'react_id': 1,
+                    'u_ids': [], 
+                    'is_this_user_reacted': False
+                }
+            ]
         }
     )
 
