@@ -5,6 +5,7 @@ from datetime import datetime
 from src import config
 from src.other import clear_v1
 import jwt
+from src.error import InputError, AccessError
 
 
 def test_invalid_channel_id_message_send_later():
@@ -23,7 +24,7 @@ def test_invalid_channel_id_message_send_later():
         'message': "hello",
         'time_sent': int(datetime.now().timestamp()) + 5
     })
-    assert resp.status_code == 400
+    assert resp.status_code == InputError.code
 
 def test_unauthorised_user_message_send_later():
     requests.delete(config.url + 'clear/v1')
@@ -56,7 +57,7 @@ def test_unauthorised_user_message_send_later():
         'message': "hello",
         'time_sent': int(datetime.now().timestamp()) + 5,
     })
-    assert resp.status_code == 403
+    assert resp.status_code == AccessError.code
 
 def test_invalid_token_signature_message_send_later():
     requests.delete(config.url + 'clear/v1')
@@ -84,7 +85,7 @@ def test_invalid_token_signature_message_send_later():
         'message': "hello",
         'time_sent': int(datetime.now().timestamp()) + 5 
     })
-    assert resp.status_code == 403
+    assert resp.status_code == AccessError.code
 
 def test_route_works_message_send_later():
     requests.delete(config.url + 'clear/v1')
@@ -138,7 +139,7 @@ def test_message_less_than_one_character_message_send_later():
         'time_sent': int(datetime.now().timestamp()) + 5
     })
 
-    assert resp.status_code == 400
+    assert resp.status_code == InputError.code
 
 def test_message_more_than_one_thousand_character_message_send_later():
     requests.delete(config.url + 'clear/v1')
@@ -165,4 +166,4 @@ def test_message_more_than_one_thousand_character_message_send_later():
         'time_sent': int(datetime.now().timestamp()) + 5
     })
 
-    assert resp.status_code == 400
+    assert resp.status_code == InputError.code
