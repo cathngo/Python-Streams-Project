@@ -35,3 +35,6 @@ Return Value:
         return {}
 
     raise InputError(description= "message_id is not valid")
+
+def message_unpin_v1(u_id, message_id):
+    pass
