@@ -1,6 +1,7 @@
 from src.data_store import data_store
 from src.data_persistence import save_pickle, open_pickle
 from src.error import AccessError
+from src.users_stats_helper import update_messages_exist
 
 def check_channel_owner(u_id, channel):
     is_channel_owner = False
@@ -57,6 +58,8 @@ def remove_channel_message (u_id, message_id, message, channel):
         for message_store in channel_store['messages']:
             if message_store['message_id'] == message_id:
                 channel_store['messages'].remove(message)
+                #decrement workspace stats for existing messsages by one if removed
+                update_messages_exist(store, -1)
 
     data_store.set(store)
     save_pickle()
@@ -71,6 +74,8 @@ def remove_dm_message(u_id, message_id, message, dm):
         for message_store in dm_store['messages']:
             if message_store['message_id'] == message_id:
                 dm_store['messages'].remove(message) 
+                #decrement workspace stats for existing messsages by one if removed
+                update_messages_exist(store, -1)
     data_store.set(store)
     save_pickle()
     return

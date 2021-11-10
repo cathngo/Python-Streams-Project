@@ -25,12 +25,17 @@ from src.user_profile_put_helpers import set_username, set_handle, set_email
 from src.send_message import message_send_channel, message_send_dm
 from src.photo_helper import download_image, crop_image, check_valid_coordinates, check_valid_format
 import os
+from src.user_stats_helper import get_user_stats
+from src.users_stats_helper import get_workspace_stats
 from src.message_remove import message_remove_v1  
+from src.message_edit import message_edit_v1 
+from src.message_send_later import message_sendlater_v1 
 from src.message_react import message_react_v1, message_unreact_v1
-from src.message_edit import message_edit_v1
 from src.standup import standup_active, standup_start, standup_send
-from src.message_pin import message_pin_v1
+from src.message_pin import message_pin_v1, message_unpin_v1
 from src.message_share import message_share
+from src.message_send_later_dm import message_sendlaterdm_v1
+
 
 def quit_gracefully(*args):
     '''For coverage'''
@@ -425,7 +430,40 @@ def put_message_edit():
     message_edit_v1(token['u_id'], data['message_id'], data['message']) 
     
     return dumps({})
-       
+    
+@APP.route("/message/sendlater/v1", methods=['POST'])
+def send_message_later():
+    data = request.get_json()
+    
+    token = data['token']
+    channel_id = data['channel_id']
+    message = data['message']
+    time_sent = data['time_sent']
+    
+    user_token = decode_jwt(token)
+    check_valid_token(user_token)
+
+    sending_message = message_sendlater_v1(user_token['u_id'], channel_id, message, time_sent)
+    return dumps({
+        'message_id': sending_message['message_id']
+    })  
+
+@APP.route("/message/sendlaterdm/v1", methods=['POST'])
+def send_dm_later():
+    data = request.get_json()
+    
+    token = data['token']
+    dm_id = data['dm_id']
+    message = data['message']
+    time_sent = data['time_sent']
+    
+    user_token = decode_jwt(token)
+    check_valid_token(user_token)
+
+    sending_message = message_sendlaterdm_v1(user_token['u_id'], dm_id, message, time_sent)
+    return dumps({
+        'message_id': sending_message['message_id']
+    })  
 
 @APP.route("/admin/userpermission/change/v1", methods=['POST'])
 def change_permissions_user():
@@ -470,6 +508,34 @@ def get_image(filename):
 
     return send_from_directory(directory=path, filename=filename)
    
+
+
+@APP.route("/user/stats/v1", methods=['GET'])
+def retrieve_user_stats():
+    token = request.args.get('token')
+
+    #check valid token
+    user_token = decode_jwt(token)
+    check_valid_token(user_token)
+
+    stats = get_user_stats(user_token['u_id'])
+   
+    return dumps({'user_stats': stats})
+
+@APP.route("/users/stats/v1", methods=['GET'])
+def retrieve_users_stats():
+    token = request.args.get('token')
+
+    #check valid token
+    user_token = decode_jwt(token)
+    check_valid_token(user_token)
+
+    stats = get_workspace_stats(user_token['u_id'])
+   
+    return dumps({'workspace_stats': stats})
+
+
+
 @APP.route("/message/react/v1", methods=['POST'])
 def react_to_message():
     data = request.get_json()
@@ -485,6 +551,7 @@ def react_to_message():
 
     return dumps({})
         
+
 @APP.route("/standup/start/v1", methods=['POST'])
 def start_standup():
     data = request.get_json()
@@ -496,6 +563,7 @@ def start_standup():
     return dumps(
         standup_start(token, channel_id, length)
     )
+
 
 @APP.route("/standup/active/v1", methods=['GET'])
 def check_standup_active():
@@ -553,6 +621,7 @@ def share_message():
         message_share(token, og_message_id, message, channel_id, dm_id)
     )
 
+
 @APP.route("/message/unreact/v1", methods=['POST'])
 def unreact_to_message():
     data = request.get_json()
@@ -567,6 +636,20 @@ def unreact_to_message():
     message_unreact_v1(user_token['u_id'], message_id, react_id)
 
     return dumps({})
+
+@APP.route("/message/unpin/v1", methods=['POST'])
+def unpin_message():
+    data = request.get_json()
+    
+    token = data['token']
+    message_id = data['message_id']
+
+    user_token = decode_jwt(token)
+    check_valid_token(user_token)
+
+    return dumps(
+        message_unpin_v1(user_token['u_id'], message_id)
+    )
 #### NO NEED TO MODIFY BELOW THIS POINT
 
 if __name__ == "__main__":

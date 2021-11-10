@@ -2,6 +2,7 @@ from src.data_store import data_store
 from src.token_helper import decode_jwt, check_valid_token
 from src.dm_helper import check_dm_id_exists, check_user_in_dm
 from src.data_persistence import save_pickle, open_pickle
+from src.user_stats_helper import update_dms_joined
 
 
 def dm_leave_v1(token, dm_id):
@@ -40,6 +41,9 @@ Return Value:
     for dm_iter in store['dm']:
         if dm_iter['dm_id'] == dm_id:
             dm_iter['members'] = new_member_list
+
+    #decrement number of dms joined for the user's stats by one
+    update_dms_joined(user_token['u_id'], store, -1)
 
     data_store.set(store)
     save_pickle()

@@ -1,4 +1,5 @@
 from src.error import InputError
+from datetime import datetime 
 
 def get_channel(channel_id, store):
     for channel in store['channels']:
@@ -40,5 +41,16 @@ def check_message_is_right_character_length(message_length):
         raise InputError(description='Message is over 1000 character') 
     return
 
+def check_message_time(time_sent):
+    if time_sent < int(datetime.now().timestamp()):
+        raise InputError(description='time_sent is a time in the past')
+    return
 
+def find_time_delay(time_sent):
+    future_time = time_sent
+    present_time = int(datetime.now().timestamp())
+
+    difference = (future_time - present_time)
+
+    return difference
 

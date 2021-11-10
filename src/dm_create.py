@@ -2,6 +2,8 @@ from src.data_store import data_store
 from src.dm_helper import check_valid_u_id_list, generate_dm_id, generate_dm_names
 from src.token_helper import decode_jwt, check_valid_token
 from src.data_persistence import save_pickle, open_pickle
+from src.user_stats_helper import update_dms_joined
+from src.users_stats_helper import update_dms_exist
 
 
 def dm_create_v1(token , u_ids):
@@ -45,6 +47,14 @@ Return Value:
         'members': dm_members,
         'messages': [],
     })
+
+    #increment number of dms joined for the user's stats by one
+    for id in u_ids:
+        update_dms_joined(id, store, 1)
+    
+    #increment total number of existing dms by one for workspace stats
+    update_dms_exist(store, 1)
+
 
     data_store.set(store)
     save_pickle()

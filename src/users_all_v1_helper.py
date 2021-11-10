@@ -5,20 +5,6 @@ import os
 from src import config
 from urllib.request import urlopen
 
-def check_default(user_id):
-    #check if they have uploaded a profile pic
-    success = True
-    try:
-        urlopen(config.url + 'static/' + str(user_id) + '.jpg')
-    except:
-        success = False
-    
-    #if they haven't set the profile img url to default img
-    if success == False:
-        return config.url + 'static/default.jpg'
-    else:
-        return config.url + 'static/' + str(user_id) + '.jpg'
-    
 
 def get_all_users():  
     store = open_pickle()
