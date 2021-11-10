@@ -25,10 +25,8 @@ from src.user_profile_put_helpers import set_username, set_handle, set_email
 from src.send_message import message_send_channel, message_send_dm
 from src.message_remove import message_remove_v1 
 from src.message_edit import message_edit_v1 
-from src.message_send_later import message_sendlater_v1
-from src.message_remove import message_remove_v1  
+from src.message_send_later import message_sendlater_v1 
 from src.message_react import message_react_v1, message_unreact_v1
-from src.message_edit import message_edit_v1
 from src.standup import standup_active, standup_start, standup_send
 from src.message_pin import message_pin_v1
 from src.message_share import message_share
@@ -440,7 +438,7 @@ def send_message_later():
     check_valid_token(user_token)
 
     sending_message = message_sendlater_v1(user_token['u_id'], channel_id, message, time_sent)
-    return jsonify({
+    return dumps({
         'message_id': sending_message['message_id']
     })  
 

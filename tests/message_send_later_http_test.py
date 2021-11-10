@@ -24,6 +24,7 @@ def test_invalid_channel_id_message_send_later():
         'channel_id': invalid_channel_id,
         'message': "hello",
         'time_sent': int(datetime.now().timestamp()) + 5,
+        'is_pinned': False,
         'reacts':[
                 {
                     'react_id': 1,
@@ -64,6 +65,7 @@ def test_unauthorised_user_message_send_later():
         'channel_id': channel_id['channel_id'],
         'message': "hello",
         'time_sent': int(datetime.now().timestamp()) + 5,
+        'is_pinned': False,
         'reacts':[
                 {
                     'react_id': 1,
@@ -99,6 +101,7 @@ def test_invalid_token_signature_message_send_later():
         'channel_id': channel_id['channel_id'],
         'message': "hello",
         'time_sent': int(datetime.now().timestamp()) + 5,
+        'is_pinned': False,
         'reacts':[
                 {
                     'react_id': 1,
@@ -132,6 +135,7 @@ def test_route_works_message_send_later():
         'channel_id': channel_id['channel_id'],
         'message': "hello",
         'time_sent': int(datetime.now().timestamp()) + 5,
+        'is_pinned': False,
         'reacts':[
                 {
                     'react_id': 1,
@@ -176,6 +180,7 @@ def test_message_less_than_one_character_message_send_later():
         'channel_id': channel_id['channel_id'],
         'message': "",
         'time_sent': int(datetime.now().timestamp()) + 5,
+        'is_pinned': False,
         'reacts':[
                 {
                     'react_id': 1,
@@ -210,6 +215,7 @@ def test_message_more_than_one_thousand_character_message_send_later():
         'channel_id': channel_id['channel_id'],
         'message': "f" * 1001,
         'time_sent': int(datetime.now().timestamp()) + 5,
+        'is_pinned': False,
         'reacts':[
                 {
                     'react_id': 1,
