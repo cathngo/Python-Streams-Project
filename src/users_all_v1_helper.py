@@ -22,7 +22,6 @@ def check_default(user_id):
 
 def get_all_users():  
     store = open_pickle()
-    path = os.path.join(current_app.root_path, 'images')
 
     all_users = []
     #check all the users in the database
