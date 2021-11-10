@@ -302,7 +302,7 @@ def test_standup_send():
     requests.post(config.url + 'standup/start/v1', json={
         'token': payload1['token'],
         'channel_id': payload2['channel_id'],
-        'length': 3,
+        'length': 1,
     })
 
     requests.post(config.url + 'standup/send/v1', json={
@@ -323,7 +323,7 @@ def test_standup_send():
         'message': 'Message3',
     })
 
-    time.sleep(5)
+    time.sleep(1)
 
     #get user stats
     resp = requests.get(config.url + 'user/stats/v1', params={'token': payload1['token']})
@@ -353,7 +353,7 @@ def test_message_send_later():
         'token': user_token['token'], 
         'channel_id': channel_id['channel_id'],
         'message': "hello",
-        'time_sent': int(datetime.now().timestamp()) + 5,
+        'time_sent': int(datetime.now().timestamp()) + 1,
         'is_pinned': False,
         'reacts':[
                 {
@@ -368,7 +368,7 @@ def test_message_send_later():
         'token': user_token['token'], 
         'channel_id': channel_id['channel_id'],
         'message': "hello",
-        'time_sent': int(datetime.now().timestamp()) + 5,
+        'time_sent': int(datetime.now().timestamp()) + 1,
         'is_pinned': False,
         'reacts':[
                 {
@@ -379,7 +379,7 @@ def test_message_send_later():
             ]
     })
 
-    time.sleep(5) 
+    time.sleep(1) 
 
     #get user stats
     resp = requests.get(config.url + 'user/stats/v1', params={'token': user_token['token']})
