@@ -25,9 +25,10 @@ from src.send_message import message_send_channel, message_send_dm
 from src.photo_helper import download_image, crop_image, check_valid_coordinates, check_valid_format
 import os
 from src.message_remove import message_remove_v1  
-from src.message_react import message_react_v1
+from src.message_react import message_react_v1, message_unreact_v1
 from src.message_edit import message_edit_v1
 from src.standup import standup_active, standup_start, standup_send
+from src.message_pin import message_pin_v1
 from src.message_share import message_share
 
 def quit_gracefully(*args):
@@ -517,6 +518,20 @@ def send_standup_message():
         standup_send(token, channel_id, message)
     )
 
+@APP.route("/message/pin/v1", methods=['POST'])
+def pin_message():
+    data = request.get_json()
+    
+    token = data['token']
+    message_id = data['message_id']
+
+    user_token = decode_jwt(token)
+    check_valid_token(user_token)
+
+    return dumps(
+        message_pin_v1(user_token['u_id'], message_id)
+    )
+
 @APP.route("/message/share/v1", methods=['POST'])
 def share_message():
     data = request.get_json()
@@ -531,6 +546,20 @@ def share_message():
         message_share(token, og_message_id, message, channel_id, dm_id)
     )
 
+@APP.route("/message/unreact/v1", methods=['POST'])
+def unreact_to_message():
+    data = request.get_json()
+    
+    token = data['token']
+    message_id = data['message_id']
+    react_id = data['react_id']
+    
+    user_token = decode_jwt(token)
+    check_valid_token(user_token)
+    
+    message_unreact_v1(user_token['u_id'], message_id, react_id)
+
+    return dumps({})
 #### NO NEED TO MODIFY BELOW THIS POINT
 
 if __name__ == "__main__":

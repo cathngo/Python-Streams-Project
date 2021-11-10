@@ -73,7 +73,7 @@ def test_react_id_not_in_dm_message_react(clear, reg_user1, send_dm_message_user
     assert react.status_code == InputError.code 
 
 # the message already contains a react with ID react_id from the authorised user in dm
-def test_react_message_alreaded_react_to_in_by_user_in_dm(
+def test_react_message_already_reacted_to_by_user_in_dm(
     clear, reg_user1, send_dm_message_user1, user1_react_to_their_message_in_dm
     ):
     user1 = reg_user1
@@ -86,7 +86,7 @@ def test_react_message_alreaded_react_to_in_by_user_in_dm(
     assert reacted.status_code == InputError.code 
     
 # the message already contains a react with ID react_id from the authorised user in channel
-def test_react_message_alreaded_react_to_in_by_user_in_channel(
+def test_react_message_already_reacted_to_by_user_in_channel(
     clear, reg_user1, send_channel_message_user1, user1_react_to_their_message_in_channel
     ):
     user1 = reg_user1
