@@ -1,3 +1,4 @@
+import time
 import pytest
 import requests
 import json
@@ -112,6 +113,16 @@ def test_route_works_message_send_later():
         'time_sent': int(datetime.now().timestamp()) + 5,
     })
 
+    time.sleep(5) 
+
+    r1 = requests.get(config.url + 'channel/messages/v2', params={
+        'token': user_token['token'], 
+        'channel_id': channel_id['channel_id'],
+        'start': 0,
+    })
+    payload = r1.json()
+   
+    assert len(payload['messages']) == 1
     assert resp.status_code == 200
 
 def test_message_less_than_one_character_message_send_later():
