@@ -1,6 +1,8 @@
 from src.data_store import data_store
 from src.channels_create_helper import check_valid_name
 from src.data_persistence import save_pickle, open_pickle
+from src.user_stats_helper import update_channels_joined
+from src.users_stats_helper import update_channels_exist
 
 
 def channels_list_v1(auth_user_id):
@@ -113,8 +115,13 @@ Return Value:
             'standup': {},
         }
     )
-    
+        
+    #increment user stats count for channels_joined by one
+    update_channels_joined(auth_user_id, store, 1)
+    #increment workspace stats count for num_channels_exist
+    update_channels_exist(store, 1)
     data_store.set(store)
+    
     save_pickle()
     
     return {

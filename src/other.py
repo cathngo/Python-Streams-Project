@@ -5,5 +5,7 @@ def clear_v1():
     store['users'] = []
     store['channels'] = []
     store['dm'] = []
+    store['all_user_stats'] = []
+    store['workspace_stats'] = {}
     data_store.set(store)
     save_pickle()

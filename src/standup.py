@@ -9,6 +9,7 @@ from datetime import datetime
 from threading import Timer
 from src.error import InputError
 
+
 def standup_active(token, channel_id):
     '''
     For a given channel, return whether a standup is active in it, and what time the standup finishes
@@ -169,6 +170,7 @@ def standup_send(token, channel_id, message):
         'handle': user_handle,
         'message': message,
     })
+
 
     data_store.set(store)
     save_pickle()

@@ -4,6 +4,8 @@ from src.error import InputError
 from src.channel_join_helper import find_channel
 from src.message_id_generator import message_id_generate
 from datetime import datetime
+from src.user_stats_helper import update_messages_sent_later
+from src.users_stats_helper import update_messages_exist_sent_later
 
 def check_standup_length(length):
     if length < 0:
@@ -42,6 +44,13 @@ def finish_standup(u_id, channel_id):
             ]
         }
     )
+
+
+    #increase num_messages_sent for the user who sent the msg user stats
+    update_messages_sent_later(time_created, u_id, store, 1)
+    #increase num_msgs_exist for workspace stats
+    update_messages_exist_sent_later(time_created, store, 1)
+
 
     data_store.set(store)
     save_pickle()

@@ -29,6 +29,8 @@ initial_object = {
     'users': [],
     'channels': [],
     'dm': [],
+    'all_user_stats': [],
+    'workspace_stats': {},
 }
 ## YOU SHOULD MODIFY THIS OBJECT ABOVE
 
@@ -149,5 +151,32 @@ data = {
             ],
         },
     ],
+    'all_user_stats': [
+        {
+            'u_id': 0,
+            'user_stats': {
+                'channels_joined': [{'num_channels_joined': 0, 'time_stamp': 1635077932},{'num_channels_joined': 1, 'time_stamp': 1635077932}],
+                'dms_joined': [{'num_dms_joined': 0, 'time_stamp': 1635077932},{'num_dms_joined': 1, 'time_stamp': 1635077932}],
+                'messages_sent': [{'num_messages_sent': 0, 'time_stamp': 1635077932},{'num_messages_sent': 1, 'time_stamp': 1635077932}],
+                'involvement_rate':1.2,          
+            },
+        },
+        {
+            'u_id': 1,
+            'user_stats': {
+                'channels_joined': [{'num_channels_joined': 0, 'time_stamp': 1635077932},{'num_channels_joined': 1, 'time_stamp': 1635077932}],
+                'dms_joined': [{'num_dms_joined': 0, 'time_stamp': 1635077932},{'num_dms_joined': 1, 'time_stamp': 1635077932}],
+                'messages_sent': [{'num_messages_sent': 0, 'time_stamp': 1635077932},{'num_messages_sent': 1, 'time_stamp': 1635077932}],
+                'involvement_rate': 1.3,          
+            },
+        },
+    ],
+
+    'workspace_stats': {
+        'channels_exist': [{'num_channels_exist': 0, 'time_stamp': 12},{'num_channels_exist': 1, 'time_stamp': 13}],
+        'dms_exist': [{'num_dms_exist': 0, 'time_stamp': 12},{'num_dms_exist': 1, 'time_stamp': 13}],
+        'messages_exist': [{'num_messages_exist': 0, 'time_stamp': 12},{'num_messages_exist': 1, 'time_stamp': 13}],
+        'utilization_rate': 16,    
+    },
 }
 '''

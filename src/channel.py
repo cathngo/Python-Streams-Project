@@ -6,6 +6,7 @@ from src.channel_join_helper import find_user, find_channel, check_authorised_me
 from src.channel_messages_helper import get_channel, messages_pagination
 from src.dm_helper import check_dm_id_exists, check_user_in_dm
 from src.data_persistence import save_pickle, open_pickle
+from src.user_stats_helper import update_channels_joined
 '''
 Allows user to invite a user in streams to a channel
 
@@ -239,6 +240,9 @@ def channel_join_v1(auth_user_id, channel_id):
     
     # Append user id to member list
     channel_join['all_members'].append(member_dictionary)
+
+    #increment user stats count for channels_joined by one
+    update_channels_joined(auth_user_id, store, 1)
     
     data_store.set(store)
     save_pickle()
@@ -282,6 +286,8 @@ def channel_leave_v1(auth_user_id, channel_id):
     for member in channel['all_members']:
         if member['u_id'] == auth_user_id:
             channel['all_members'].remove(member)
+            #decrement user stats count for channels_joined by one
+            update_channels_joined(auth_user_id, store, -1)
             data_store.set(store)
             save_pickle()
             return {}

@@ -10,6 +10,8 @@ from src.channel_messages_helper import get_channel, check_message_is_right_char
 from src.dm_helper import check_dm_id_exists, check_user_in_dm
 from src.data_persistence import save_pickle, open_pickle
 from src.channel_messages_helper import check_message_time, find_time_delay
+from src.user_stats_helper import update_messages_sent_later
+from src.users_stats_helper import update_messages_exist_sent_later
 
 def send_message_later(auth_user_id, channel_id, message_id, message, time_sent):
     '''
@@ -43,6 +45,11 @@ def send_message_later(auth_user_id, channel_id, message_id, message, time_sent)
             ]
         }
     )
+    #increase num_messages_sent for the user who sent the msg user stats
+    update_messages_sent_later(time_sent, auth_user_id, store, 1)
+    #increase num_msgs_exist for workspace stats
+    update_messages_exist_sent_later(time_sent, store, 1)
+
     data_store.set(store)
     save_pickle()
 
