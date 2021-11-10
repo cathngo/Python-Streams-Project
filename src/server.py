@@ -3,7 +3,7 @@ import signal
 from json import dumps
 from flask import Flask, request, jsonify, send_from_directory, current_app
 from flask_cors import CORS
-from src.email_helper import send_email_to_reset
+from src.email_helper import reset_password, send_email_to_reset
 from src.error import InputError
 from src import config
 from src.other import clear_v1
@@ -585,6 +585,13 @@ def send_standup_message():
     return dumps(
         standup_send(token, channel_id, message)
     )
+@APP.route("/auth/passwordreset/reset/v1", methods=['POST'])
+def change_passs():
+    data = request.get_json()
+    new_pass = data['new_password']
+    reset_code = data['reset_code']
+    reset_password(reset_code, new_pass)
+    return dumps({})
 
 @APP.route("/auth/passwordreset/request/v1", methods=['POST'])
 def send_password_code():
