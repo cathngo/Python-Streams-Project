@@ -54,8 +54,3 @@ def find_time_delay(time_sent):
 
     return difference
 
-def get_entry(data, field, field_id):
-    for entry in data[field]:
-        if field_id == entry['id']:
-            field_entry = entry
-    return field_entry

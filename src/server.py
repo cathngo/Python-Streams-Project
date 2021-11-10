@@ -440,24 +440,7 @@ def send_message_later():
     sending_message = message_sendlater_v1(user_token['u_id'], channel_id, message, time_sent)
     return jsonify({
         'message_id': sending_message['message_id']
-    })
-    
-@APP.route("/message/sendlaterdm/v1", methods=['POST'])
-def send_message_laterdm():
-    data = request.get_json()
-    
-    token = data['token']
-    channel_id = data['channel_id']
-    message = data['message']
-    time_sent = data['time_sent']
-    
-    user_token = decode_jwt(token)
-    check_valid_token(user_token)
-
-    sending_message = message_sendlaterdm_v1(user_token['u_id'], channel_id, message, time_sent)
-    return jsonify({
-        'message_id': sending_message['message_id']
-    })
+    })  
 
 @APP.route("/admin/userpermission/change/v1", methods=['POST'])
 def change_permissions_user():
