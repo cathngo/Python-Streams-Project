@@ -2,7 +2,7 @@ from src.data_store import data_store
 from src.token_helper import decode_jwt, check_valid_token
 from src.dm_helper import check_dm_id_exists, check_user_is_dm_owner
 from src.data_persistence import save_pickle, open_pickle
-from src.users_stats_helper import update_dms_exist
+from src.users_stats_helper import update_dms_exist, update_messages_exist
 from src.user_stats_helper import update_dms_joined
 
 
@@ -39,12 +39,19 @@ def dm_remove_v1(token, dm_id):
 
 
     #user stats 
+    dm_rem = {}
     for dm in store['dm']:
         if dm['dm_id'] == dm_id:
+            dm_rem = dm
         #find all users in the dm
             for id in dm['members']:
                 #decrement number of dms joined for the user's stats by one
                 update_dms_joined(id, store, -1)
+
+    #decrement number of msgs for workspace stats depending on number msgs in the dm removed
+    num_msgs = len(dm_rem['messages'])
+
+    update_messages_exist(store, -num_msgs)
 
     #decrement number of existing dms for workspace stats by one
     update_dms_exist(store, -1)

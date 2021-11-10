@@ -4,6 +4,7 @@ import json
 from src import config
 import jwt
 import time
+from datetime import datetime
 
 #check stats are 0 when user first registers
 def test_initalise_stats():
@@ -327,5 +328,61 @@ def test_standup_send():
     #get user stats
     resp = requests.get(config.url + 'user/stats/v1', params={'token': payload1['token']})
     r = resp.json()
-    #user sent 2 and shared 2 messages, num messages sent should be 4
-    assert r['user_stats']['messages_sent'][-1]['num_messages_sent'] == 3
+    #user sent 3 messages
+    assert r['user_stats']['messages_sent'][-1]['num_messages_sent'] == 1
+
+def test_message_send_later():
+    requests.delete(config.url + 'clear/v1')
+
+    user = requests.post(config.url + 'auth/register/v2', json={
+        'email': 'validemail@gmail.com', 
+        'password': '123abc!@#', 
+        'name_first': 'Sam', 
+        'name_last': 'Smith'
+    })
+    user_token = user.json()
+
+    channel = requests.post(config.url + 'channels/create/v2', json={
+        'token': user_token['token'], 
+        'name': 'Alpaca', 
+        'is_public': True
+    })
+    channel_id = channel.json()
+
+    resp = requests.post(config.url + 'message/sendlater/v1', json={
+        'token': user_token['token'], 
+        'channel_id': channel_id['channel_id'],
+        'message': "hello",
+        'time_sent': int(datetime.now().timestamp()) + 5,
+        'is_pinned': False,
+        'reacts':[
+                {
+                    'react_id': 1,
+                    'u_ids': [], 
+                    'is_this_user_reacted': False
+                }
+            ]
+    })
+
+    requests.post(config.url + 'message/sendlater/v1', json={
+        'token': user_token['token'], 
+        'channel_id': channel_id['channel_id'],
+        'message': "hello",
+        'time_sent': int(datetime.now().timestamp()) + 5,
+        'is_pinned': False,
+        'reacts':[
+                {
+                    'react_id': 1,
+                    'u_ids': [], 
+                    'is_this_user_reacted': False
+                }
+            ]
+    })
+
+    time.sleep(5) 
+
+    #get user stats
+    resp = requests.get(config.url + 'user/stats/v1', params={'token': user_token['token']})
+    r = resp.json()
+    #user sent 3 messages
+    assert r['user_stats']['messages_sent'][-1]['num_messages_sent'] == 2
