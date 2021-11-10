@@ -74,6 +74,17 @@ def user2_channel_join(reg_user2, reg_channel_user1):
         'channel_id': channel_id
     })
     return 
+
+@pytest.fixture
+def user1_channel_join(reg_user1, reg_channel_user2):
+    user1 = reg_user1
+    channel_id = reg_channel_user2
+
+    requests.post(config.url + 'channel/join/v2', json={
+        'token': user1['token'], 
+        'channel_id': channel_id
+    })
+    return
 ########################################################################
 ###                     FIXTURES TO REGISTER DM                         
 ########################################################################
@@ -199,6 +210,34 @@ def send_channel_message_user1(reg_user1, reg_channel_user1):
     return message_id
 
 @pytest.fixture
+def send_channel_message_user1_in_user2_channel(reg_user1, reg_channel_user2, user1_channel_join):
+    user1 = reg_user1
+    channel_id = reg_channel_user2
+
+    resp = requests.post(config.url + 'message/send/v1', json={
+        'token': user1['token'], 
+        'channel_id': channel_id,
+        'message': "hello",
+    })
+    message_id_dic = resp.json()
+    message_id = message_id_dic['message_id']
+    return message_id
+
+@pytest.fixture
+def send_channel_message_user2_in_user2_channel(reg_user2, reg_channel_user2, user1_channel_join):
+    user2 = reg_user2
+    channel_id = reg_channel_user2
+
+    resp = requests.post(config.url + 'message/send/v1', json={
+        'token': user2['token'], 
+        'channel_id': channel_id,
+        'message': "hello",
+    })
+    message_id_dic = resp.json()
+    message_id = message_id_dic['message_id']
+    return message_id
+
+@pytest.fixture
 def send_2nd_channel_message_user1(reg_user1, reg_channel_user1):
     user1 = reg_user1
     channel_id = reg_channel_user1
@@ -248,7 +287,6 @@ def send_channel_message_with_two_users_user1(
 ):
     user_token = reg_user1
     channel_id = reg_channel_user1
-    user2_channel_join
     message_send = requests.post(config.url + 'message/send/v1', json={
         'token': user_token['token'], 
         'channel_id': channel_id,
@@ -282,6 +320,7 @@ def user2_react_to_user1_message_in_channel(reg_user2, send_channel_message_with
         'react_id': 1      
     })
     return
+
 ########################################################################
 ###                FIXTURES TO MESSAGE REACT IN DM                   
 ########################################################################
@@ -307,3 +346,119 @@ def user2_react_to_user1_message_in_dm(reg_user2, send_dm_message_user1_in_dm_wi
     })
     return
 
+########################################################################
+###                FIXTURES TO MESSAGE UNREACT IN CHANNEL                   
+########################################################################
+
+@pytest.fixture
+def user1_unreact_to_their_message_in_channel(
+    reg_user1, send_channel_message_user1, user1_react_to_their_message_in_channel
+    ):
+    user1 = reg_user1
+    message_id = send_channel_message_user1
+    requests.post(config.url + 'message/unreact/v1', json={ 
+        'token': user1['token'],
+        'message_id': message_id,
+        'react_id': 1    
+    })
+    return
+
+@pytest.fixture 
+def user2_unreact_to_user1_message_in_channel(
+    reg_user2, send_channel_message_with_two_users_user1, user2_react_to_user1_message_in_channel
+    ):
+    user2 = reg_user2
+    message_id = send_channel_message_with_two_users_user1
+    requests.post(config.url + 'message/unreact/v1', json={ 
+        'token': user2['token'],
+        'message_id': message_id,
+        'react_id': 1      
+    })
+    return
+    
+########################################################################
+###                FIXTURES TO MESSAGE UNREACT IN DM                   
+########################################################################
+
+@pytest.fixture
+def user1_unreact_to_their_message_in_dm(
+    reg_user1, send_dm_message_user1, user1_react_to_their_message_in_dm
+    ):
+    user1 = reg_user1
+    message_id = send_dm_message_user1
+    requests.post(config.url + 'message/unreact/v1', json={ 
+        'token': user1['token'],
+        'message_id': message_id,
+        'react_id': 1   
+    })
+    return
+
+@pytest.fixture
+def user2_unreact_to_user1_message_in_dm(
+    reg_user2, send_dm_message_user1_in_dm_with_two_users, user2_react_to_user1_message_in_dm
+    ):
+    user2 = reg_user2
+    message_id = send_dm_message_user1_in_dm_with_two_users
+    requests.post(config.url + 'message/unreact/v1', json={ 
+        'token': user2['token'],
+        'message_id': message_id,
+        'react_id': 1 
+    })
+    return
+
+########################################################################
+###                FIXTURES TO MESSAGE PIN IN CHANNEL                
+########################################################################
+
+@pytest.fixture
+def owner_pins_their_message_in_channel(reg_user1, send_channel_message_user1):
+    user1 = reg_user1
+    message_id = send_channel_message_user1
+    requests.post(config.url + 'message/pin/v1', json={ 
+        'token': user1['token'],
+        'message_id': message_id,     
+    })
+    return
+@pytest.fixture
+def owner_pins_user1_message_in_channel(reg_user2, send_channel_message_user1_in_user2_channel):
+    user2 = reg_user2
+    message_id = send_channel_message_user1_in_user2_channel
+    requests.post(config.url + 'message/pin/v1', json={ 
+        'token': user2['token'],
+        'message_id': message_id,
+    })
+    return
+
+@pytest.fixture
+def streams_owner_pins_owner_message_in_channel(reg_user1, send_channel_message_user2_in_user2_channel):
+    user1 = reg_user1
+    message_id = send_channel_message_user2_in_user2_channel
+    requests.post(config.url + 'message/pin/v1', json={ 
+        'token': user1['token'],
+        'message_id': message_id,
+    })
+    return
+
+########################################################################
+###                FIXTURES TO MESSAGE PIN IN DM                   
+########################################################################
+
+@pytest.fixture
+def owner_pins_their_message_in_dm(reg_user1, send_dm_message_user1):
+    user1 = reg_user1
+    message_id = send_dm_message_user1
+    requests.post(config.url + 'message/pin/v1', json={ 
+        'token': user1['token'],
+        'message_id': message_id,   
+    })
+    return
+
+@pytest.fixture
+def owner_pins_user2_message_in_dm(reg_user1, send_dm_message_user2_in_dm_with_two_users):
+    user1 = reg_user1
+    message_id = send_dm_message_user2_in_dm_with_two_users
+    requests.post(config.url + 'message/pin/v1', json={ 
+        'token': user1['token'],
+        'message_id': message_id,  
+    })
+    return
