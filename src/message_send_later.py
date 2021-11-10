@@ -57,6 +57,12 @@ def message_sendlater_v1(u_id, channel_id, message, time_sent):
         message (string) - the message that is being sent
         time_sent (int) - time that the message is set to be sent
 
+    Exceptions:
+        - channel_id does not refer to a valid channel raise InputError
+        - length of message is over 1000 characters raise InputError
+        - time_sent is a time in the past raise InputError
+        - channel_id is valid and the authorised user is not a member of the channel they are trying to post to raise AccessError
+
     Return Value: message_id
     '''
     store = open_pickle()
