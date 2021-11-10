@@ -32,6 +32,7 @@ from src.message_react import message_react_v1, message_unreact_v1
 from src.standup import standup_active, standup_start, standup_send
 from src.message_pin import message_pin_v1
 from src.message_share import message_share
+from src.message_send_later_dm import message_sendlaterdm_v1
 
 
 def quit_gracefully(*args):
@@ -441,6 +442,23 @@ def send_message_later():
     check_valid_token(user_token)
 
     sending_message = message_sendlater_v1(user_token['u_id'], channel_id, message, time_sent)
+    return dumps({
+        'message_id': sending_message['message_id']
+    })  
+
+@APP.route("/message/sendlaterdm/v1", methods=['POST'])
+def send_dm_later():
+    data = request.get_json()
+    
+    token = data['token']
+    dm_id = data['dm_id']
+    message = data['message']
+    time_sent = data['time_sent']
+    
+    user_token = decode_jwt(token)
+    check_valid_token(user_token)
+
+    sending_message = message_sendlaterdm_v1(user_token['u_id'], dm_id, message, time_sent)
     return dumps({
         'message_id': sending_message['message_id']
     })  
