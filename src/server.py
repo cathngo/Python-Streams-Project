@@ -457,11 +457,10 @@ def upload_profile():
     user_token = decode_jwt(token)
     check_valid_token(user_token)
 
-    
     img = download_image(img_url, user_token['u_id'])
     check_valid_coordinates(img, x_start, y_start, x_end, y_end,user_token['u_id'])
     check_valid_format(img,user_token['u_id'])
-    crop_image(img, x_start, y_start, x_end, y_end)
+    crop_image(img, x_start, y_start, x_end, y_end, user_token['u_id'])
     
     return dumps({})
 
