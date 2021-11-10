@@ -158,3 +158,24 @@ Return Value:
             #remove the user
             store['all_user_stats'].remove(user)
 
+#this will only ever increase message count for user stats
+def update_messages_sent_later(time_created, u_id, store, increment):
+    '''
+Adds a new timestamp to messages_sent for the user's stats 
+
+Arguments:
+    time_created (integer unix timestamp) - the time the message was sent
+    u_id (int) - the id of the user whose stats are being updated
+    store (dictionary) - the database which stores the user's stats
+    increment (int) - the amount of messages the user has sent
+
+Return Value: 
+    Returns void 
+'''
+    for user in store['all_user_stats']:
+        if user['u_id'] == u_id:
+            #get the last dictionary value in the list
+            recent = user['user_stats']['messages_sent'][-1]
+            #increment the count if it increases msgs sent (message/senddm, message/send)
+            new_count = recent['num_messages_sent']  + increment
+            user['user_stats']['messages_sent'].append({'num_messages_sent': new_count, 'time_stamp': time_created})

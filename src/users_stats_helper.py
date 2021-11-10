@@ -72,12 +72,31 @@ Return Value:
     new_count = recent['num_messages_exist'] + increment
     store['workspace_stats']['messages_exist'].append({'num_messages_exist': new_count, 'time_stamp': time_created})
 
+def update_messages_exist_sent_later(time_created, store, increment):
+    '''
+Adds a new timestamp to messages_exist for the workspace stats
+
+Arguments:
+    time_created (integer unix timestamp) - the time the message was sent
+    store (dictionary) - the database which stores the workspace stats
+    increment (int) - the amount of messages created/removed (negative if a message has been removed)
+
+Return Value: 
+    Returns void 
+'''
+    time_created = int(datetime.now().timestamp())
+    #get latest count
+    recent = store['workspace_stats']['messages_exist'][-1]
+    new_count = recent['num_messages_exist'] + increment
+    store['workspace_stats']['messages_exist'].append({'num_messages_exist': new_count, 'time_stamp': time_created})
+
+
 def get_workspace_stats(store):
     '''
 Returns the workspace stats
 
 Arguments:
-    ustore (dictionary) - the database which stores the workspace stats
+    store (dictionary) - the database which stores the workspace stats
 
 Return Value: 
     Returns a dictionary containing the current workspace stats

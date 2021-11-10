@@ -305,6 +305,7 @@ def send_channel_message_with_two_users_user1(
     })
     message_id_resp = message_send.json()
     message_id = message_id_resp['message_id']
+
     return message_id
 
 ########################################################################
@@ -356,6 +357,7 @@ def user2_react_to_user1_message_in_dm(reg_user2, send_dm_message_user1_in_dm_wi
         'react_id': 1      
     })
     return
+
 
 ########################################################################
 ###                FIXTURES TO MESSAGE UNREACT IN CHANNEL                   
@@ -473,3 +475,4 @@ def owner_pins_user2_message_in_dm(reg_user1, send_dm_message_user2_in_dm_with_t
         'message_id': message_id,  
     })
     return
+
