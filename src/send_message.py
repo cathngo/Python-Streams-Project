@@ -44,7 +44,8 @@ Return Value:
         'message_id': message_id, 
         'u_id': u_id, 
         'message': message,
-        'time_created': time_created,    
+        'time_created': time_created,
+        'is_pinned': False,    
         'reacts':[
                 {
                     'react_id': 1,
@@ -95,7 +96,8 @@ def message_send_dm(u_id, dm_id, message):
         'message_id': message_id, 
         'u_id': u_id, 
         'message': message,
-        'time_created': time_created,    
+        'time_created': time_created,
+        'is_pinned': False,
         'reacts':[
                 {
                     'react_id': 1,
