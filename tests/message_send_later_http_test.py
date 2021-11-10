@@ -23,7 +23,14 @@ def test_invalid_channel_id_message_send_later():
         'token': user_token['token'],
         'channel_id': invalid_channel_id,
         'message': "hello",
-        'time_sent': int(datetime.now().timestamp()) + 5
+        'time_sent': int(datetime.now().timestamp()) + 5,
+        'reacts':[
+                {
+                    'react_id': 1,
+                    'u_ids': [], 
+                    'is_this_user_reacted': False
+                }
+            ]
     })
     assert resp.status_code == InputError.code
 
@@ -57,6 +64,13 @@ def test_unauthorised_user_message_send_later():
         'channel_id': channel_id['channel_id'],
         'message': "hello",
         'time_sent': int(datetime.now().timestamp()) + 5,
+        'reacts':[
+                {
+                    'react_id': 1,
+                    'u_ids': [], 
+                    'is_this_user_reacted': False
+                }
+            ]
     })
     assert resp.status_code == AccessError.code
 
@@ -84,7 +98,14 @@ def test_invalid_token_signature_message_send_later():
         'token': invalid_token, 
         'channel_id': channel_id['channel_id'],
         'message': "hello",
-        'time_sent': int(datetime.now().timestamp()) + 5 
+        'time_sent': int(datetime.now().timestamp()) + 5,
+        'reacts':[
+                {
+                    'react_id': 1,
+                    'u_ids': [], 
+                    'is_this_user_reacted': False
+                }
+            ]
     })
     assert resp.status_code == AccessError.code
 
@@ -111,6 +132,13 @@ def test_route_works_message_send_later():
         'channel_id': channel_id['channel_id'],
         'message': "hello",
         'time_sent': int(datetime.now().timestamp()) + 5,
+        'reacts':[
+                {
+                    'react_id': 1,
+                    'u_ids': [], 
+                    'is_this_user_reacted': False
+                }
+            ]
     })
 
     time.sleep(5) 
@@ -147,7 +175,14 @@ def test_message_less_than_one_character_message_send_later():
         'token': user_token['token'], 
         'channel_id': channel_id['channel_id'],
         'message': "",
-        'time_sent': int(datetime.now().timestamp()) + 5
+        'time_sent': int(datetime.now().timestamp()) + 5,
+        'reacts':[
+                {
+                    'react_id': 1,
+                    'u_ids': [], 
+                    'is_this_user_reacted': False
+                }
+            ]
     })
 
     assert resp.status_code == InputError.code
@@ -174,7 +209,14 @@ def test_message_more_than_one_thousand_character_message_send_later():
         'token': user_token['token'], 
         'channel_id': channel_id['channel_id'],
         'message': "f" * 1001,
-        'time_sent': int(datetime.now().timestamp()) + 5
+        'time_sent': int(datetime.now().timestamp()) + 5,
+        'reacts':[
+                {
+                    'react_id': 1,
+                    'u_ids': [], 
+                    'is_this_user_reacted': False
+                }
+            ]
     })
 
     assert resp.status_code == InputError.code

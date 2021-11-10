@@ -20,6 +20,13 @@ def send_message_later(auth_user_id, channel_id, message_id, message, time_sent)
         'u_id': auth_user_id, 
         'message': message,
         'time_created': time_sent,
+        'reacts':[
+                {
+                    'react_id': 1,
+                    'u_ids': [], 
+                    'is_this_user_reacted': False
+                }
+            ]
         }
     )
     data_store.set(store)
