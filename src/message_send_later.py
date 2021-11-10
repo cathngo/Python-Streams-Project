@@ -1,3 +1,4 @@
+
 import time 
 from threading import Timer
 from src.data_store import data_store
@@ -38,8 +39,7 @@ def message_sendlater_v1(u_id, channel_id, message, time_sent):
 
     message_id = message_id_generate()
     
-    thread1 = Timer(time_delay, send_message_later, \
-            [u_id, channel_id, message_id, message, time_sent])
+    thread1 = Timer(time_delay, send_message_later, [u_id, channel_id, message_id, message, time_sent])
     thread1.start()
 
     data_store.set(store)
