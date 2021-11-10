@@ -537,7 +537,7 @@ def test_standup_send_works():
     requests.post(config.url + 'standup/start/v1', json={
         'token': payload1['token'],
         'channel_id': payload2['channel_id'],
-        'length': 3,
+        'length': 1,
     })
 
     requests.post(config.url + 'standup/send/v1', json={
@@ -558,7 +558,7 @@ def test_standup_send_works():
         'message': 'Message3',
     })
 
-    time.sleep(5)
+    time.sleep(1)
 
     r4 = requests.get(config.url + 'channel/messages/v2', params={
         'token': payload1['token'], 
