@@ -26,6 +26,7 @@ from src.message_remove import message_remove_v1
 from src.message_react import message_react_v1, message_unreact_v1
 from src.message_edit import message_edit_v1
 from src.standup import standup_active, standup_start, standup_send
+from src.message_pin import message_pin_v1
 from src.message_share import message_share
 
 def quit_gracefully(*args):
@@ -484,6 +485,20 @@ def send_standup_message():
 
     return dumps(
         standup_send(token, channel_id, message)
+    )
+
+@APP.route("/message/pin/v1", methods=['POST'])
+def pin_message():
+    data = request.get_json()
+    
+    token = data['token']
+    message_id = data['message_id']
+
+    user_token = decode_jwt(token)
+    check_valid_token(user_token)
+
+    return dumps(
+        message_pin_v1(user_token['u_id'], message_id)
     )
 
 @APP.route("/message/share/v1", methods=['POST'])

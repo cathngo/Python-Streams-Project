@@ -30,7 +30,7 @@ Return Value:
         react_channel_message(u_id, react_id, in_channel_found['message'], in_channel_found['channel'])
         return {}
     
-    if  in_dm_found:
+    if in_dm_found:
         react_dm_message(u_id, react_id, in_dm_found['message'], in_dm_found['dm'])
         return {}
 
