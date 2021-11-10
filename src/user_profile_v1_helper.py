@@ -3,9 +3,13 @@ from src.data_store import data_store
 from src.error import AccessError
 from src.error import InputError
 from src.data_persistence import save_pickle, open_pickle
+from flask import current_app
+import os
+from src import config
+from urllib.request import urlopen
+
 def get_user_profile(token, user_id):
     store = open_pickle()
-    #check valid token
 
     user_profile = {}
     for user in store['users']:
@@ -16,6 +20,7 @@ def get_user_profile(token, user_id):
                 'name_first': user['name_first'], 
                 'name_last': user['name_last'],
                 'handle_str': user['handle_str'],
+                'profile_img_url': user['profile_img_url']
             }
     return {'user': user_profile}
 

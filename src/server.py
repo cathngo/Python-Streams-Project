@@ -1,7 +1,7 @@
 import sys
 import signal
 from json import dumps
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory, current_app
 from flask_cors import CORS
 from src.email_helper import send_email_to_reset
 from src.error import InputError
@@ -23,6 +23,8 @@ from src.users_all_v1_helper import get_all_users
 from src.user_profile_v1_helper import get_user_profile, check_valid_u_id
 from src.user_profile_put_helpers import set_username, set_handle, set_email
 from src.send_message import message_send_channel, message_send_dm
+from src.photo_helper import download_image, crop_image, check_valid_coordinates, check_valid_format
+import os
 from src.user_stats_helper import get_user_stats
 from src.users_stats_helper import get_workspace_stats
 from src.message_remove import message_remove_v1  
@@ -479,6 +481,33 @@ def change_permissions_user():
     return dumps({})
 
 
+@APP.route("/user/profile/uploadphoto/v1", methods=['POST'])
+def upload_profile():
+    data = request.get_json()
+    
+    token = data['token']
+    img_url= data['img_url']
+    x_start = data['x_start']
+    y_start = data['y_start']
+    x_end = data['x_end']
+    y_end = data['y_end']
+
+    user_token = decode_jwt(token)
+    check_valid_token(user_token)
+
+    img = download_image(img_url, user_token['u_id'])
+    check_valid_coordinates(img, x_start, y_start, x_end, y_end,user_token['u_id'])
+    check_valid_format(img,user_token['u_id'])
+    crop_image(img, x_start, y_start, x_end, y_end, user_token['u_id'])
+    
+    return dumps({})
+
+@APP.route('/static/<filename>')
+def get_image(filename):
+    path = os.path.join(current_app.root_path, 'images')
+
+    return send_from_directory(directory=path, filename=filename)
+   
 
 
 @APP.route("/user/stats/v1", methods=['GET'])

@@ -12,6 +12,7 @@ from src.auth_register_helper import (
 )
 
 from src.data_persistence import save_pickle, open_pickle
+from src import config
 from src.user_stats_helper import create_user_stats
 from src.users_stats_helper import create_workspace_stats
 
@@ -140,7 +141,8 @@ def auth_register_v1(email, password, name_first, name_last):
             'name_last': name_last,
             'handle_str': handle_str,
             'is_streams_owner': is_streams_owner,
-            'session_list': [new_session_id]
+            'session_list': [new_session_id],
+            'profile_img_url': config.url + 'static/default.jpg'
         }
     )
 
