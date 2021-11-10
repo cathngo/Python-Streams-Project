@@ -3,6 +3,7 @@ import requests
 import json
 from src import config
 import jwt
+import time
 
 #check stats are 0 when streams owner first registers
 def test_initalise_stats():
@@ -131,3 +132,138 @@ def test_correct_messages_exist():
     r = resp.json()
     #sent two msgs, removed a msg so total msgs is now 1
     assert r['workspace_stats']['messages_exist'][-1]['num_messages_exist'] == 1
+
+def test_message_share():
+    requests.delete(config.url + 'clear/v1')
+    r1 = requests.post(config.url + 'auth/register/v2', json={
+        'email': 'user1@email.com',
+        'password': 'user1password',
+        'name_first': 'Kanye',
+        'name_last': 'Yeezus',
+    })
+    payload1 = r1.json()
+
+    r2 = requests.post(config.url + 'channels/create/v2', json={
+        'token': payload1['token'],
+        'name': 'Alpaca',
+        'is_public': True,
+    })
+    payload2 = r2.json()
+
+    r3 = requests.post(config.url + 'message/send/v1', json={
+        'token': payload1['token'], 
+        'channel_id': payload2['channel_id'],
+        'message': "Hello from Channel",
+    })
+    payload3 = r3.json()
+
+    r4 = requests.post(config.url + 'dm/create/v1', json={
+        'token': payload1['token'],
+        'u_ids': [],
+    })
+    payload4 = r4.json()
+
+    r5 = requests.post(config.url + 'message/senddm/v1', json={
+        'token': payload1['token'], 
+        'dm_id': payload4['dm_id'],
+        'message': "Hello from DM",
+    })
+    payload5 = r5.json()
+
+    requests.post(config.url + 'message/share/v1', json={
+        'token': payload1['token'],
+        'og_message_id': payload3['message_id'],
+        'message': 'Works',
+        'channel_id': -1,
+        'dm_id': payload4['dm_id'],
+    })
+    requests.post(config.url + 'message/share/v1', json={
+        'token': payload1['token'],
+        'og_message_id': payload5['message_id'],
+        'message': 'Works',
+        'channel_id': payload2['channel_id'],
+        'dm_id': -1,
+    })
+    #get user stats
+    resp = requests.get(config.url + 'users/stats/v1', params={'token': payload1['token']})
+    r = resp.json()
+    #sent two messages, shared two messages, num_messages_exist should be 4
+    assert r['workspace_stats']['messages_exist'][-1]['num_messages_exist'] == 4
+
+
+
+def test_standup_send():
+    requests.delete(config.url + 'clear/v1')
+    r1 = requests.post(config.url + 'auth/register/v2', json={
+        'email': 'user1@email.com',
+        'password': 'user1password',
+        'name_first': 'Kanye',
+        'name_last': 'Yeezus',
+    })
+    payload1 = r1.json()
+
+    r2 = requests.post(config.url + 'channels/create/v2', json={
+        'token': payload1['token'],
+        'name': 'Alpaca',
+        'is_public': True,
+    })
+    payload2 = r2.json()
+
+    requests.post(config.url + 'standup/start/v1', json={
+        'token': payload1['token'],
+        'channel_id': payload2['channel_id'],
+        'length': 3,
+    })
+
+    requests.post(config.url + 'standup/send/v1', json={
+        'token': payload1['token'],
+        'channel_id': payload2['channel_id'],
+        'message': 'Message1',
+    })
+
+    requests.post(config.url + 'standup/send/v1', json={
+        'token': payload1['token'],
+        'channel_id': payload2['channel_id'],
+        'message': 'Message2',
+    })
+
+    requests.post(config.url + 'standup/send/v1', json={
+        'token': payload1['token'],
+        'channel_id': payload2['channel_id'],
+        'message': 'Message3',
+    })
+
+    time.sleep(5)
+
+     #get user stats
+    resp = requests.get(config.url + 'users/stats/v1', params={'token': payload1['token']})
+    r = resp.json()
+    #sent three messages, num_messages_exist should be 3
+    assert r['workspace_stats']['messages_exist'][-1]['num_messages_exist'] == 3
+
+#test users stats utilization rate is correct after removing user
+def test_user_removed():
+    #Reset route
+    requests.delete(config.url + 'clear/v1')
+    #Register three users
+    user1 = requests.post(config.url + 'auth/register/v2', json={'email': 'validemail@gmail.com', 'password': '123abc!@#', 'name_first': 'Sam', 'name_last': 'Smith'})
+    user2 = requests.post(config.url + 'auth/register/v2', json={'email': 'valid1email@gmail.com', 'password': '123abc!@#', 'name_first': 'Becky', 'name_last': 'Smile'})
+    requests.post(config.url + 'auth/register/v2', json={'email': 'valid2email@gmail.com', 'password': '123abc!@#', 'name_first': 'George', 'name_last': 'Peach'})
+    user1_token = user1.json()
+    user2_token = user2.json()
+    #create a channel
+    channel1 = requests.post(config.url + 'channels/create/v2', json={'token': user1_token['token'], 'name': 'Alpaca', 'is_public': True})
+    channel1_id = channel1.json() 
+    #user1 and user_2 join dm
+    requests.post(config.url + 'dm/create/v1', json={
+        'token': user1_token['token'],
+        'u_ids': [user2_token['auth_user_id']],
+    })
+    #remove the second user
+    requests.delete(config.url + 'admin/user/remove/v1', json={'token': user1_token['token'], 'u_id':user2_token['auth_user_id']})
+    #get users stats
+    resp = requests.get(config.url + 'users/stats/v1', params={'token': user1_token['token']})
+    r = resp.json()
+    #rate = 2 users joined atleast one channel/dm (but then one got removed so now one userjoined atleast one channel/dm)/ 3 users (then after removal 2 users) = 1/2
+    assert r['workspace_stats']['utilization_rate'] == float(1/2)
+   
