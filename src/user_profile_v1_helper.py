@@ -10,19 +10,7 @@ from urllib.request import urlopen
 
 def get_user_profile(token, user_id):
     store = open_pickle()
-    #check valid token
-    #check if they have uploaded a profile pic
-    success = True
-    try:
-        urlopen(config.url + 'static/' + str(user_id) + '.jpg')
-    except:
-        success = False
-    
-    #if they haven't set the profile img url to default img
-    if success == False:
-        img_url = config.url + 'static/default.jpg'
-    else:
-        img_url = config.url + 'static/' + str(user_id) + '.jpg'
+
     user_profile = {}
     for user in store['users']:
         if user['u_id'] == user_id:
@@ -32,7 +20,7 @@ def get_user_profile(token, user_id):
                 'name_first': user['name_first'], 
                 'name_last': user['name_last'],
                 'handle_str': user['handle_str'],
-                'profile_img_url': img_url
+                'profile_img_url': user['profile_img_url']
             }
     return {'user': user_profile}
 

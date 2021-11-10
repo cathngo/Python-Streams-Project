@@ -3,6 +3,9 @@ from PIL import Image
 from src.error import InputError
 from flask import current_app
 import os
+from src.data_persistence import save_pickle, open_pickle
+from src.data_store import data_store
+from src import config
 
 def check_valid_coordinates(img, x_start, y_start, x_end, y_end, auth_user_id):
     '''
@@ -44,7 +47,7 @@ Return Value:
         raise InputError(description="value not within height of image")
 
     #check if x_end less than x_start
-    if x_end < x_start or y_end < y_start:
+    if x_end < x_start:
         os.remove(os.path.join(current_app.root_path, 'images/') + str(auth_user_id) + ".jpg")
         raise InputError(description="x end value larger than x start value")
         
@@ -103,7 +106,7 @@ Return Value:
         raise InputError(description="not valid format " + str(img.format))
 
 
-def crop_image(img, x_start, y_start, x_end, y_end):
+def crop_image(img, x_start, y_start, x_end, y_end, user_id):
     '''
 Crops the image within the given the boundaries
 
@@ -113,6 +116,7 @@ Arguments:
     y_start (int) - the start position on the y axis to crop the image
     x_end (int) - the end position on the x axis to crop the image
     y_end (int) - the end position on the y axis to crop the image
+    user_id (int) - the id of the user who is uploading the photo
 
 Return Value: 
     Returns void upon success
@@ -120,5 +124,16 @@ Return Value:
     imageObject = Image.open(img)
     cropped = imageObject.crop((x_start, y_start, x_end, y_end))
     cropped.save(img)
+    #save the image to the user's profile
+    store = open_pickle()
+
+    for user in store['users']:
+        if user['u_id'] == user_id:
+            user['profile_img_url'] = config.url + 'static/' + str(user_id) + '.jpg'
+
+    data_store.set(store)
+    save_pickle()
+
+
 
 

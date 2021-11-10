@@ -62,7 +62,8 @@ data = {
             'name_last': 'West',
             'handle_str': 'kanyewest',
             'is_streams_owner': true,
-            'session_list': [1001]
+            'session_list': [1001],
+            'profile_img_url': http://localhost:33327/static/0.jpg
         },
         {
             'u_id': 1,
