@@ -2,7 +2,16 @@ from datetime import datetime
 from src.data_store import data_store
 from src.data_persistence import save_pickle, open_pickle
 
-def create_workspace_stats(u_id, store):
+def create_workspace_stats(store):
+    '''
+Intialises workspace stats to 0 when the streams owner registers
+
+Arguments:
+    store (dictionary) - the database which stores the workspace stats
+
+Return Value: 
+    Returns void 
+'''
     time_created = int(datetime.now().timestamp())
 
     store['workspace_stats'] = {
@@ -13,6 +22,16 @@ def create_workspace_stats(u_id, store):
     }
 
 def update_channels_exist(store, increment):
+    '''
+Adds a new timestamp to channels_exist for workspace stats
+
+Arguments:
+    store (dictionary) - the database which stores the workspace stats
+    increment (int) - the amount of channels created 
+
+Return Value: 
+    Returns void 
+'''
     time_created = int(datetime.now().timestamp())
     #get latest count
     recent = store['workspace_stats']['channels_exist'][-1]
@@ -20,6 +39,16 @@ def update_channels_exist(store, increment):
     store['workspace_stats']['channels_exist'].append({'num_channels_exist': new_count, 'time_stamp': time_created})
 
 def update_dms_exist(store, increment):
+    '''
+Adds a new timestamp to dms_exist for the workspace stats
+
+Arguments:
+    store (dictionary) - the database which stores the workspace stats
+    increment (int) - the amount of dms created/removed (negative if a dm has been removed)
+
+Return Value: 
+    Returns void 
+'''
     time_created = int(datetime.now().timestamp())
     #get latest count
     recent = store['workspace_stats']['dms_exist'][-1]
@@ -27,6 +56,16 @@ def update_dms_exist(store, increment):
     store['workspace_stats']['dms_exist'].append({'num_dms_exist': new_count, 'time_stamp': time_created})
 
 def update_messages_exist(store, increment):
+    '''
+Adds a new timestamp to messages_exist for the workspace stats
+
+Arguments:
+    store (dictionary) - the database which stores the workspace stats
+    increment (int) - the amount of messages created/removed (negative if a message has been removed)
+
+Return Value: 
+    Returns void 
+'''
     time_created = int(datetime.now().timestamp())
     #get latest count
     recent = store['workspace_stats']['messages_exist'][-1]
@@ -34,6 +73,15 @@ def update_messages_exist(store, increment):
     store['workspace_stats']['messages_exist'].append({'num_messages_exist': new_count, 'time_stamp': time_created})
 
 def get_workspace_stats(store):
+    '''
+Returns the workspace stats
+
+Arguments:
+    ustore (dictionary) - the database which stores the workspace stats
+
+Return Value: 
+    Returns a dictionary containing the current workspace stats
+'''
     store = open_pickle()
     num_channel_dm = 0
     for user in store['all_user_stats']:
@@ -42,9 +90,11 @@ def get_workspace_stats(store):
     
     num_users =  0
     for user in store['users']:
-        num_users += 1
+        if user['name_first'] != 'Removed':
+            num_users += 1
     
     utilization = num_channel_dm/num_users
 
     store['workspace_stats']['utilization_rate'] = float(utilization)
+    #store['workspace_stats']['utilization_rate'] = num_channel_dm
     return store['workspace_stats']

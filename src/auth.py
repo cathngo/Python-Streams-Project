@@ -148,7 +148,7 @@ def auth_register_v1(email, password, name_first, name_last):
     create_user_stats(u_id, store)
     #if this is the first user to sign up, intialise workspace stats
     if (u_id == 0):
-        create_workspace_stats(u_id, store)
+        create_workspace_stats(store)
     
     data_store.set(store)
     save_pickle()

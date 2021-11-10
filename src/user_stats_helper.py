@@ -3,6 +3,15 @@ from src.data_store import data_store
 from src.data_persistence import save_pickle, open_pickle
 
 def get_user_stats(u_id):
+    '''
+Returns the user's stats for the given user
+
+Arguments:
+    u_id (int) - the id of the user whose stats are being retrieved
+
+Return Value: 
+    Returns a dictionary containing the user's stats
+'''
     store = open_pickle()
     
     #first get numerator 
@@ -43,8 +52,18 @@ def get_user_stats(u_id):
             user['user_stats']['involvement_rate'] = float(involvement)
             return user['user_stats']
 
-#initalize stats - initalise stats to 0 when user is first registered into database
+
 def create_user_stats(u_id, store):
+    '''
+Intialises a user's stats to 0 when they are first registered
+
+Arguments:
+    u_id (int) - the id of the user whose stats are being created
+    store (dictionary) - the database which stores the user's stats
+
+Return Value: 
+    Returns void 
+'''
     time_created = int(datetime.now().timestamp())
     store['all_user_stats'].append({
         'u_id': u_id,
@@ -58,6 +77,17 @@ def create_user_stats(u_id, store):
 
 
 def update_channels_joined(u_id, store, increment):
+    '''
+Adds a new timestamp to channels_joined for the user's stats
+
+Arguments:
+    u_id (int) - the id of the user whose stats are being updated
+    store (dictionary) - the database which stores the user's stats
+    increment (int) - the amount of channels the user has joined (negative if they have left a channel)
+
+Return Value: 
+    Returns void 
+'''
     #for channel join
     time_created = int(datetime.now().timestamp())
     for user in store['all_user_stats']:
@@ -69,6 +99,17 @@ def update_channels_joined(u_id, store, increment):
             user['user_stats']['channels_joined'].append({'num_channels_joined': new_count, 'time_stamp': time_created})
 
 def update_dms_joined(u_id, store, increment):
+    '''
+Adds a new timestamp to dms_joined for the user's stats
+
+Arguments:
+    u_id (int) - the id of the user whose stats are being updated
+    store (dictionary) - the database which stores the user's stats
+    increment (int) - the amount of dms the user has joined (negative if they have left a dm or the dm has been removed)
+
+Return Value: 
+    Returns void 
+'''
     time_created = int(datetime.now().timestamp())
     for user in store['all_user_stats']:
         if user['u_id'] == u_id:
@@ -80,6 +121,17 @@ def update_dms_joined(u_id, store, increment):
 
 #this will only ever increase message count for user stats
 def update_messages_sent(u_id, store, increment):
+    '''
+Adds a new timestamp to messages_sent for the user's stats 
+
+Arguments:
+    u_id (int) - the id of the user whose stats are being updated
+    store (dictionary) - the database which stores the user's stats
+    increment (int) - the amount of messages the user has sent
+
+Return Value: 
+    Returns void 
+'''
     time_created = int(datetime.now().timestamp())
     for user in store['all_user_stats']:
         if user['u_id'] == u_id:
@@ -89,8 +141,18 @@ def update_messages_sent(u_id, store, increment):
             new_count = recent['num_messages_sent']  + increment
             user['user_stats']['messages_sent'].append({'num_messages_sent': new_count, 'time_stamp': time_created})
 
-#if user removed from stream (admin remove), then remove their stats as well
+
 def remove_user_stats(u_id, store):
+    '''
+Remove the user's stats if they have been removed from Streams
+
+Arguments:
+    u_id (int) - the id of the user whose stats are being updated
+    store (dictionary) - the database which stores the user's stats
+
+Return Value: 
+    Returns void 
+'''
     for user in store['all_user_stats']:
         if user['u_id'] == u_id:
             #remove the user
