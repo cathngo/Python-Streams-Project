@@ -32,6 +32,17 @@ def reg_user2():
     user_token2 = user2.json()
     return user_token2
 
+@pytest.fixture
+def reg_user_alpaca(): 
+    user = requests.post(config.url + 'auth/register/v2', json={
+        'email': 'alpacatesting123@gmail.com', 
+        'password': '123abc!@#', 
+        'name_first': 'Sam', 
+        'name_last': 'Smith'
+    })
+    user_token = user.json()
+    return user_token
+
 ########################################################################
 ###                     FIXTURES TO REGISTER CHANNEL                         
 ########################################################################
