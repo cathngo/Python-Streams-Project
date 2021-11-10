@@ -10,7 +10,6 @@ def check_channel_owner(u_id, channel):
             is_channel_owner = True
     return is_channel_owner
 
-
 def check_dm_owner(u_id, dm):
     is_dm_owner = False
     if dm['owner_id'] == u_id:
@@ -40,7 +39,6 @@ def check_channel_message_permissions(u_id, message, channel):
 
     if (is_streams_owner == False and user_sent_message == False and is_channel_owner == False): 
         raise AccessError(description='Cannot delete/edit message because you do not have the needed permissions in the channel')
-    
     return 
 
 def check_dm_message_permissions(u_id, message, dm): 
@@ -52,7 +50,6 @@ def check_dm_message_permissions(u_id, message, dm):
     return
 
 def remove_channel_message (u_id, message_id, message, channel):
-    
     store = open_pickle()
 
     check_channel_message_permissions(u_id, message, channel)
@@ -91,8 +88,7 @@ def in_channel_search(message_id):
         for message_store in channel_store['messages']:
             if message_store['message_id'] == message_id:
                 temp_dic_channel['channel'] = channel_store
-                temp_dic_channel['message'] = message_store                    
-
+                temp_dic_channel['message'] = message_store
     return temp_dic_channel
 
 def in_dm_search(message_id):
@@ -104,7 +100,6 @@ def in_dm_search(message_id):
             if message_store['message_id'] == message_id:
                 temp_dic_dm['dm'] = dm_store
                 temp_dic_dm['message'] = message_store
-    
     return temp_dic_dm
 
 def edit_dm_message(u_id, message_id, message, dm, message_given):
