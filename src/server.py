@@ -463,7 +463,7 @@ def upload_profile():
     check_valid_format(img,user_token['u_id'])
     crop_image(img, x_start, y_start, x_end, y_end)
     
-    return dumps({'img_url': img_url})
+    return dumps({})
 
 @APP.route('/static/<filename>')
 def get_image(filename):
