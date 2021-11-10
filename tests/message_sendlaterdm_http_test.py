@@ -10,8 +10,26 @@ from tests.pytest_fixtures import (
 )
 from src.error import InputError, AccessError
 
+def test_invalid_token_dm_messages_later(clear, reg_dm_user1):
+    dm_reg = reg_dm_user1
 
-def test_invalid_dm_id_message_send_dm(clear, reg_user1, reg_dm_user1):
+    resp = requests.post(config.url + 'message/sendlaterdm/v1', json={
+        'token': 'invalidtoken',
+        'dm_id': dm_reg['dm_id'] + 1,
+        'message': "hello",
+        'time_sent': int(datetime.now().timestamp()) + 5,
+        'is_pinned': False,
+        'reacts':[
+                {
+                    'react_id': 1,
+                    'u_ids': [], 
+                    'is_this_user_reacted': False
+                }
+            ]
+    })
+    assert resp.status_code == AccessError.code
+
+def test_invalid_dm_id_message_send_dm_later(clear, reg_user1, reg_dm_user1):
     user1 = reg_user1
     dm_reg = reg_dm_user1
 
@@ -31,7 +49,7 @@ def test_invalid_dm_id_message_send_dm(clear, reg_user1, reg_dm_user1):
     })
     assert resp.status_code == InputError.code
 
-def test_not_dm_member_message_send_dm(clear, reg_user2, reg_dm_user1):
+def test_not_dm_member_message_send_dm_later(clear, reg_user2, reg_dm_user1):
     user2 = reg_user2
     dm_reg = reg_dm_user1
 
@@ -52,7 +70,7 @@ def test_not_dm_member_message_send_dm(clear, reg_user2, reg_dm_user1):
     assert resp.status_code == AccessError.code
 
 
-def test_route_works_message_send_dm(clear, reg_user1, reg_dm_user1):
+def test_route_works_message_send_dm_later(clear, reg_user1, reg_dm_user1):
     user1 = reg_user1
     dm_reg = reg_dm_user1
 
@@ -60,7 +78,7 @@ def test_route_works_message_send_dm(clear, reg_user1, reg_dm_user1):
         'token': user1['token'], 
         'dm_id': dm_reg['dm_id'],
         'message': "hello",
-        'time_sent': int(datetime.now().timestamp()) + 5,
+        'time_sent': int(datetime.now().timestamp()) + 1,
         'is_pinned': False,
         'reacts':[
                 {
@@ -71,7 +89,7 @@ def test_route_works_message_send_dm(clear, reg_user1, reg_dm_user1):
             ]
     })
 
-    time.sleep(5)
+    time.sleep(1)
 
     response = requests.get(config.url + 'dm/messages/v1', params={
         'token': user1['token'], 
@@ -83,7 +101,7 @@ def test_route_works_message_send_dm(clear, reg_user1, reg_dm_user1):
     assert len(dm_messages['messages']) == 1
     assert resp.status_code == 200
 
-def test_message_less_than_one_character_message_send_dm(clear, reg_user1, reg_dm_user1):
+def test_message_less_than_one_character_message_send_dm_later(clear, reg_user1, reg_dm_user1):
     user1 = reg_user1
     dm_reg = reg_dm_user1
 
@@ -104,7 +122,7 @@ def test_message_less_than_one_character_message_send_dm(clear, reg_user1, reg_d
 
     assert resp.status_code == InputError.code
 
-def test_message_more_than_one_thousand_character_message_send_dm(clear, reg_user1, reg_dm_user1):
+def test_message_more_than_one_thousand_character_message_send_dm_later(clear, reg_user1, reg_dm_user1):
     user1 = reg_user1
     dm_reg = reg_dm_user1
 

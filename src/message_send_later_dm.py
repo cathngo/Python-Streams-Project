@@ -13,8 +13,21 @@ from src.dm_helper import check_dm_id_exists, check_user_in_dm, obtain_user_deta
 
 
 def send_dm_later(u_id, dm_id, message_id, message, time_sent):
+    '''
+    Adds the message to the start of the messages list within dm
+
+    Arguments:
+        u_id (int) - id of the user sending 
+        dm_id (int) - id of the dm
+        message_id (int) - id of the message being sent
+        message (string) - the message that is being sent
+        time_sent (int) - time that the message is set to be sent
+
+    Return Value: None
+
+    '''
     store = open_pickle()
-    
+
     dm = check_dm_id_exists(dm_id, store)
     dm['messages'].append(
         {
@@ -36,6 +49,19 @@ def send_dm_later(u_id, dm_id, message_id, message, time_sent):
     save_pickle()
 
 def message_sendlaterdm_v1(u_id, dm_id, message, time_sent):
+    '''
+    Send a message from the authorised user to the DM specified by dm_id automatically at a specified time in the future.
+
+    Arguments:
+        u_id (int) - id of the user sending 
+        dm_id (int) - id of the dm
+        message_id (int) - id of the message being sent
+        message (string) - the message that is being sent
+        time_sent (int) - time that the message is set to be sent
+
+    Return Value: message_id
+    '''
+ 
     store = open_pickle()
     
     dm = check_dm_id_exists(dm_id, store)

@@ -12,6 +12,19 @@ from src.data_persistence import save_pickle, open_pickle
 from src.channel_messages_helper import check_message_time, find_time_delay
 
 def send_message_later(auth_user_id, channel_id, message_id, message, time_sent):
+    '''
+    Adds the message to the start of the messages list within channel
+
+    Arguments:
+        u_id (int) - id of the user sending 
+        dm_id (int) - id of the dm
+        message_id (int) - id of the message being sent
+        message (string) - the message that is being sent
+        time_sent (int) - time that the message is set to be sent
+
+    Return Value: None
+
+    '''
     store = open_pickle()
     channel = get_channel(channel_id, store)
     channel['messages'].append(
@@ -34,6 +47,18 @@ def send_message_later(auth_user_id, channel_id, message_id, message, time_sent)
     save_pickle()
 
 def message_sendlater_v1(u_id, channel_id, message, time_sent):
+    '''
+    Send a message from the authorised user to the channel specified by channel_id automatically at a specified time in the future.
+
+    Arguments:
+        u_id (int) - id of the user sending 
+        dm_id (int) - id of the dm
+        message_id (int) - id of the message being sent
+        message (string) - the message that is being sent
+        time_sent (int) - time that the message is set to be sent
+
+    Return Value: message_id
+    '''
     store = open_pickle()
     
     get_channel(channel_id, store)
