@@ -105,12 +105,13 @@ def test_remove_and_check_profile():
     requests.delete(config.url + 'admin/user/remove/v1', json={'token': user_token['token'], 'u_id':user_token2['auth_user_id']})
 
     #check profile details
-    resp = requests.get(config.url + 'user/profile/v1', params={'token': user_token2['token'], 'u_id': user_token2['auth_user_id']})
+    resp = requests.get(config.url + 'user/profile/v1', params={'token': user_token['token'], 'u_id': user_token2['auth_user_id']})
     r = resp.json()
+    assert resp.status_code == 200
     assert r['user']['name_first'] == 'Removed'
     assert r['user']['name_last'] == 'user'
     assert r['user']['email'] == ''
-    assert resp.status_code == 200
+    
 
 #remove an user and try to registed another user with the same email as the removed user
 def test_reusable_email():
