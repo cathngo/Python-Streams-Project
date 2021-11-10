@@ -28,7 +28,7 @@ from src.message_edit import message_edit_v1
 from src.message_send_later import message_sendlater_v1 
 from src.message_react import message_react_v1, message_unreact_v1
 from src.standup import standup_active, standup_start, standup_send
-from src.message_pin import message_pin_v1
+from src.message_pin import message_pin_v1, message_unpin_v1
 from src.message_share import message_share
 from src.message_send_later_dm import message_sendlaterdm_v1
 
@@ -572,6 +572,20 @@ def unreact_to_message():
     message_unreact_v1(user_token['u_id'], message_id, react_id)
 
     return dumps({})
+
+@APP.route("/message/unpin/v1", methods=['POST'])
+def unpin_message():
+    data = request.get_json()
+    
+    token = data['token']
+    message_id = data['message_id']
+
+    user_token = decode_jwt(token)
+    check_valid_token(user_token)
+
+    return dumps(
+        message_unpin_v1(user_token['u_id'], message_id)
+    )
 #### NO NEED TO MODIFY BELOW THIS POINT
 
 if __name__ == "__main__":

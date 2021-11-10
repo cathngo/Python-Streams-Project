@@ -20,6 +20,10 @@ def check_if_message_already_pinned(message):
     if message['is_pinned'] == True:
         raise InputError(description= "Message is already pinned")
 
+def check_if_message_already_unpinned(message):
+    if message['is_pinned'] == False:
+        raise InputError(description= "Message is already unpinned")
+
 def pin_channel_message(u_id, message_id, message, channel):
     store = open_pickle()
     
@@ -47,6 +51,38 @@ def pin_dm_message(u_id, message_id, message, dm):
         for message_store in dm_store['messages']:
             if message_store['message_id'] == message_id:
                 message_store['is_pinned'] = True 
+
+    data_store.set(store)
+    save_pickle()
+    return
+
+def unpin_channel_message(u_id, message_id, message, channel):
+    store = open_pickle()
+    
+    check_user_in_channel(channel, u_id)
+    check_channel_message_permissions_message_pin(u_id, channel)
+    check_if_message_already_unpinned(message)
+    
+    for channel_store in store['channels']:
+        for message_store in channel_store['messages']:
+            if message_store['message_id'] == message_id:
+                message_store['is_pinned'] = False
+
+    data_store.set(store)
+    save_pickle()
+    return
+
+def unpin_dm_message(u_id, message_id, message, dm):
+    store = open_pickle()
+    
+    check_user_in_dm(dm, u_id)
+    check_dm_owner_message_pin(u_id, dm)
+    check_if_message_already_unpinned(message)
+    
+    for dm_store in store['dm']:
+        for message_store in dm_store['messages']:
+            if message_store['message_id'] == message_id:
+                message_store['is_pinned'] = False 
 
     data_store.set(store)
     save_pickle()
