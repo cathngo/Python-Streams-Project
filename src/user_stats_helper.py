@@ -179,3 +179,5 @@ Return Value:
             #increment the count if it increases msgs sent (message/senddm, message/send)
             new_count = recent['num_messages_sent']  + increment
             user['user_stats']['messages_sent'].append({'num_messages_sent': new_count, 'time_stamp': time_created})
+    data_store.set(store)
+    save_pickle()

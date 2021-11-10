@@ -5,6 +5,9 @@ from src import config
 import jwt
 import time
 from datetime import datetime
+
+
+
 #check stats are 0 when streams owner first registers
 def test_initalise_stats():
     #Reset route
@@ -379,6 +382,104 @@ def test_message_send_later():
     })
 
     time.sleep(5) 
+
+
+    #get user stats
+    resp = requests.get(config.url + 'users/stats/v1', params={'token': user_token['token']})
+    r = resp.json()
+
+    assert r['workspace_stats']['messages_exist'][-1]['num_messages_exist'] == 2
+
+#check correct dms_joined
+def test_message_sendlaterdm():
+    #Reset route
+    requests.delete(config.url + 'clear/v1')
+    #Register two users
+    user1 = requests.post(config.url + 'auth/register/v2', json={'email': 'validemail@gmail.com', 'password': '123abc!@#', 'name_first': 'Sam', 'name_last': 'Smith'})
+    user2 = requests.post(config.url + 'auth/register/v2', json={'email': 'valid1email@gmail.com', 'password': '123abc!@#', 'name_first': 'Becky', 'name_last': 'Smile'})
+    user1_token = user1.json()
+    user2_token = user2.json()
+    #create one dms
+    dm = requests.post(config.url + 'dm/create/v1', json={
+        'token': user1_token['token'],
+        'u_ids': [user2_token['auth_user_id']],
+    })
+
+    dm_reg = dm.json()
+    #send two messages
+
+    requests.post(config.url + 'message/sendlaterdm/v1', json={
+        'token': user1_token['token'], 
+        'dm_id': dm_reg['dm_id'],
+        'message': "hello",
+        'time_sent': int(datetime.now().timestamp()) + 1,
+        'is_pinned': False,
+        'reacts':[
+                {
+                    'react_id': 1,
+                    'u_ids': [], 
+                    'is_this_user_reacted': False
+                }
+            ]
+    })
+
+    time.sleep(2)
+
+    #get users  stats
+    resp = requests.get(config.url + 'users/stats/v1', params={'token': user2_token['token']})
+    r = resp.json()
+
+    assert r['workspace_stats']['messages_exist'][-1]['num_messages_exist'] == 1
+
+def test_sendlaterdm_work():
+    requests.delete(config.url + 'clear/v1')
+
+    user = requests.post(config.url + 'auth/register/v2', json={
+        'email': 'validemail@gmail.com', 
+        'password': '123abc!@#', 
+        'name_first': 'Sam', 
+        'name_last': 'Smith'
+    })
+    user_token = user.json()
+
+    dm = requests.post(config.url + 'dm/create/v1', json={
+        'token': user_token['token'],
+        'u_ids': [],
+    })
+
+    dm_reg = dm.json()
+
+    requests.post(config.url + 'message/sendlaterdm/v1', json={
+        'token': user_token['token'], 
+        'dm_id': dm_reg['dm_id'],
+        'message': "hello",
+        'time_sent': int(datetime.now().timestamp()) + 1,
+        'is_pinned': False,
+        'reacts':[
+                {
+                    'react_id': 1,
+                    'u_ids': [], 
+                    'is_this_user_reacted': False
+                }
+            ]
+    })
+
+    requests.post(config.url + 'message/sendlaterdm/v1', json={
+    'token': user_token['token'], 
+    'dm_id': dm_reg['dm_id'],
+    'message': "hello",
+    'time_sent': int(datetime.now().timestamp()) + 1,
+    'is_pinned': False,
+    'reacts':[
+            {
+                'react_id': 1,
+                'u_ids': [], 
+                'is_this_user_reacted': False
+            }
+        ]
+    })
+
+    time.sleep(1) 
 
 
     #get user stats

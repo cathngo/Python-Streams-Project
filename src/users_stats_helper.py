@@ -89,7 +89,8 @@ Return Value:
     recent = store['workspace_stats']['messages_exist'][-1]
     new_count = recent['num_messages_exist'] + increment
     store['workspace_stats']['messages_exist'].append({'num_messages_exist': new_count, 'time_stamp': time_created})
-
+    data_store.set(store)
+    save_pickle()
 
 def get_workspace_stats(store):
     '''
@@ -115,5 +116,4 @@ Return Value:
     utilization = num_channel_dm/num_users
 
     store['workspace_stats']['utilization_rate'] = float(utilization)
-    #store['workspace_stats']['utilization_rate'] = num_channel_dm
     return store['workspace_stats']
