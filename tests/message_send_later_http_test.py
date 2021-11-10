@@ -134,7 +134,7 @@ def test_route_works_message_send_later():
         'token': user_token['token'], 
         'channel_id': channel_id['channel_id'],
         'message': "hello",
-        'time_sent': int(datetime.now().timestamp()) + 5,
+        'time_sent': int(datetime.now().timestamp()) + 1,
         'is_pinned': False,
         'reacts':[
                 {
@@ -145,7 +145,7 @@ def test_route_works_message_send_later():
             ]
     })
 
-    time.sleep(5) 
+    time.sleep(1) 
 
     r1 = requests.get(config.url + 'channel/messages/v2', params={
         'token': user_token['token'], 
