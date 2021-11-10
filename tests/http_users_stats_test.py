@@ -252,8 +252,7 @@ def test_user_removed():
     user1_token = user1.json()
     user2_token = user2.json()
     #create a channel
-    channel1 = requests.post(config.url + 'channels/create/v2', json={'token': user1_token['token'], 'name': 'Alpaca', 'is_public': True})
-    channel1_id = channel1.json() 
+    requests.post(config.url + 'channels/create/v2', json={'token': user1_token['token'], 'name': 'Alpaca', 'is_public': True})
     #user1 and user_2 join dm
     requests.post(config.url + 'dm/create/v1', json={
         'token': user1_token['token'],
