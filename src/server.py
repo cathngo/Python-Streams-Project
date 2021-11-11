@@ -23,6 +23,7 @@ from src.users_all_v1_helper import get_all_users
 from src.user_profile_v1_helper import get_user_profile, check_valid_u_id
 from src.user_profile_put_helpers import set_username, set_handle, set_email
 from src.send_message import message_send_channel, message_send_dm
+from src.search import find_message
 from src.photo_helper import download_image, crop_image, check_valid_coordinates, check_valid_format
 import os
 from src.user_stats_helper import get_user_stats
@@ -585,6 +586,21 @@ def send_standup_message():
     return dumps(
         standup_send(token, channel_id, message)
     )
+
+@APP.route("/search/v1", methods=['GET'])
+def search_v1():
+    token = request.args.get('token')
+    query = request.args.get('query_str')
+
+    #check valid token
+    user_token = decode_jwt(token)
+    check_valid_token(user_token)
+
+    messages_d_list = find_message(user_token['u_id'], query)
+    return dumps(
+        messages_d_list
+    )
+
 @APP.route("/auth/passwordreset/reset/v1", methods=['POST'])
 def change_passs():
     data = request.get_json()

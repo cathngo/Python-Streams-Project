@@ -76,6 +76,7 @@ data = {
             'handle_str': 'kanyesouth',
             'is_streams_owner': false,
             'session_list': [1002]
+            'password_reset': 'MAGQaXcfVdOlxArMqXJz'
             'profile_img_url': http://localhost:33327/static/0.jpg
         },
     ],
