@@ -25,7 +25,8 @@ def get_user_details(auth_user_id, store):
                 'name_first': user['name_first'],
                 'name_last': user['name_last'],
                 'handle_str': user['handle_str'],
-                'notifications': user['notifications'],            
+                'notifications': user['notifications'],                  
+                'profile_img_url': user['profile_img_url']    
             }
 
     return owner_dictionary 
