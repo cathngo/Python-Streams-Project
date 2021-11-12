@@ -89,7 +89,7 @@ def test_route_works_message_send_dm_later(clear, reg_user1, reg_dm_user1):
             ]
     })
 
-    time.sleep(1)
+    time.sleep(2)
 
     response = requests.get(config.url + 'dm/messages/v1', params={
         'token': user1['token'], 
