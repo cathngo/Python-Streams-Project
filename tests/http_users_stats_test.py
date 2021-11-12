@@ -236,7 +236,7 @@ def test_standup_send():
         'message': 'Message3',
     })
 
-    time.sleep(2)
+    time.sleep(3)
 
     #get user stats
     resp = requests.get(config.url + 'users/stats/v1', params={'token': payload1['token']})
@@ -381,7 +381,7 @@ def test_message_send_later():
             ]
     })
 
-    time.sleep(2) 
+    time.sleep(3) 
 
 
     #get user stats
@@ -423,7 +423,7 @@ def test_message_sendlaterdm():
             ]
     })
 
-    time.sleep(2)
+    time.sleep(3)
 
     #get users  stats
     resp = requests.get(config.url + 'users/stats/v1', params={'token': user2_token['token']})
@@ -479,7 +479,7 @@ def test_sendlaterdm_work():
         ]
     })
 
-    time.sleep(2) 
+    time.sleep(3) 
 
 
     #get user stats

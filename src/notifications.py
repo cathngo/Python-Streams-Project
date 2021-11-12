@@ -93,7 +93,6 @@ def notifications_get_v1(auth_user_id):
     check_u_id_exists(auth_user_id, store)
     user_notifs = get_user_details(auth_user_id, store)['notifications']
     if len(user_notifs) >= 20:
-        return {'notifications': user_notifs[0:20]}
+        return {'notifications': user_notifs[-20:]}
     else:
-        return {'notifications': user_notifs} 
-   
+        return {'notifications': user_notifs[::-1]} 

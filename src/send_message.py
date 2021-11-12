@@ -57,7 +57,7 @@ Return Value:
             ]
         }
     )
-    identify_tag(u_id, channel_id, -1, message, message_id)
+
     #increment user's stats count for messsages_sent by one
     update_messages_sent(u_id, store, 1)
     #increment number of existing msgs in workspace stats by one
@@ -65,6 +65,7 @@ Return Value:
 
     data_store.set(store)
     save_pickle()
+    identify_tag(u_id, channel_id, -1, message, message_id)
     return {
         'message_id': message_id
     }
@@ -114,7 +115,7 @@ def message_send_dm(u_id, dm_id, message):
             ]
         }
     )
-    identify_tag(u_id, -1, dm_id, message, message_id)
+
     #increment user's stats count for messsages_sent by one
     update_messages_sent(u_id, store, 1)
     #increment number of existing msgs in workspace stats by one
@@ -123,7 +124,7 @@ def message_send_dm(u_id, dm_id, message):
     
     data_store.set(store)
     save_pickle()
-
+    identify_tag(u_id, -1, dm_id, message, message_id)
 
     return {
         'message_id': message_id
