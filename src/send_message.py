@@ -8,6 +8,7 @@ from src.dm_helper import check_dm_id_exists, check_user_in_dm
 from src.data_persistence import save_pickle, open_pickle
 from src.user_stats_helper import update_messages_sent
 from src.users_stats_helper import update_messages_exist
+from src.notifications import identify_tag
 
 
 def message_send_channel(u_id, channel_id, message):
@@ -64,6 +65,7 @@ Return Value:
 
     data_store.set(store)
     save_pickle()
+    identify_tag(u_id, channel_id, -1, message, message_id)
     return {
         'message_id': message_id
     }
@@ -113,6 +115,7 @@ def message_send_dm(u_id, dm_id, message):
             ]
         }
     )
+
     #increment user's stats count for messsages_sent by one
     update_messages_sent(u_id, store, 1)
     #increment number of existing msgs in workspace stats by one
@@ -121,7 +124,7 @@ def message_send_dm(u_id, dm_id, message):
     
     data_store.set(store)
     save_pickle()
-
+    identify_tag(u_id, -1, dm_id, message, message_id)
 
     return {
         'message_id': message_id

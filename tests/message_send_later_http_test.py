@@ -145,7 +145,7 @@ def test_route_works_message_send_later():
             ]
     })
 
-    time.sleep(1) 
+    time.sleep(2) 
 
     r1 = requests.get(config.url + 'channel/messages/v2', params={
         'token': user_token['token'], 

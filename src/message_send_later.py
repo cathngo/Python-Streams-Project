@@ -12,6 +12,7 @@ from src.data_persistence import save_pickle, open_pickle
 from src.channel_messages_helper import check_message_time, find_time_delay
 from src.user_stats_helper import update_messages_sent_later
 from src.users_stats_helper import update_messages_exist_sent_later
+from src.notifications import identify_tag
 
 def send_message_later(auth_user_id, channel_id, message_id, message, time_sent):
     '''
@@ -45,6 +46,7 @@ def send_message_later(auth_user_id, channel_id, message_id, message, time_sent)
             ]
         }
     )
+    
     #increase num_messages_sent for the user who sent the msg user stats
     update_messages_sent_later(time_sent, auth_user_id, store, 1)
     #increase num_msgs_exist for workspace stats
@@ -52,6 +54,7 @@ def send_message_later(auth_user_id, channel_id, message_id, message, time_sent)
 
     data_store.set(store)
     save_pickle()
+    identify_tag(auth_user_id, channel_id, -1, message, message_id)
 
 def message_sendlater_v1(u_id, channel_id, message, time_sent):
     '''

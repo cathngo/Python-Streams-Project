@@ -558,7 +558,7 @@ def test_standup_send_works():
         'message': 'Message3',
     })
 
-    time.sleep(1)
+    time.sleep(2)
 
     r4 = requests.get(config.url + 'channel/messages/v2', params={
         'token': payload1['token'], 

@@ -142,7 +142,8 @@ def auth_register_v1(email, password, name_first, name_last):
             'handle_str': handle_str,
             'is_streams_owner': is_streams_owner,
             'session_list': [new_session_id],
-            'profile_img_url': config.url + 'static/default.jpg'
+            'profile_img_url': config.url + 'static/default.jpg',
+            'notifications': []
         }
     )
 

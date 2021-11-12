@@ -82,6 +82,7 @@ def obtain_user_details(auth_user_id, store):
                 'name_first': user_iter['name_first'], 
                 'name_last': user_iter['name_last'],
                 'handle_str': user_iter['handle_str'],
+                'profile_img_url': user_iter['profile_img_url']
             }
     return user_details_temp
 

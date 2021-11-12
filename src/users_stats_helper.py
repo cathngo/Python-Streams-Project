@@ -55,6 +55,9 @@ Return Value:
     new_count = recent['num_dms_exist'] + increment
     store['workspace_stats']['dms_exist'].append({'num_dms_exist': new_count, 'time_stamp': time_created})
 
+    data_store.set(store)
+    save_pickle()
+    
 def update_messages_exist(store, increment):
     '''
 Adds a new timestamp to messages_exist for the workspace stats

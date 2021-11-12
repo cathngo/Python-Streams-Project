@@ -36,6 +36,7 @@ from src.standup import standup_active, standup_start, standup_send
 from src.message_pin import message_pin_v1, message_unpin_v1
 from src.message_share import message_share
 from src.message_send_later_dm import message_sendlaterdm_v1
+from src.notifications import notifications_get_v1
 
 
 def quit_gracefully(*args):
@@ -673,6 +674,15 @@ def unpin_message():
     return dumps(
         message_unpin_v1(user_token['u_id'], message_id)
     )
+
+@APP.route("/notifications/get/v1", methods=['GET'])
+def get_notifications():
+    token = request.args.get('token')
+
+    user_token = decode_jwt(token)
+    check_valid_token(user_token)
+
+    return dumps(notifications_get_v1(user_token['u_id']))
 #### NO NEED TO MODIFY BELOW THIS POINT
 
 if __name__ == "__main__":
