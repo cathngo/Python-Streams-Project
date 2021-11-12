@@ -1,6 +1,7 @@
 import requests
 from src import config
 from src.error import InputError, AccessError
+from src.auth_register_helper import hash_user_password
 from tests.pytest_fixtures import clear, reg_user_alpaca, reg_user2, reg_user1
 
 def test_invalid_code(clear, reg_user_alpaca):
@@ -10,7 +11,3 @@ def test_invalid_code(clear, reg_user_alpaca):
 def test_invalid_password(clear, reg_user1):
     re = requests.post(config.url + 'auth/passwordreset/reset/v1', json={'reset_code': 'invalid_code','new_password': 'inval'})
     assert re.status_code == InputError.code
-
-
-
-

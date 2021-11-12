@@ -53,6 +53,21 @@ def send_email_to_reset(email):
     save_pickle()
 
 def reset_password(code, new_password):
+    '''
+    Given a query string, return a collection of messages 
+    in all of the channels/DMs that the user has joined that contain the query.
+
+    Arguments:
+        reset_code (string) - The code sent through email 
+        new_password (string) - The new password
+
+    Exceptions:
+        InpurError if new_password is smaller than 6 characters
+
+    Return Value: 
+        None.
+
+    '''
     check_password(new_password)
     store = open_pickle()
 
