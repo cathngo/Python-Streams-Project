@@ -118,6 +118,8 @@ Return Value:
             #increment the count if it increases dm joined (dmcreate) or decrement it (dm/leave or dm/remove <- need to double check for dmremove)
             new_count = recent['num_dms_joined'] + increment
             user['user_stats']['dms_joined'].append({'num_dms_joined': new_count, 'time_stamp': time_created})
+    data_store.set(store)
+    save_pickle()
 
 #this will only ever increase message count for user stats
 def update_messages_sent(u_id, store, increment):

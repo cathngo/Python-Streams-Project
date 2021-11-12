@@ -2,6 +2,7 @@ from src.data_store import data_store
 from src.error import InputError
 from src.remove_edit_message_helper import in_channel_search, in_dm_search
 from src.message_react_helper import react_dm_message, react_channel_message, unreact_dm_message, unreact_channel_message
+from src.notifications import identify_react_notification
 
 def message_react_v1(u_id, message_id, react_id):
     '''
@@ -28,10 +29,16 @@ Return Value:
 
     if in_channel_found:
         react_channel_message(u_id, react_id, in_channel_found['message'], in_channel_found['channel'])
+        channel = in_channel_found['channel']
+        sender = in_channel_found['message']
+        identify_react_notification(u_id, sender['u_id'], channel['channel_id'], -1, message_id)
         return {}
     
     if in_dm_found:
         react_dm_message(u_id, react_id, in_dm_found['message'], in_dm_found['dm'])
+        dm = in_dm_found['dm']
+        sender = in_dm_found['message']
+        identify_react_notification(u_id, sender['u_id'], -1, dm['dm_id'], message_id)       
         return {}
 
     raise InputError(description= "message_id is not valid")

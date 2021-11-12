@@ -12,9 +12,9 @@ from src.channel_messages_helper import check_message_time, find_time_delay
 from src.dm_helper import check_dm_id_exists, check_user_in_dm, obtain_user_details
 from src.user_stats_helper import update_messages_sent_later
 from src.users_stats_helper import update_messages_exist_sent_later
+from src.notifications import identify_tag
 
-
-def send_dm_later(u_id, dm_id, message_id, message, time_sent):
+def send_dm_later(auth_user_id, dm_id, message_id, message, time_sent):
     '''
     Adds the message to the start of the messages list within dm
 
@@ -34,7 +34,7 @@ def send_dm_later(u_id, dm_id, message_id, message, time_sent):
     dm['messages'].append(
         {
         'message_id': message_id, 
-        'u_id': u_id, 
+        'u_id': auth_user_id, 
         'message': message,
         'time_created': time_sent,
         'is_pinned': False,
@@ -47,14 +47,15 @@ def send_dm_later(u_id, dm_id, message_id, message, time_sent):
             ]
         }
     )
+    
     #increase num_messages_sent for the user who sent the msg user stats
-    update_messages_sent_later(time_sent, u_id, store, 1)
+    update_messages_sent_later(time_sent, auth_user_id, store, 1)
     #increase num_msgs_exist for workspace stats
     update_messages_exist_sent_later(time_sent, store, 1)
 
-
     data_store.set(store)
     save_pickle()
+    identify_tag(auth_user_id, -1, dm_id, message, message_id)
 
 def message_sendlaterdm_v1(u_id, dm_id, message, time_sent):
     '''

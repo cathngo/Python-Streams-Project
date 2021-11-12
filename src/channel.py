@@ -7,6 +7,7 @@ from src.channel_messages_helper import get_channel, messages_pagination
 from src.dm_helper import check_dm_id_exists, check_user_in_dm
 from src.data_persistence import save_pickle, open_pickle
 from src.user_stats_helper import update_channels_joined
+from src.notifications import identify_add
 '''
 Allows user to invite a user in streams to a channel
 
@@ -44,10 +45,13 @@ def channel_invite_v1(auth_user_id, channel_id, u_id):
                 if dict['u_id'] == u_id:
                     raise InputError(description="This member cannot be invited as they are already part of the channel")
             #if u_id is not part of the channel then append as a dictionary
-            channel['all_members'].append({'u_id': u_id})
+            channel['all_members'].append({'u_id': u_id})      
     
+
+
     data_store.set(store)
     save_pickle()
+    identify_add(auth_user_id, u_id, channel_id, -1)
     return {
     }
     
