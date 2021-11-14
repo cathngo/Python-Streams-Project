@@ -294,6 +294,11 @@ def test_message_share_works():
     })
     payload3 = r3.json()
 
+    requests.post(config.url + 'dm/create/v1', json={
+        'token': payload1['token'],
+        'u_ids': [],
+    })
+
     r4 = requests.post(config.url + 'dm/create/v1', json={
         'token': payload1['token'],
         'u_ids': [],
