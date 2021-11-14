@@ -4,6 +4,8 @@ import json
 from src import config
 from src.other import clear_v1
 import jwt
+from src.error import AccessError, InputError
+
 
 # Checks if channel is invalid and gives input error
 def test_invalid_channel_id():
@@ -18,7 +20,7 @@ def test_invalid_channel_id():
     user2 = requests.post(config.url + 'auth/register/v2', json={'email': 'validemail1@gmail.com', 'password': '122abc!@#', 'name_first': 'Tam', 'name_last': 'Lam'})
     user_token2 = user2.json()
     join = requests.post(config.url + 'channel/join/v2', json={'token': user_token2['token'], 'channel_id': channel_id['channel_id'] + 1})
-    assert join.status_code == 400
+    assert join.status_code == InputError.code
 
 # Check if channel_join_v2
 def test_http_channel_join_works():
@@ -53,7 +55,7 @@ def test_http_channel_rejoin_error():
     user_token2 = user2.json()
     requests.post(config.url + 'channel/join/v2', json={'token': user_token2['token'], 'channel_id': channel_id['channel_id']})
     join = requests.post(config.url + 'channel/join/v2', json={'token': user_token2['token'], 'channel_id': channel_id['channel_id']})
-    assert join.status_code == 400
+    assert join.status_code == InputError.code
 
 # If channel is private and user is not global owner check if join is prevented
 def test_http_channel_private_error():
@@ -68,6 +70,6 @@ def test_http_channel_private_error():
     user2 = requests.post(config.url + 'auth/register/v2', json={'email': 'validemail1@gmail.com', 'password': '122abc!@#', 'name_first': 'Tam', 'name_last': 'Lam'})
     user_token2 = user2.json()
     join = requests.post(config.url + 'channel/join/v2', json={'token': user_token2['token'], 'channel_id': channel_id['channel_id']})
-    assert join.status_code == 403
+    assert join.status_code == AccessError.code
   
 

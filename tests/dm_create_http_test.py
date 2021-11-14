@@ -1,5 +1,6 @@
 import requests
 from src import config
+from src.error import AccessError, InputError
 
 def test_dm_create_works():
     '''
@@ -44,7 +45,7 @@ def test_invalid_token():
         'token': 'invalidtoken',
         'u_ids': [payload1['auth_user_id']],
     })
-    assert r2.status_code == 403
+    assert r2.status_code == AccessError.code
 
 def test_empty_u_ids():
     '''
@@ -88,7 +89,7 @@ def test_invalid_u_ids():
         'token': payload1['token'],
         'u_ids': [payload2['auth_user_id'] + 1],
     })
-    assert r2.status_code == 400
+    assert r2.status_code == InputError.code
 
 def test_unique_dm_id():
     '''

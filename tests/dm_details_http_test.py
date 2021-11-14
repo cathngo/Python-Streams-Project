@@ -1,5 +1,6 @@
 import requests
 from src import config
+from src.error import AccessError, InputError
 
 def test_dm_details_works():
     '''
@@ -83,7 +84,7 @@ def test_invalid_dm_id():
         'token': payload1['token'],
         'dm_id': payload2['dm_id'] + 1,
     })
-    assert r3.status_code == 400
+    assert r3.status_code == InputError.code
 
 def test_not_dm_member():
     '''
@@ -115,4 +116,4 @@ def test_not_dm_member():
         'token': payload2['token'],
         'dm_id': payload3['dm_id'],
     })
-    assert r4.status_code == 403
+    assert r4.status_code == AccessError.code

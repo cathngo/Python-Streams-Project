@@ -4,6 +4,7 @@ import json
 from src import config
 from src.other import clear_v1
 import jwt
+from src.error import AccessError, InputError
 
 # Checks for invalid token
 def test_invalid_token_leave():
@@ -20,7 +21,7 @@ def test_invalid_token_leave():
     requests.post(config.url + 'channel/join/v2', json={'token': user_token2['token'], 'channel_id': channel_id['channel_id']})
     invalid_token = jwt.encode({'u_id': 0, 'session_id': 0}, 'Invalid', algorithm='HS256')
     leave = requests.post(config.url + 'channel/leave/v1', json={'token': invalid_token, 'channel_id': channel_id['channel_id']})
-    assert leave.status_code == 403
+    assert leave.status_code == AccessError.code
 
 # Checks for invalid channel
 def test_invalid_channel_leave():
@@ -36,7 +37,7 @@ def test_invalid_channel_leave():
     user_token2 = user2.json()
     requests.post(config.url + 'channel/join/v2', json={'token': user_token2['token'], 'channel_id': channel_id['channel_id']})
     leave = requests.post(config.url + 'channel/leave/v1', json={'token': user_token2['token'], 'channel_id': channel_id['channel_id'] + 1})
-    assert leave.status_code == 400
+    assert leave.status_code == InputError.code
 
 
 # Check if channel_leave_v1 works for member
@@ -95,4 +96,4 @@ def test_http_channel_notjoined_error():
     user2 = requests.post(config.url + 'auth/register/v2', json={'email': 'validemail1@gmail.com', 'password': '122abc!@#', 'name_first': 'Tam', 'name_last': 'Lam'})
     user_token2 = user2.json()
     leave = requests.post(config.url + 'channel/leave/v1', json={'token': user_token2['token'], 'channel_id': channel_id['channel_id']})
-    assert leave.status_code == 403
+    assert leave.status_code == AccessError.code

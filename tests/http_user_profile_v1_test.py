@@ -3,6 +3,7 @@ import requests
 import json
 from src import config
 import jwt
+from src.error import AccessError, InputError
 
 #check input error when for invalid u_id but valid token
 def test_invalid_u_id():
@@ -13,7 +14,7 @@ def test_invalid_u_id():
     user_token = user.json()
     invalid_u_id = user_token['auth_user_id'] + 100
     resp = requests.get(config.url + 'user/profile/v1', params={'token': user_token['token'], 'u_id': invalid_u_id})
-    resp.status_code == 400
+    resp.status_code == InputError.code
 
 #check returns correct details
 def test_correct_details():
@@ -51,7 +52,7 @@ def test_invalid_token():
     invalid_u_id = user_token['auth_user_id'] + 1
     invalid_token = jwt.encode({'u_id': invalid_u_id, 'session_id': 0}, config.SECRET, algorithm='HS256')
     resp = requests.get(config.url + 'user/profile/v1', params={'token': invalid_token, 'u_id': invalid_u_id})
-    assert resp.status_code == 403
+    assert resp.status_code == AccessError.code
 
 #check accesserror for token with wrong secret
 def test_invalid_secret():
@@ -60,7 +61,7 @@ def test_invalid_secret():
     user_token = user.json()
     invalid_token = jwt.encode({'u_id': user_token['auth_user_id'], 'session_id': 0}, 'Invalid', algorithm='HS256')
     resp = requests.get(config.url + 'user/profile/v1', params={'token': invalid_token, 'u_id': user_token['auth_user_id']})
-    assert resp.status_code == 403
+    assert resp.status_code == AccessError.code
 
 #check access error for invalid token but valid id
 def test_invalid_token_valid_u_id():
@@ -70,4 +71,4 @@ def test_invalid_token_valid_u_id():
     invalid_u_id = user_token['auth_user_id'] + 1
     invalid_token = jwt.encode({'u_id': invalid_u_id, 'session_id': 0}, config.SECRET, algorithm='HS256')
     resp = requests.get(config.url + 'user/profile/v1', params={'token': invalid_token, 'u_id': user_token['auth_user_id']})
-    assert resp.status_code == 403
+    assert resp.status_code == AccessError.code

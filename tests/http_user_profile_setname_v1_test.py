@@ -2,6 +2,7 @@ import requests
 import json
 from src import config
 import jwt
+from src.error import AccessError, InputError
 
 #check name is updated for one user
 def test_name_updated_once():
@@ -32,7 +33,7 @@ def test_short_first_name():
     user = requests.post(config.url + 'auth/register/v2', json={'email': 'validemail@gmail.com', 'password': '123abc!@#', 'name_first': 'Sam', 'name_last': 'Smith'})
     user_token = user.json()
     r = requests.put(config.url + 'user/profile/setname/v1', json={'token': user_token['token'], 'name_first': '', 'name_last': 'Bean'})  
-    assert r.status_code == 400
+    assert r.status_code == InputError.code
 
 #check input error if first name less than 1 character
 def test_short_last_name():
@@ -40,7 +41,7 @@ def test_short_last_name():
     user = requests.post(config.url + 'auth/register/v2', json={'email': 'validemail@gmail.com', 'password': '123abc!@#', 'name_first': 'Sam', 'name_last': 'Smith'})
     user_token = user.json()
     r = requests.put(config.url + 'user/profile/setname/v1', json={'token': user_token['token'], 'name_first': 'Mister', 'name_last': ''})  
-    assert r.status_code == 400
+    assert r.status_code == InputError.code
 
 #check input error if first name than 50 characters
 def test_long_first_name():
@@ -48,7 +49,7 @@ def test_long_first_name():
     user = requests.post(config.url + 'auth/register/v2', json={'email': 'validemail@gmail.com', 'password': '123abc!@#', 'name_first': 'Sam', 'name_last': 'Smith'})
     user_token = user.json()
     r = requests.put(config.url + 'user/profile/setname/v1', json={'token': user_token['token'], 'name_first': 'thisNameisLongerthanfiftycharactersthisNameisLongerthanfiftycharacters', 'name_last': 'Bean'})  
-    assert r.status_code == 400
+    assert r.status_code == InputError.code
 
 #check input error if first name than 50 characters
 def test_long_last_name():
@@ -56,7 +57,7 @@ def test_long_last_name():
     user = requests.post(config.url + 'auth/register/v2', json={'email': 'validemail@gmail.com', 'password': '123abc!@#', 'name_first': 'Sam', 'name_last': 'Smith'})
     user_token = user.json()
     r = requests.put(config.url + 'user/profile/setname/v1', json={'token': user_token['token'], 'name_first': 'Mister', 'name_last': 'thisNameisLongerthanfiftycharactersthisNameisLongerthanfiftycharacters'})  
-    assert r.status_code == 400
+    assert r.status_code == InputError.code
 
 #access error if invalid token
 def test_invalid_token():
@@ -66,7 +67,7 @@ def test_invalid_token():
     invalid_u_id = user_token['auth_user_id'] + 1
     invalid_token = jwt.encode({'u_id': invalid_u_id, 'session_id': 0}, config.SECRET, algorithm='HS256')
     r = requests.put(config.url + 'user/profile/setname/v1', json={'token': invalid_token, 'name_first': 'Jelly', 'name_last': 'Bean'})  
-    assert r.status_code == 403   
+    assert r.status_code == AccessError.code   
 
 #access error if invalid token secret
 def test_invalid_token_secret():
@@ -75,7 +76,7 @@ def test_invalid_token_secret():
     user_token = user.json()
     invalid_token = jwt.encode({'u_id': user_token['auth_user_id'], 'session_id': 0}, 'Invalid', algorithm='HS256')
     r = requests.put(config.url + 'user/profile/setname/v1', json={'token': invalid_token, 'name_first': 'Jelly', 'name_last': 'Bean'})  
-    assert r.status_code == 403   
+    assert r.status_code == AccessError.code   
 
 #check access error if both invalid name and invalid token
 def test_invalid_name_invalid_token():
@@ -85,7 +86,7 @@ def test_invalid_name_invalid_token():
     invalid_u_id = user_token['auth_user_id'] + 1
     invalid_token = jwt.encode({'u_id': invalid_u_id, 'session_id': 0}, config.SECRET, algorithm='HS256')
     r = requests.put(config.url + 'user/profile/setname/v1', json={'token': invalid_token, 'name_first': 'thisNameisLongerthanfiftycharactersthisNameisLongerthanfiftycharacters', 'name_last': 'Bean'})  
-    assert r.status_code == 403   
+    assert r.status_code == AccessError.code   
 
 
 #check returns an empty dictionary
