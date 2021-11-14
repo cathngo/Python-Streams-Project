@@ -142,3 +142,24 @@ def test_message_more_than_one_thousand_character_message_send_dm_later(clear, r
     })
 
     assert resp.status_code == InputError.code
+
+def test_message_invalid_time(clear, reg_user1, reg_dm_user1):
+    user1 = reg_user1
+    dm_reg = reg_dm_user1
+
+    resp = requests.post(config.url + 'message/sendlaterdm/v1', json={
+        'token': user1['token'], 
+        'dm_id': dm_reg['dm_id'],
+        'message': "hello",
+        'time_sent': int(datetime.now().timestamp()) - 10,
+        'is_pinned': False,
+        'reacts':[
+                {
+                    'react_id': 1,
+                    'u_ids': [], 
+                    'is_this_user_reacted': False
+                }
+            ]
+    })
+
+    assert resp.status_code == InputError.code

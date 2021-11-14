@@ -51,8 +51,22 @@ def test_search_dms(
     clear, reg_user1, reg_user2, reg_dm_user1, send_dm_message_user1
     ):
     user1 = reg_user1
-    query = "hello"
+    dm_reg = reg_dm_user1
+    requests.post(config.url + 'message/senddm/v1', json={
+        'token': user1['token'], 
+        'dm_id': dm_reg['dm_id'],
+        'message': "message2",
+    })
+    query = "message2"
     resp = requests.get(config.url + "search/v1", params={'token': user1['token'],'query_str': query})
     mess = resp.json()
-    assert len(mess['messages']) == 1 
+    assert len(mess['messages']) == 1
 
+def test_search_not_in_dm(
+    clear, reg_user1, reg_user2, reg_dm_user1
+    ):
+    user2 = reg_user2
+    query = "hello"
+    resp = requests.get(config.url + "search/v1", params={'token': user2['token'],'query_str': query})
+    mess = resp.json()
+    assert len(mess['messages']) == 0

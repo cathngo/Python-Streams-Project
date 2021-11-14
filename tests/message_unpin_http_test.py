@@ -167,3 +167,61 @@ def test_owner_can_unpin_message_in_dm(
     })
     message_list = message_page.json()
     assert message_list['messages'][0]['is_pinned'] == False
+
+def test_pin_when_more_than_one_message_channel(
+    clear, reg_user1, reg_channel_user1
+    ):
+    user1 = reg_user1
+    channel_id = reg_channel_user1
+
+    requests.post(config.url + 'message/send/v1', json={
+        'token': user1['token'], 
+        'channel_id': channel_id,
+        'message': "hello",
+    })
+    resp = requests.post(config.url + 'message/send/v1', json={
+        'token': user1['token'], 
+        'channel_id': channel_id,
+        'message': "hello",
+    })
+    resp1 = resp.json()
+
+    requests.post(config.url + 'message/pin/v1', json={ 
+        'token': user1['token'],
+        'message_id': resp1['message_id'],
+    })
+
+    unpin = requests.post(config.url + 'message/unpin/v1', json={ 
+        'token': user1['token'],
+        'message_id': resp1['message_id'], 
+    })
+    assert unpin.status_code == 200
+
+def test_pin_when_more_than_one_message_dm(
+    clear, reg_user1, reg_dm_2users
+    ):
+    user1 = reg_user1
+    dm_id = reg_dm_2users
+
+    requests.post(config.url + 'message/senddm/v1', json={
+        'token': user1['token'], 
+        'dm_id': dm_id['dm_id'],
+        'message': "hello",
+    })
+    resp = requests.post(config.url + 'message/senddm/v1', json={
+        'token': user1['token'], 
+        'dm_id': dm_id['dm_id'],
+        'message': "hello",
+    })
+    resp1 = resp.json()
+
+    requests.post(config.url + 'message/pin/v1', json={ 
+        'token': user1['token'],
+        'message_id': resp1['message_id'],
+    })
+
+    unpin = requests.post(config.url + 'message/unpin/v1', json={ 
+        'token': user1['token'],
+        'message_id': resp1['message_id'], 
+    })
+    assert unpin.status_code == 200
