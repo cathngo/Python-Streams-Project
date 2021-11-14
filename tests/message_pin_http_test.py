@@ -158,3 +158,27 @@ def test_owner_can_pin_message_in_dm(
     })
     message_list = message_page.json()
     assert message_list['messages'][0]['is_pinned'] == True
+
+def test_pin_when_more_than_one_message(
+    clear, reg_user1, reg_channel_user1
+    ):
+    user1 = reg_user1
+    channel_id = reg_channel_user1
+
+    requests.post(config.url + 'message/send/v1', json={
+        'token': user1['token'], 
+        'channel_id': channel_id,
+        'message': "hello",
+    })
+    resp = requests.post(config.url + 'message/send/v1', json={
+        'token': user1['token'], 
+        'channel_id': channel_id,
+        'message': "hello",
+    })
+    resp1 = resp.json()
+
+    pin = requests.post(config.url + 'message/pin/v1', json={ 
+        'token': user1['token'],
+        'message_id': resp1['message_id'],
+    })
+    assert pin.status_code == 200
