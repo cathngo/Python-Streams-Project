@@ -16,8 +16,6 @@ def messages_in_channel(u_id: int, query: str, channels: list):
     return return_list
 
 def messages_in_dms(u_id, query, dms):
-    if len(query) > 1000 or len(query) < 1:
-        raise InputError(description="Length of the is less than 1 or over 1000 characters")
     return_list = []
     #check all dms
     for dm in dms:
