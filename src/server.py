@@ -508,7 +508,7 @@ def upload_profile():
 def get_image(filename):
     path = os.path.join(current_app.root_path, 'images')
 
-    return send_from_directory(directory=path, filename=filename)
+    return send_from_directory(path, filename)
    
 
 
