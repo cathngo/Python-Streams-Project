@@ -314,7 +314,7 @@ def test_message_share_works():
 
     r4 = requests.post(config.url + 'dm/create/v1', json={
         'token': user2['token'],
-        'u_ids': [payload1['token']],
+        'u_ids': [payload1['auth_user_id']],
     })
     payload4 = r4.json()
 
