@@ -160,7 +160,7 @@ def test_user2_react_to_user1_message_in_channel_is_true(
 
 def test_user2_tries_to_react_to_a_message_in_a_channel_they_are_not_a_member_of(
     clear, reg_user2, send_channel_message_user1
-    ): 
+    ):
     user2 = reg_user2
     message_id = send_channel_message_user1
 
@@ -182,4 +182,42 @@ def test_user2_tries_to_react_to_a_message_in_a_dm_they_are_not_a_member_of(
         'message_id': message_id,
         'react_id': 1   
     })
-    assert react.status_code == InputError.code 
+    assert react.status_code == InputError.code
+
+def test_channel_react_second_message_works(
+    clear, reg_user1, send_channel_message_user1, send_2nd_channel_message_user1
+    ):
+    user1 = reg_user1
+    message_id = send_2nd_channel_message_user1
+
+    react = requests.post(config.url + 'message/react/v1', json={ 
+        'token': user1['token'],
+        'message_id': message_id,
+        'react_id': 1  
+    })
+    unreacted = requests.post(config.url + 'message/unreact/v1', json={ 
+        'token': user1['token'],
+        'message_id': message_id,
+        'react_id': 1
+    })
+    assert react.status_code == 200
+    assert unreacted.status_code == 200
+
+def test_dm_react_second_message_works(
+    clear, reg_user1, send_dm_message_user1, send_2nd_dm_message_user1
+    ):
+    user1 = reg_user1
+    message_id = send_2nd_dm_message_user1
+
+    react = requests.post(config.url + 'message/react/v1', json={ 
+        'token': user1['token'],
+        'message_id': message_id,
+        'react_id': 1  
+    })
+    unreacted = requests.post(config.url + 'message/unreact/v1', json={ 
+        'token': user1['token'],
+        'message_id': message_id,
+        'react_id': 1
+    })
+    assert react.status_code == 200
+    assert unreacted.status_code == 200
