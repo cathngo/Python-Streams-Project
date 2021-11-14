@@ -10,7 +10,7 @@ from tests.pytest_fixtures import (
     user1_react_to_their_message_in_channel, user1_react_to_their_message_in_dm,
     user2_react_to_user1_message_in_dm, user2_react_to_user1_message_in_channel,
     send_channel_message_with_two_users_user1, send_dm_message_user1_in_dm_with_two_users, 
-    user2_channel_join
+    user2_channel_join, send_2nd_channel_message_user1, send_2nd_dm_message_user1
 )
 
 def test_invalid_token_message_react(clear, reg_user1, send_channel_message_user1):
