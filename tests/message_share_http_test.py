@@ -280,12 +280,25 @@ def test_message_share_works():
     })
     payload1 = r1.json()
 
+    u2 = requests.post(config.url + 'auth/register/v2', json={
+        'email': 'user2@email.com',
+        'password': 'user2password',
+        'name_first': 'Kanyee',
+        'name_last': 'Yeezuss',
+    })
+    user2 = u2.json()
+
     r2 = requests.post(config.url + 'channels/create/v2', json={
-        'token': payload1['token'],
+        'token': user2['token'],
         'name': 'Alpaca',
         'is_public': True,
     })
     payload2 = r2.json()
+
+    requests.post(config.url + 'channel/join/v2', json={
+        'token': payload1['token'],
+        'channel_id': payload2['channel_id']
+    })
 
     r3 = requests.post(config.url + 'message/send/v1', json={
         'token': payload1['token'], 
@@ -300,8 +313,8 @@ def test_message_share_works():
     })
 
     r4 = requests.post(config.url + 'dm/create/v1', json={
-        'token': payload1['token'],
-        'u_ids': [],
+        'token': user2['token'],
+        'u_ids': [payload1['token']],
     })
     payload4 = r4.json()
 
