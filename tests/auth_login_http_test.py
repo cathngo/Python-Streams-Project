@@ -2,6 +2,9 @@ import requests
 import jwt
 from src import config
 from src.config import SECRET
+from src.error import InputError
+
+
 
 # Checks if auth_login_v2 works correctly 
 def test_http_auth_login_works():
@@ -36,7 +39,7 @@ def test_http_unregistered_auth_login():
         'email': 'user2@email.com',
         'password': 'user2password',
     })
-    assert r2.status_code == 400
+    assert r2.status_code == InputError.code
 
 # Check if email entered is not a valid email
 def test_http_invalid_email_auth_login():
@@ -51,7 +54,7 @@ def test_http_invalid_email_auth_login():
         'email': '',
         'password': 'user2password',
     })
-    assert r2.status_code == 400
+    assert r2.status_code == InputError.code
 
 # Check if password is not correct
 def test_http_auth_login_incorrect_password():
@@ -66,7 +69,7 @@ def test_http_auth_login_incorrect_password():
         'email': 'user1@email.com',
         'password': 'user2password',
     })
-    assert r2.status_code == 400
+    assert r2.status_code == InputError.code
     
     
     

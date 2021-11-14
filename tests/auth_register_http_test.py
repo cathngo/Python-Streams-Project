@@ -2,6 +2,7 @@ import requests
 import jwt
 from src import config
 from src.config import SECRET
+from src.error import InputError
 
 def test_http_auth_register_works():
     '''
@@ -127,9 +128,9 @@ def test_http_unique_invalid_email():
         'name_first': 'Kanye',
         'name_last': 'South',
     })
-    assert r1.status_code == 400
-    assert r2.status_code == 400
-    assert r3.status_code == 400
+    assert r1.status_code == InputError.code
+    assert r2.status_code == InputError.code
+    assert r3.status_code == InputError.code
 
 def test_http_register_duplicate_email():
     '''
@@ -148,7 +149,7 @@ def test_http_register_duplicate_email():
         'name_first': 'Lavar',
         'name_last': 'Ball',
     })
-    assert r2.status_code == 400
+    assert r2.status_code == InputError.code
 
 def test_http_register_password_length():
     '''
@@ -161,7 +162,7 @@ def test_http_register_password_length():
         'name_first': 'Kanye',
         'name_last': 'Yeezus',
     })
-    assert r1.status_code == 400
+    assert r1.status_code == InputError.code
 
 def test_http_register_fname_length():
     '''
@@ -180,8 +181,8 @@ def test_http_register_fname_length():
         'name_first': 'ffffff' * 10,
         'name_last': 'Ball',
     })
-    assert r1.status_code == 400
-    assert r2.status_code == 400
+    assert r1.status_code == InputError.code
+    assert r2.status_code == InputError.code
 
 def test_http_register_lname_length():
     '''
@@ -200,8 +201,8 @@ def test_http_register_lname_length():
         'name_first': 'Lavar',
         'name_last': 'ffffff' * 10,
     })
-    assert r1.status_code == 400
-    assert r2.status_code == 400
+    assert r1.status_code == InputError.code
+    assert r2.status_code == InputError.code
 
 def test_unique_handle():
     '''
@@ -286,6 +287,6 @@ def test_unique_handle():
         'name_first': 'KanyeKanyeKanye123',
         'name_last': 'WestWestWest123',
     })
-    assert r1.status_code != 400
-    assert r2.status_code != 400
-    assert r3.status_code != 400
+    assert r1.status_code != InputError.code
+    assert r2.status_code != InputError.code
+    assert r3.status_code != InputError.code

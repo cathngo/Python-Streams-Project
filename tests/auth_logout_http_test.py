@@ -2,6 +2,8 @@ import requests
 import jwt
 from src import config
 from src.config import SECRET
+from src.error import AccessError
+
 
 # Checks if auth_logout_v2 works
 def test_http_auth_logout_works():
@@ -30,7 +32,7 @@ def test_http_auth_logout_invalid_token():
     r2 = requests.post(config.url + 'auth/logout/v1', json={
         'token': invalid_token,
     })
-    assert r2.status_code == 403
+    assert r2.status_code == AccessError.code
 
 def test_http_auth_double_logout():
     requests.delete(config.url + 'clear/v1')
@@ -47,7 +49,7 @@ def test_http_auth_double_logout():
     r3 = requests.post(config.url + 'auth/logout/v1', json={
         'token': payload1['token'],
     })
-    assert r3.status_code == 403
+    assert r3.status_code == AccessError.code
 
 def test_http_login_logout():
     requests.delete(config.url + 'clear/v1')

@@ -2,7 +2,7 @@ import requests
 import json
 from src import config
 import jwt
-
+from src.error import AccessError
 
 #check 
 def test_basic_listall():
@@ -61,4 +61,4 @@ def test_invalid_token_listall():
     
     re = requests.get(config.url + 'channels/listall/v2', params={'token': invalid_token})
     
-    assert re.status_code == 403
+    assert re.status_code == AccessError.code

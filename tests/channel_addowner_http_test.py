@@ -4,6 +4,7 @@ import json
 from src import config
 from src.other import clear_v1
 import jwt
+from src.error import AccessError, InputError
 
 # Checks if the function works
 def test_addowner_works():
@@ -36,7 +37,7 @@ def test_invalid_token_addowner():
     requests.post(config.url + 'channel/join/v2', json={'token': user_token2['token'], 'channel_id': channel_id['channel_id']})
     invalid_token = jwt.encode({'u_id': 0, 'session_id': 0}, 'Invalid', algorithm='HS256')
     add = requests.post(config.url + 'channel/addowner/v1', json={'token': invalid_token, 'channel_id': channel_id['channel_id'], 'u_id': user_token2['auth_user_id']})
-    assert add.status_code == 403
+    assert add.status_code == AccessError.code
 
 # Checks for invalid channel
 def test_invalid_channel_addowner():
@@ -52,7 +53,7 @@ def test_invalid_channel_addowner():
     user_token2 = user2.json()
     requests.post(config.url + 'channel/join/v2', json={'token': user_token2['token'], 'channel_id': channel_id['channel_id']})
     add = requests.post(config.url + 'channel/addowner/v1', json={'token': user_token2['token'], 'channel_id': channel_id['channel_id'] + 1, 'u_id': user_token2['auth_user_id']})
-    assert add.status_code == 400
+    assert add.status_code == InputError.code
 
 
 # Check if u_id does not refer to a member of the channel
@@ -68,7 +69,7 @@ def test_http_channel_addowner_works_member():
     user2 = requests.post(config.url + 'auth/register/v2', json={'email': 'validemail1@gmail.com', 'password': '122abc!@#', 'name_first': 'Tam', 'name_last': 'Lam'})
     user_token2 = user2.json()
     add = requests.post(config.url + 'channel/addowner/v1', json={'token': user_token['token'], 'channel_id': channel_id['channel_id'], 'u_id': user_token2['auth_user_id']})
-    assert add.status_code == 400
+    assert add.status_code == InputError.code
 
 # u_id refers to an owner 
 def test_http_channel_addowner_already_owner():
@@ -80,7 +81,7 @@ def test_http_channel_addowner_already_owner():
     channel = requests.post(config.url + 'channels/create/v2', json={'token': user_token['token'], 'name': 'Alpaca', 'is_public': True})
     channel_id = channel.json()
     add = requests.post(config.url + 'channel/addowner/v1', json={'token': user_token['token'], 'channel_id': channel_id['channel_id'], 'u_id': user_token['auth_user_id']})
-    assert add.status_code == 400
+    assert add.status_code == InputError.code
 
 
 # Check if user adding is an owner
@@ -100,4 +101,4 @@ def test_http_channel_owner_adding():
     user_token3 = user3.json()
     requests.post(config.url + 'channel/join/v2', json={'token': user_token3['token'], 'channel_id': channel_id['channel_id']})
     add = requests.post(config.url + 'channel/addowner/v1', json={'token': user_token2['token'], 'channel_id': channel_id['channel_id'], 'u_id': user_token3['auth_user_id']})
-    assert add.status_code == 403
+    assert add.status_code == AccessError.code

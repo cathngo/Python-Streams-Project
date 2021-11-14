@@ -5,6 +5,7 @@ import json
 from werkzeug.exceptions import UnsupportedMediaType
 from src import config
 import jwt 
+from src.error import AccessError, InputError
 
 
 #check if the token is valid
@@ -20,7 +21,7 @@ def test_token_is_invalid():
     invalid_token = jwt.encode({'u_id': user_token['auth_user_id'], 'session_id': 0}, 'Invalid', algorithm='HS256')
     #pass valid channel id but invalid token
     resp = requests.delete(config.url + 'admin/user/remove/v1', json={'token': invalid_token, 'u_id': user_token['auth_user_id']})
-    assert resp.status_code == 403
+    assert resp.status_code == AccessError.code
 
 #check when u_id is invalid
 def test_remove_invalid_u_id():
@@ -32,7 +33,7 @@ def test_remove_invalid_u_id():
 
     #pass valid channel id but invalid token
     resp = requests.delete(config.url + 'admin/user/remove/v1', json={'token': user_token['token'], 'u_id': invalid_u_id})
-    assert resp.status_code == 400
+    assert resp.status_code == InputError.code
 
 #check the return list of users/all
 def test_user_all_remove():
@@ -57,7 +58,7 @@ def test_remove_last_global_owner():
     user = requests.post(config.url + 'auth/register/v2', json={'email': 'validemail@gmail.com', 'password': '123abc!@#', 'name_first': 'Kanye', 'name_last': 'Chan'})
     user_token = user.json()
     re = requests.delete(config.url + 'admin/user/remove/v1', json={'token': user_token['token'], 'u_id':user_token['auth_user_id']})
-    assert re.status_code == 400
+    assert re.status_code == InputError.code
 
 #normal member tries to remove other members
 def test_not_authorised_removes():
@@ -70,7 +71,7 @@ def test_not_authorised_removes():
     user_token3 = user3.json()
     #user2 who is not a global owner tries to remove another member 
     re = requests.delete(config.url + 'admin/user/remove/v1', json={'token': user_token2['token'], 'u_id':user_token3['auth_user_id']})
-    assert re.status_code == 403
+    assert re.status_code == AccessError.code
 
 #global owner removes channel owner from streams
 def test_removed_channel_owner():
@@ -91,7 +92,7 @@ def test_removed_channel_owner():
     assert r.status_code == 200
     #deleted user2 invites another user to the channel made by user2
     re = requests.post(config.url + 'channel/invite/v2',json={'token': user_token2['token'],'channel_id': channel_id['channel_id'], 'u_id': user_token3['auth_user_id']})
-    assert re.status_code == 403
+    assert re.status_code == AccessError.code
 
 #check user profile
 def test_remove_and_check_profile():
@@ -142,7 +143,7 @@ def test_remove_dm_owner():
     requests.delete(config.url + 'admin/user/remove/v1', json={'token': user_token['token'], 'u_id':user_token2['auth_user_id']})
 
     re = requests.post(config.url + 'dm/leave/v1', json={'token': user_token2['token'], 'dm_id': dm_id['dm_id']})
-    assert re.status_code == 403
+    assert re.status_code == AccessError.code
 
 #test removing user with dm messages and channel messages 
 def test_remove_messages_owner():

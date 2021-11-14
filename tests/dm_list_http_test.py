@@ -1,5 +1,7 @@
 import requests
 from src import config
+from src.error import AccessError
+
 
 def test_dm_list_works():
     '''
@@ -75,4 +77,4 @@ def test_invalid_token():
     r2 = requests.get(config.url + 'dm/list/v1', params={
         'token': 'invalidtoken',
     })
-    assert r2.status_code == 403
+    assert r2.status_code == AccessError.code

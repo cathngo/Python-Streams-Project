@@ -4,6 +4,8 @@ import json
 from src import config
 from src.other import clear_v1
 import jwt
+from src.error import AccessError, InputError
+
 
 #check valid token 
 def test_given_token():
@@ -17,7 +19,7 @@ def test_given_token():
     #create invalid token
     invalid_token = jwt.encode({'u_id': user_token['auth_user_id'], 'session_id': 0}, 'invalid', algorithm='HS256')
     re = requests.post(config.url + 'channel/invite/v2', json={'token': invalid_token, 'channel_id': channel_id['channel_id']})
-    assert re.status_code == 403
+    assert re.status_code == AccessError.code
 
 
 #check
@@ -32,7 +34,7 @@ def test_invalid_channel_id():
     user_token2 = user2.json()
     
     re = requests.post(config.url + 'channel/invite/v2', json={'token': user_token['token'],'channel_id': invalid_channel_id , 'u_id': user_token2['auth_user_id']})
-    assert re.status_code == 400
+    assert re.status_code == InputError.code
 
 #check inviting to private channel
 def test_invite_private_channel_v2():
@@ -68,7 +70,7 @@ def test_invite_invalid_u_id_v2():
     
     re = requests.post(config.url + 'channel/invite/v2',json={'token': user_token['token'],'channel_id': channel_id['channel_id'], 'u_id': invalid_u_id})
 
-    assert re.status_code == 400
+    assert re.status_code == InputError.code
 
 #check invalid u_id
 def test_invite_another_member_v2():
@@ -86,7 +88,7 @@ def test_invite_another_member_v2():
     requests.post(config.url + 'channel/invite/v2',json={'token': user_token['token'],'channel_id': channel_id['channel_id'], 'u_id': user_token2['auth_user_id']})
     re = requests.post(config.url + 'channel/invite/v2',json={'token': user_token['token'],'channel_id': channel_id['channel_id'], 'u_id': user_token2['auth_user_id']})
 
-    assert re.status_code == 400
+    assert re.status_code == InputError.code
 
 #check error when valid channel but inviter is not member
 def test_invitation_not_authorised():
@@ -106,7 +108,7 @@ def test_invitation_not_authorised():
     #invite the same suer twice
     re = requests.post(config.url + 'channel/invite/v2',json={'token': user_token3['token'],'channel_id': channel_id['channel_id'], 'u_id': user_token2['auth_user_id']})
 
-    assert re.status_code == 403
+    assert re.status_code == AccessError.code
 
 # Check if invite works when there are multiple channels
 def test_multiple_channel_invite_once_works():

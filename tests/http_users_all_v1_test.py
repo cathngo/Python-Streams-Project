@@ -4,6 +4,7 @@ import json
 from src import config
 from src.other import clear_v1
 import jwt
+from src.error import AccessError, InputError
 
 #check returns correct user details
 def test_correct_user_details():
@@ -47,7 +48,7 @@ def test_invalid_token():
     invalid_u_id = user_token['auth_user_id'] + 1
     invalid_token = jwt.encode({'u_id': invalid_u_id, 'session_id': 0}, config.SECRET, algorithm='HS256')
     resp = requests.get(config.url + 'users/all/v1', params={'token': invalid_token})
-    assert resp.status_code == 403
+    assert resp.status_code == AccessError.code
 
 #check accesserror for token with wrong secret
 def test_invalid_secret():
@@ -56,4 +57,4 @@ def test_invalid_secret():
     user_token = user.json()
     invalid_token = jwt.encode({'u_id': user_token['auth_user_id'], 'session_id': 0}, config.SECRET, algorithm='HS256')
     resp = requests.get(config.url + 'users/all/v1', params={'token': invalid_token})
-    assert resp.status_code == 403
+    assert resp.status_code == AccessError.code

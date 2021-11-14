@@ -4,6 +4,8 @@ import json
 from src import config
 from src.other import clear_v1
 import jwt
+from src.error import AccessError, InputError
+
 
 #check returns correct details
 def test_correct_details():
@@ -33,7 +35,7 @@ def test_invalid_channel_id():
     invalid_u_id = user_token['auth_user_id'] + 1
     invalid_token = jwt.encode({'u_id': invalid_u_id, 'session_id': 0}, config.SECRET, algorithm='HS256')
     resp = requests.get(config.url + 'channel/details/v2', params={'token': invalid_token, 'channel_id': invalid_channel_id })
-    assert resp.status_code == 403
+    assert resp.status_code == AccessError.code
 
 #check access error for valid channel id and unauthorised user
 def test_unauthorised_user():
@@ -47,7 +49,7 @@ def test_unauthorised_user():
     user2 = requests.post(config.url + 'auth/register/v2', json={'email': 'unauthorisedemail@gmail.com', 'password': '123abc!@#', 'name_first': 'Sam', 'name_last': 'Smith'})
     unauthorised_user = user2.json()
     resp = requests.get(config.url + 'channel/details/v2', params={'token': unauthorised_user['token'], 'channel_id': channel_id['channel_id'] })
-    assert resp.status_code == 403
+    assert resp.status_code == AccessError.code
 
 #check input error when given invalid channel id but valid token
 def test_invalid_existing_channel_id():
@@ -61,7 +63,7 @@ def test_invalid_existing_channel_id():
     invalid_channel_id = channel_id['channel_id'] + 1000
     #pass in invalid channel id but valid token
     resp = requests.get(config.url + 'channel/details/v2', params={'token': user_token['token'], 'channel_id': invalid_channel_id })
-    assert resp.status_code == 400
+    assert resp.status_code == InputError.code
 
 #check accesserror for invalid signature but valid channel id
 def test_invalid_token_signature():
@@ -76,7 +78,7 @@ def test_invalid_token_signature():
     invalid_token = jwt.encode({'u_id': user_token['auth_user_id'], 'session_id': 0}, 'Invalid', algorithm='HS256')
     #pass valid channel id but invalid token
     resp = requests.get(config.url + 'channel/details/v2', params={'token': invalid_token, 'channel_id': channel_id['channel_id']})
-    assert resp.status_code == 403
+    assert resp.status_code == AccessError.code
 
 def test_check_last_channel():
     requests.delete(config.url + 'clear/v1')

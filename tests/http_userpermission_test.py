@@ -5,6 +5,7 @@ import json
 from werkzeug.exceptions import UnsupportedMediaType
 from src import config
 import jwt
+from src.error import AccessError, InputError
 
 
 #check 
@@ -66,7 +67,7 @@ def test_token_is_invalid():
     invalid_token = jwt.encode({'u_id': user_token['auth_user_id'], 'session_id': 0}, 'Invalid', algorithm='HS256')
     #pass valid channel id but invalid token
     resp = requests.post(config.url + 'admin/userpermission/change/v1', json={'token': invalid_token, 'u_id': user_token['auth_user_id'], 'permission_id': 1})
-    assert resp.status_code == 403
+    assert resp.status_code == AccessError.code
 
 #check when an invalid u_id is pased 
 def test_invalid_u_id_():
@@ -78,7 +79,7 @@ def test_invalid_u_id_():
 
     #pass valid channel id but invalid token
     resp = requests.post(config.url + 'admin/userpermission/change/v1', json={'token': user_token['token'], 'u_id': invalid_u_id, 'permission_id': 1})
-    assert resp.status_code == 400
+    assert resp.status_code == InputError.code
 
 #check when the last global owner is trying to become a normal user 
 def test_last_global_owner_demoted():
@@ -89,7 +90,7 @@ def test_last_global_owner_demoted():
 
     #pass valid channel id but invalid token
     resp = requests.post(config.url + 'admin/userpermission/change/v1', json={'token': user_token['token'], 'u_id': user_token['auth_user_id'], 'permission_id': 2})
-    assert resp.status_code == 400
+    assert resp.status_code == InputError.code
 
 #check the given permision_id is not valid
 def test_invalid_permision_id():
@@ -104,7 +105,7 @@ def test_invalid_permision_id():
     channel.json()
     #pass valid channel id but invalid token
     resp = requests.post(config.url + 'admin/userpermission/change/v1', json={'token': user_token['token'], 'u_id': user_token2['auth_user_id'], 'permission_id': 99})
-    assert resp.status_code == 400
+    assert resp.status_code == InputError.code
 
 def test_authorised_user_not_global_owner():
     requests.delete(config.url + 'clear/v1')
@@ -118,7 +119,7 @@ def test_authorised_user_not_global_owner():
     channel.json()
     #pass valid channel id but invalid token
     resp = requests.post(config.url + 'admin/userpermission/change/v1', json={'token': user_token2['token'], 'u_id': user_token['auth_user_id'], 'permission_id': 1})
-    assert resp.status_code == 403
+    assert resp.status_code == AccessError.code
 
 #test when permission_id is 2
 def test_basic_remove_global_owner():
@@ -141,4 +142,4 @@ def test_basic_remove_global_owner():
     res = requests.post(config.url + 'admin/userpermission/change/v1',json={'token': user_token2['token'] , 'u_id': user_token3['auth_user_id'], 'permission_id': 2})
     assert res.status_code == 200
     re = requests.post(config.url + 'channel/join/v2', json={'token': user_token3['token'], 'channel_id':channel_id['channel_id']})
-    assert re.status_code == 403
+    assert re.status_code == AccessError.code
